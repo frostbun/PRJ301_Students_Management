@@ -1,58 +1,56 @@
 
+
 create table [User](
-	rollNumber nvarchar(10) not null,
-	firstName nvarchar(50),
-	lastName nvarchar(50),
-	phoneNumber nvarchar(10),
-	email nvarchar(50),
-	address nvarchar(100),
+	firstName nvarchar(50) not null,
+	lastName nvarchar(50) not null,
+	phoneNumber nvarchar(10) not null,
+	email nvarchar(50) not null,
+	address nvarchar(100) not null,
 	username nvarchar(50),
 	password nvarchar(50) not null,
 	primary key(username)
 )
 
 create table Class(
-   classID nvarchar(10),
-   name nvarchar(20),
-   inviteCode nvarchar(20) unique,
+   classID int identity(1,1),
+   className nvarchar(20) not null,
+   inviteCode nvarchar(20) not null,
    primary key(ClassID)
 )
 
 create table ClassMember(
+	classID int foreign key references Class(classID),
 	username nvarchar(50) foreign key references [User](username),
-	classID nvarchar(10) foreign key references Class(classID),
 	role nvarchar(7) not null, 
-	check(role in ('Student', 'Teacher'))
+	check(role in ('Student', 'Teacher')),
+	primary key(username, classID)
 )
 
 create table Homework(
-	homeworkID nvarchar(10) primary key,
-	fileLink nvarchar,
-	discription nvarchar,
-	classID nvarchar(10) foreign key references Class(classID),
+	homeworkID int identity(1,1) primary key,
+	classID int foreign key references Class(classID),
 	username nvarchar(50) foreign key references [User](username),
-	deadline Date,
+	fileLink nvarchar not null,
+	discription nvarchar not null,
+	deadline Date not null
 )
 
 create table Submission(
-	homeworkID nvarchar(10),
-	fileLink nvarchar,
+	homeworkID int identity(1,1) references Homework(HomeworkID),
 	username nvarchar(50) foreign key references [User](username),
-	mark int,
+	fileLink nvarchar not null,
+	mark int not null,
 	primary key(homeworkID, username)
 )
 
-create table MailRequest(
-	username nvarchar(50) foreign key references [User](username),
-	title nvarchar,
-	content nvarchar,
-	classID nvarchar(10) foreign key references Class(classID)
+create table Mail(
+	messageID int identity(1,1) not null,
+	classID int foreign key references Class(classID),
+	usernameFrom nvarchar(50) foreign key references [User](username),
+	usernameTo nvarchar(50) foreign key references [User](username),
+	content nvarchar not null, 
 )
 
-create table MailResponse(
-	username nvarchar(50) foreign key references [User](username),
-	title nvarchar,
-	content nvarchar,
-	classID nvarchar(10) foreign key references Class(classID)
-)
+
+
 
