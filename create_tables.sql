@@ -39,7 +39,7 @@ CREATE TABLE Homework(
 
 CREATE TABLE Submission(
     homeworkID      INT             FOREIGN KEY REFERENCES Homework(homeworkID),
-    username        VARCHAR(25)    FOREIGN KEY REFERENCES [User](username),
+    username        VARCHAR(25)     FOREIGN KEY REFERENCES [User](username),
     fileLink        VARCHAR         NOT NULL,
     mark            INT,
     createdAt       DATETIME        NOT NULL    DEFAULT GETDATE(),
