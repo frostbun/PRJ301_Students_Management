@@ -33,5 +33,5 @@ phục vụ cho cả giảng viên và sinh viên với giao diện dễ sử d�
 
 ## Team Members
  - Nguyễn Đức Mạnh
- - Dư Lê Minhee
+ - Dư Lê Minh
  - Nguyễn Thị Thanh Hiền
