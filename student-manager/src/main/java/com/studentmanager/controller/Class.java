@@ -5,11 +5,16 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("/")
-public class Index {
+@RequestMapping("/class")
+public class Class {
 
     @GetMapping
-    public String index() {
-        return "index";
+    public String classList() {
+        return "class";
+    }
+
+    @GetMapping("/{id}")
+    public String classID() {
+        return "class";
     }
 }

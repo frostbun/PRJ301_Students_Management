@@ -1,0 +1,28 @@
+<nav class="navbar navbar-expand-md navbar-light">
+  <a th:href="@{/}" class="navbar-brand colorNav">STUDENTS MANAGEMENT</a>
+  <button class="navbar-toggler" data-toggle="collapse" data-target="#navbarMenu">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarMenu">
+    <ul class="navbar-nav ml-auto">
+      <li class="nav-item">
+        <a th:href="@{/class}" class="nav-link colorNav">Class</a>
+      </li>
+      <th:block th:switch="${session.user}">
+        <th:block th:case="null">
+          <li class="nav-item">
+            <a th:href="@{/login}" class="nav-link colorNav">Login</a>
+          </li>
+        </th:block>
+        <th:block th:case="*">
+          <li class="nav-item">
+            <a th:href="@{/profile}" class="nav-link colorNav">Profile</a>
+          </li>
+          <li class="nav-item">
+            <a th:href="@{/logout}" class="nav-link colorNav">Logout</a>
+          </li>
+        </th:block>
+      </th:block>
+    </ul>
+  </div>
+</nav>

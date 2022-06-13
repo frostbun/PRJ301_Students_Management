@@ -5,28 +5,7 @@
     --secondary-light: #e24943;
 }
 
-.login-form {
-    max-width: 75%;
-    margin: 0 auto;
-}
-
-.login-bg {
-    background-image: url("../image/login_bg.jpg");
-    background-size: cover;
-}
-
-.login-form-link {
-    max-width: 50%;
-    padding: 10px;
-    margin: 0 auto;
-    color: var(--primary);
-    background-color: var(--secondary-light);
-}
-
-.class-cover {
-    max-height: 25vh;
-}
-
+/* Color */
 .btn-primary {
     background-color: var(--primary);
     border-color: var(--primary);
@@ -44,6 +23,29 @@
 
 .text-danger {
     color: var(--secondary);
+}
+
+
+.login-form {
+    max-width: 75%;
+    margin: 0 auto;
+}
+
+.login-bg {
+    background-image: url("../img/login_bg.jpg");
+    background-size: cover;
+}
+
+.login-form-link {
+    max-width: 50%;
+    padding: 10px;
+    margin: 0 auto;
+    color: var(--primary);
+    background-color: var(--secondary-light);
+}
+
+.class-cover {
+    max-height: 25vh;
 }
 
 .card {
@@ -73,6 +75,54 @@
     cursor: pointer;
 }
 
+
+/* Navbar */
+.colorNav {
+    color: #ffffff !important;
+}
+
+nav {
+    background: var(--primary);
+    padding: 15px;
+
+}
+
+.nav {
+    background-color: black;
+}
+
+.navbar-brand {
+    font-size: 28px;
+    margin: 0;
+    padding: 0;
+    line-height: 1;
+    font-weight: 700;
+    color: hotpink;
+}
+
+.footer {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    padding: 8px;
+    background-color: var(--primary);
+    color: #000000;
+    text-align: center;
+}
+
+.footer a {
+    color: #712421;
+    text-align: center;
+}
+
+.footer a:hover {
+    text-decoration: none;
+    color: #000000;
+
+}
+
+
 @media screen and (min-width: 576px) {
 
     .card {
@@ -84,7 +134,4 @@
     }
 }
 
-@media screen and (min-width: 768px) {
-
-
-}
+@media screen and (min-width: 768px) {}
