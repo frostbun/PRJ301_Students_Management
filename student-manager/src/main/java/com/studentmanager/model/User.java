@@ -14,6 +14,7 @@ public class User {
     private String email;
     private String address;
     private String avatarURL;
+    private String role;
     private LocalDateTime createdAt;
     private boolean deleted;
 }

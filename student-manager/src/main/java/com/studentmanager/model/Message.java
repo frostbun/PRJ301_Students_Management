@@ -2,11 +2,9 @@ package com.studentmanager.model;
 
 import java.time.LocalDateTime;
 
-import lombok.Builder;
 import lombok.Data;
 
 @Data
-@Builder
 public class Message {
     private int messageID;
     private int classID;
@@ -14,4 +12,5 @@ public class Message {
     private String receiver;
     private String content;
     private LocalDateTime createdAt;
+    private boolean deleted;
 }

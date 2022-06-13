@@ -4,7 +4,7 @@ server:
 
 spring:
   datasource:
-    url: jdbc:sqlserver://localhost:1433;databaseName=ProductOrder;encrypt=true;trustServerCertificate=true;
+    url: jdbc:sqlserver://localhost:1433;databaseName=StudentManager;encrypt=true;trustServerCertificate=true;
     username: mssql
     password: 12345679
     driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
