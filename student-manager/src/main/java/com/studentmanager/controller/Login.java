@@ -14,7 +14,7 @@ import com.studentmanager.service.UserService;
 @RequestMapping("/login")
 public class Login {
     @Autowired
-    public UserService userService;
+    private UserService userService;
 
     @GetMapping
     public String get() {

@@ -1,26 +1,36 @@
-<th:block th:insert="components/header"></th:block>
-<th:block th:insert="components/navbar"></th:block>
+<!DOCTYPE html>
+<html lang="en">
 
-<div class="container mt-5">
-  <div class="row position-relative">
-    <img class="img-fluid class-cover" th:src="@{/img/class_cover.png}" alt="class cover image">
-    <div class="row align-items-end position-absolute bottom-0 text-white">
-      <h1 class="col-8 ps-5 fw-bold">${className}</h1>
-      <div class="col-4">
-        <a class="class-nav-item" href="leave">Leave</a>
-        <a class="class-nav-item" href="member">Members</a>
-        <br>
-        <a class="class-nav-item" href="delete">Delete</a>
-        <span class="class-nav-item" onclick='navigator.clipboard.writeText("${inviteCode}")'>Copy invite code</span>
-        <a class="class-nav-item" href="homework/new">New homework</a>
+<head>
+  <title th:text="${title}">Class</title>
+  <th:block th:insert="components/head"></th:block>
+</head>
+
+<body>
+  <header th:insert="components/header"></header>
+
+  <div class="container mt-5">
+    <div class="row position-relative">
+      <img class="img-fluid class-cover" th:src="@{/img/class_cover.png}" alt="class cover image">
+      <div class="row align-items-end position-absolute bottom-0 text-white">
+        <h1 class="col-8 ps-5 fw-bold" th:text="${members}"></h1>
+        <div class="col-4">
+          <a class="class-nav-item" href="leave">Leave</a>
+          <a class="class-nav-item" href="member">Members</a>
+          <br>
+          <a class="class-nav-item" href="delete">Delete</a>
+          <span class="class-nav-item" onclick='navigator.clipboard.writeText("${inviteCode}")'>Copy invite code</span>
+          <a class="class-nav-item" href="homework/new">New homework</a>
+        </div>
       </div>
     </div>
+    <div th:replace="components/post :: card-not-submitted"></div>
+    <div th:replace="components/post :: card-submitted"></div>
+    <div th:replace="components/post :: card-teacher"></div>
   </div>
 
-  <th:block th:insert="components/post :: card-not-submitted"></th:block>
-  <th:block th:insert="components/post :: card-submitted"></th:block>
-  <th:block th:insert="components/post :: card-teacher"></th:block>
-</div>
+  <footer th:insert="components/footer"></footer>
+  <div th:insert="components/script"></div>
+</body>
 
-<th:block th:insert="components/info"></th:block>
-<th:block th:insert="components/footer"></th:block>
+</html>

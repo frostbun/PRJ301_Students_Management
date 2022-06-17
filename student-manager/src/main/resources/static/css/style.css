@@ -26,6 +26,7 @@
 }
 
 
+/* Login, register */
 .login-form {
     max-width: 75%;
     margin: 0 auto;
@@ -122,6 +123,78 @@ nav {
 
 }
 
+
+/* Minh */
+.logoimg img {
+    display: inline-block;
+    padding-bottom: 2px;
+    width: 60px;
+    height: 40px;
+}
+
+#header {
+    height: 64px;
+    background-color: white;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 997;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
+#nav,
+.subnav {
+    list-style-type: none;
+}
+
+#nav>li {
+    display: inline-block;
+}
+
+#nav li {
+    position: relative;
+}
+
+#nav .subnav {
+    display: none;
+    position: absolute;
+    background-color: white;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
+
+#nav>li>a {
+    color: #e24943;
+}
+
+#nav li a {
+    color: #e24943;
+    text-decoration: none;
+    line-height: 64px;
+    padding: 0 24px;
+    display: block;
+}
+
+#nav li:hover .subnav {
+    display: block;
+}
+
+#nav .subnav a {
+    color: #e24943;
+}
+
+
+#nav .subnav li:hover a {
+    color: white;
+    background-color: #df322b;
+}
+
+
+#nav>li:hover>a {
+    color: white;
+    background-color: #df322b;
+}
 
 @media screen and (min-width: 576px) {
 

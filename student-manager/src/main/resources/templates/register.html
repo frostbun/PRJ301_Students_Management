@@ -1,36 +1,80 @@
-<th:block th:insert="components/header"></th:block>
+<!DOCTYPE html>
+<html lang="en">
 
-<div class="container m-0">
-  <div class="row vw-100 vh-100 text-center login-bg">
-    <div class="col-md-6 row m-0 align-items-center">
-      <div class="login-form-link">
-        <p class="h4">Already have an account?</p>
-        <a class="btn btn-secondary" th:href="@{/login}">&lt;-- Login here</a>
+<head>
+  <title>Register</title>
+  <th:block th:insert="components/head"></th:block>
+</head>
+
+<body>
+  <div class="container m-0">
+    <div class="row vw-100 vh-100 text-center login-bg">
+      <div class="col-md-6 row m-0 align-items-center">
+        <div class="login-form-link">
+          <p class="h4">Already have an account?</p>
+          <a class="btn btn-secondary" th:href="@{/login}">&lt;-- Login here</a>
+        </div>
+      </div>
+      <div class="col-md-6 row m-0 align-items-center bg-light">
+        <form class="login-form" th:action="@{/register}" method="post">
+          <h1>Register</h1>
+          <!-- Username -->
+          <div class="form-floating m-3">
+            <input class="form-control" type="text" name="username" id="username" placeholder="Username"
+              th:value="${username}" required autofocus>
+            <label class="form-label" for="username">Username</label>
+          </div>
+          <!-- Password -->
+          <div class="form-floating m-3">
+            <input class="form-control" type="password" name="password" id="password" placeholder="Password" required>
+            <label for="password">Password</label>
+          </div>
+          <!-- Confirm password -->
+          <div class="form-floating m-3">
+            <input class="form-control" type="password" id="re-password" placeholder="Confirm password" required>
+            <label for="re-password">Confirm password</label>
+          </div>
+          <!-- Name -->
+          <div class="row">
+            <div class="col-6">
+              <div class="form-floating ms-3">
+                <input class="form-control" type="text" name="firstName" id="firstName" placeholder="First Name"
+                  required>
+                <label for="firstName">First name</label>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="form-floating me-3">
+                <input class="form-control" type="text" name="lastName" id="lastName" placeholder="Last name" required>
+                <label for="lastName">Last name</label>
+              </div>
+            </div>
+          </div>
+          <!-- Phone -->
+          <div class="form-floating m-3">
+            <input class="form-control" type="phone" name="phone" id="phone" placeholder="Phone number" required>
+            <label for="phone">Phone number</label>
+          </div>
+          <!-- Email -->
+          <div class="form-floating m-3">
+            <input class="form-control" type="email" name="email" id="email" placeholder="Email" required>
+            <label for="email">Email</label>
+          </div>
+          <!-- Address -->
+          <div class="form-floating m-3">
+            <input class="form-control" type="text" name="address" id="address" placeholder="Address" required>
+            <label for="address">Address</label>
+          </div>
+          <!-- Submit -->
+          <p class="text-danger" th:text="${error}"></p>
+          <a class="btn btn-secondary" th:href="@{/}">Cancel</a>
+          <button class="btn btn-primary" name="submit">Register</button>
+        </form>
       </div>
     </div>
-    <div class="col-md-6 row m-0 align-items-center bg-light">
-      <form class="login-form" th:action="@{/register}" method="post">
-        <h1>Register</h1>
-        <div class="form-floating m-3">
-          <input class="form-control" type="text" name="username" id="username" placeholder="Username"
-            th:value="${username}" required autofocus>
-          <label class="form-label" for="username">Username</label>
-        </div>
-        <div class="form-floating m-3">
-          <input class="form-control" type="password" name="password" id="password" placeholder="Password" required>
-          <label for="password">Password</label>
-        </div>
-        <div class="form-floating m-3">
-          <input class="form-control" type="password" name="re-password" id="re-password" placeholder="Confirm password"
-            required>
-          <label for="re-password">Confirm password</label>
-        </div>
-        <p class="text-danger" th:text="${error}"></p>
-        <a class="btn btn-secondary" th:href="@{/}">Cancel</a>
-        <button class="btn btn-primary" name="submit">Register</button>
-      </form>
-    </div>
   </div>
-</div>
 
-<th:block th:insert="components/footer"></th:block>
+  <div th:insert="components/script"></div>
+</body>
+
+</html>
