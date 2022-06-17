@@ -1,6 +1,6 @@
 <div class="card" th:fragment="card-not-submitted">
   <div>
-    <img class="img-fluid rounded-circle" src="../static/image/white_avt.jpg" alt="class member avatar" width="40px">
+    <img class="img-fluid rounded-circle" th:src="@{/img/white_avt.jpg}" alt="class member avatar" width="40px">
     <span>${username}</span>
   </div>
   <p class="text-muted m-0">${time}</p>
@@ -20,7 +20,7 @@
 
 <div class="card" th:fragment="card-submitted">
   <div>
-    <img class="img-fluid rounded-circle" src="../static/image/white_avt.jpg" alt="class member avatar" width="40px">
+    <img class="img-fluid rounded-circle" th:src="@{/img/white_avt.jpg}" alt="class member avatar" width="40px">
     <span>${username}</span>
   </div>
   <p class="text-muted m-0">${time}</p>
@@ -40,7 +40,7 @@
 
 <div class="card" th:fragment="card-teacher">
   <div>
-    <img class="img-fluid rounded-circle" src="../static/image/white_avt.jpg" alt="class member avatar" width="40px">
+    <img class="img-fluid rounded-circle" th:src="@{/img/white_avt.jpg}" alt="class member avatar" width="40px">
     <span>${username}</span>
   </div>
   <p class="text-muted m-0">${time}</p>

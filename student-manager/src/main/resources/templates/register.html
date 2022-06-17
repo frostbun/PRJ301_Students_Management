@@ -38,31 +38,31 @@
           <div class="row">
             <div class="col-6">
               <div class="form-floating ms-3">
-                <input class="form-control" type="text" name="firstName" id="firstName" placeholder="First Name"
+                <input class="form-control" type="text" name="firstName" id="firstName" placeholder="First Name" th:value="${firstName}"
                   required>
                 <label for="firstName">First name</label>
               </div>
             </div>
             <div class="col-6">
               <div class="form-floating me-3">
-                <input class="form-control" type="text" name="lastName" id="lastName" placeholder="Last name" required>
+                <input class="form-control" type="text" name="lastName" id="lastName" placeholder="Last name" th:value="${lastName}" required>
                 <label for="lastName">Last name</label>
               </div>
             </div>
           </div>
           <!-- Phone -->
           <div class="form-floating m-3">
-            <input class="form-control" type="phone" name="phone" id="phone" placeholder="Phone number" required>
+            <input class="form-control" type="tel" name="phone" id="phone" placeholder="Phone number" th:value="${phone}" required>
             <label for="phone">Phone number</label>
           </div>
           <!-- Email -->
           <div class="form-floating m-3">
-            <input class="form-control" type="email" name="email" id="email" placeholder="Email" required>
+            <input class="form-control" type="email" name="email" id="email" placeholder="Email" th:value="${email}" required>
             <label for="email">Email</label>
           </div>
           <!-- Address -->
           <div class="form-floating m-3">
-            <input class="form-control" type="text" name="address" id="address" placeholder="Address" required>
+            <input class="form-control" type="text" name="address" id="address" placeholder="Address" th:value="${address}" required>
             <label for="address">Address</label>
           </div>
           <!-- Submit -->

@@ -26,6 +26,12 @@
 }
 
 
+.big-fucking-text {
+    color: var(--secondary);
+    font-size: 100px;
+    text-align: center;
+}
+
 /* Login, register */
 .login-form {
     max-width: 75%;

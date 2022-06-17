@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-  <title th:text="${title}">Class</title>
+  <title th:text="${class.className}">Class</title>
   <th:block th:insert="components/head"></th:block>
 </head>
 
@@ -18,7 +18,6 @@
           <a class="class-nav-item" href="leave">Leave</a>
           <a class="class-nav-item" href="member">Members</a>
           <br>
-          <a class="class-nav-item" href="delete">Delete</a>
           <span class="class-nav-item" onclick='navigator.clipboard.writeText("${inviteCode}")'>Copy invite code</span>
           <a class="class-nav-item" href="homework/new">New homework</a>
         </div>

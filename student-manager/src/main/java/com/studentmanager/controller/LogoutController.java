@@ -5,18 +5,17 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.studentmanager.service.UserService;
+import com.studentmanager.service.SessionService;
 
 @Controller
-@RequestMapping("/editProfile")
-public class editProfile {
+@RequestMapping("/logout")
+public class LogoutController {
     @Autowired
-    public UserService userService;
+    private SessionService sessionService;
 
     @GetMapping
     public String get() {
-        return "editProfile";
+        sessionService.setCurrentUser(null);
+        return "redirect:/";
     }
-
-
 }

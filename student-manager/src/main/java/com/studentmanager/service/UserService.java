@@ -1,11 +1,13 @@
 package com.studentmanager.service;
 
-import javax.servlet.http.HttpSession;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.studentmanager.dto.ChangeUserInformationDTO;
+import com.studentmanager.dto.ChangeUserPasswordDTO;
+import com.studentmanager.dto.LoginDTO;
+import com.studentmanager.dto.RegisterDTO;
 import com.studentmanager.model.User;
 import com.studentmanager.repository.UserDAO;
 
@@ -15,21 +17,83 @@ public class UserService {
     private UserDAO userDAO;
     @Autowired
     private PasswordEncoder passwordEncoder;
-    @Autowired
-    private HttpSession session;
 
-    public boolean login(User user) {
-        User realUser = userDAO.readByUsername(user.getUsername());
-        if (realUser == null) return false;
-        if (!passwordEncoder.matches(user.getPassword(), realUser.getPassword())) return false;
-        session.setAttribute("user", realUser);
-        System.out.println(realUser);
-        return true;
+    public String login(LoginDTO dto) {
+        String error = dto.validate();
+        if (error != null) {
+            return error;
+        }
+        User user = userDAO.readByUsername(dto.getUsername());
+        if (user == null) {
+            return "Wrong username";
+        }
+        if (!passwordEncoder.matches(dto.getPassword(), user.getPassword())) {
+            return "Wrong password";
+        }
+        return null;
+    }
+    
+    public String register(RegisterDTO dto) {
+        String error = dto.validate();
+        if (error != null) {
+            return error;
+        }
+        if (userDAO.readByUsername(dto.getUsername()) != null) {
+            return "Username existed";
+        }
+        if (!dto.getPassword().equals(dto.getConfirmPassword())) {
+            return "Password not match";
+        }
+        if (!userDAO.create(
+                dto.getUsername(),
+                passwordEncoder.encode(dto.getPassword()),
+                dto.getFirstName(),
+                dto.getLastName(),
+                dto.getPhone(),
+                dto.getEmail(),
+                dto.getAddress()
+        )) {
+            return "Something went wrong while creating your user";
+        }
+        return null;
     }
 
-    public boolean register(User user) {
-        if (userDAO.readByUsername(user.getUsername()) != null) return false;
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        return userDAO.create(user);
+    public String changePassword(String username, ChangeUserPasswordDTO dto) {
+        String error = dto.validate();
+        if (error != null) {
+            return error;
+        }
+        User user = userDAO.readByUsername(username);
+        if (!passwordEncoder.matches(dto.getPassword(), user.getPassword())) {
+            return "Wrong password";
+        }
+        if (!dto.getNewPassword().equals(dto.getConfirmPassword())) {
+            return "Password not match";
+        }
+        if (!userDAO.updatePassword(
+                username,
+                passwordEncoder.encode(dto.getNewPassword())
+        )) {
+            return "Something went wrong while changing your password";
+        }
+        return null;
+    }
+
+    public String changeInformation(String username, ChangeUserInformationDTO dto) {
+        String error = dto.validate();
+        if (error != null) {
+            return error;
+        }
+        if (!userDAO.updateInformation(
+                username,
+                dto.getFirstName(),
+                dto.getLastName(),
+                dto.getPhone(),
+                dto.getEmail(),
+                dto.getAddress()
+        )) {
+            return "Something went wrong while changing your information";
+        }
+        return null;
     }
 }

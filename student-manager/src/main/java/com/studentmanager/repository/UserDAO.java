@@ -1,5 +1,7 @@
 package com.studentmanager.repository;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -13,11 +15,26 @@ public class UserDAO {
     @Autowired
     private JdbcTemplate db;
 
-    public boolean create(User user) {
+    public boolean create(
+        String username,
+        String password,
+        String firstName,
+        String lastName,
+        String phone,
+        String email,
+        String address
+    ) {
         return db.update(
-            "INSERT INTO [User](username, password) VALUES (?, ?)",
-            user.getUsername(),
-            user.getPassword()
+            "INSERT INTO "
+                + "[User](username, password, firstName, lastName, phone, email, address) "
+                + "VALUES (?, ?, ?, ?, ?, ?, ?)",
+            username,
+            password,
+            firstName,
+            lastName,
+            phone,
+            email,
+            address
         ) > 0;
     }
 
@@ -28,22 +45,60 @@ public class UserDAO {
                 BeanPropertyRowMapper.newInstance(User.class),
                 username
             );
-        }
-        catch (EmptyResultDataAccessException e) {
+        } catch (EmptyResultDataAccessException e) {
             return null;
         }
     }
 
-    public boolean updateByUsername(User user) {
+    public List<User> readByClassID(int classID, int page, int size) {
+        return db.query(
+            "SELECT [User].* "
+                + "FROM [User] "
+                + "JOIN ClassMember "
+                + "ON User.username = ClassMember.username "
+                + "WHERE classID=? "
+                + "OFFSET ? "
+                + "FETCH NEXT ? ROWS ONLY",
+            BeanPropertyRowMapper.newInstance(User.class),
+            classID,
+            (page - 1) * size,
+            size
+        );
+    }
+
+    public boolean updateInformation(
+        String username,
+        String firstName,
+        String lastName,
+        String phone,
+        String email,
+        String address
+    ) {
         return db.update(
-            ""
+            "UPDATE [User] "
+                + "SET firstName=?, lastName=?, phone=?, email=?, address=? "
+                + "WHERE username=?",
+            firstName,
+            lastName,
+            phone,
+            email,
+            address,
+            username
         ) > 0;
     }
 
-    public boolean deleteByUsername(User user) {
+    public boolean updatePassword(String username, String password) {
+        return db.update(
+            "UPDATE [User] SET password=? WHERE username=?",
+            password,
+            username
+        ) > 0;
+    }
+    
+    public boolean delete(String username) {
         return db.update(
             "UPDATE [User] SET deleted=1 WHERE username=?",
-            user.getUsername()
+            username
         ) > 0;
     }
 }
