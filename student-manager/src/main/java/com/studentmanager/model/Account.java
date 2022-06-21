@@ -4,10 +4,7 @@ import java.time.Instant;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import lombok.AllArgsConstructor;
@@ -21,25 +18,34 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Submission {
+public class Account {
     @Id
-    @GeneratedValue
     @Column
-    private Long id;
-
-    @ManyToOne
-    @JoinColumn
-    private Homework homework;
-
-    @ManyToOne
-    @JoinColumn
-    private Account author;
+    private String username;
 
     @Column
-    private String fileLink;
+    private String password;
+
+    @Column(columnDefinition = "NVARCHAR(25)")
+    private String firstName;
+
+    @Column(columnDefinition = "NVARCHAR(25)")
+    private String lastName;
 
     @Column
-    private Integer mark;
+    private String phone;
+
+    @Column
+    private String email;
+
+    @Column(columnDefinition = "NVARCHAR(50)")
+    private String address;
+
+    @Column
+    private String avatarURL;
+
+    @Column
+    private String role;
 
     @Column
     @Builder.Default

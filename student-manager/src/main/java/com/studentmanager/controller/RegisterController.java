@@ -6,49 +6,36 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import com.studentmanager.dto.RegisterDTO;
-import com.studentmanager.model.User;
 import com.studentmanager.service.SessionService;
-import com.studentmanager.service.UserService;
+import com.studentmanager.service.AccountService;
 
 @Controller
 @RequestMapping("/register")
 public class RegisterController {
     @Autowired
-    private UserService userService;
+    private AccountService accountService;
     @Autowired
-    private SessionService sessionService;
+    private SessionService session;
 
     @GetMapping
-    public String get(Model view, @RequestParam(defaultValue = "") String error) {
-        User user = sessionService.getCurrentUser();
-        if (user != null) {
+    public String get(Model view) {
+        if (session.loggedIn()) {
             return "redirect:/";
         }
-        view.addAttribute("error", error);
         return "register";
     }
 
     @PostMapping
     public String post(Model view, RegisterDTO dto) {
-        User user = sessionService.getCurrentUser();
-        if (user != null) {
+        if (session.loggedIn()) {
             return "redirect:/";
         }
-        String error = userService.register(dto);
-        if (error != null) {
-            view.addAttribute("username", dto.getUsername());
-            view.addAttribute("firstName", dto.getFirstName());
-            view.addAttribute("lastName", dto.getLastName());
-            view.addAttribute("phone", dto.getPhone());
-            view.addAttribute("email", dto.getEmail());
-            view.addAttribute("address", dto.getAddress());
-            view.addAttribute("error", error);
+        if (!accountService.register(view, dto)) {
+            dto.addToView(view);
             return "register";
         }
-        sessionService.setCurrentUser(dto.getUsername());
         return "redirect:/";
     }
 }

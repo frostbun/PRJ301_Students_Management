@@ -1,29 +1,41 @@
 package com.studentmanager.service;
 
+import java.util.Optional;
+
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.studentmanager.model.User;
-import com.studentmanager.repository.UserDAO;
+import com.studentmanager.model.Account;
+import com.studentmanager.repository.AccountRepository;
 
 @Service
 public class SessionService {
     @Autowired
-    private UserDAO userDAO;
-    @Autowired
     private HttpSession session;
+    @Autowired
+    private AccountRepository accountRepo;
 
-    public User getCurrentUser() {
-        return (User)session.getAttribute("user");
+    public boolean loggedIn() {
+        Account account = (Account)session.getAttribute("account");
+        if (account == null) {
+            return false;
+        }
+        Optional<Account> uOptional = accountRepo.findByUsername(account.getUsername());
+        if (!uOptional.isPresent()) {
+            setCurrentAccount(null);
+            return false;
+        }
+        setCurrentAccount(uOptional.get());
+        return true;
     }
 
-    public void setCurrentUser(String username) {
-        if (username == null) {
-            session.removeAttribute("user");
-            return;
-        }
-        session.setAttribute("user", userDAO.readByUsername(username));
+    public Account getCurrentAccount() {
+        return (Account)session.getAttribute("account");
+    }
+
+    public void setCurrentAccount(Account account) {
+        session.setAttribute("account", account);
     }
 }

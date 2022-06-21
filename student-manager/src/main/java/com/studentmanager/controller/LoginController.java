@@ -9,41 +9,34 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.studentmanager.dto.LoginDTO;
-import com.studentmanager.model.User;
+import com.studentmanager.service.AccountService;
 import com.studentmanager.service.SessionService;
-import com.studentmanager.service.UserService;
 
 @Controller
 @RequestMapping("/login")
 public class LoginController {
     @Autowired
-    private UserService userService;
+    private AccountService accountService;
     @Autowired
-    private SessionService sessionService;
+    private SessionService session;
 
     @GetMapping
     public String get(Model view, @RequestParam(defaultValue = "") String error) {
-        User user = sessionService.getCurrentUser();
-        if (user != null) {
+        if (session.loggedIn()) {
             return "redirect:/";
         }
-        view.addAttribute("error", error);
         return "login";
     }
 
     @PostMapping
     public String post(Model view, LoginDTO dto) {
-        User user = sessionService.getCurrentUser();
-        if (user != null) {
+        if (session.loggedIn()) {
             return "redirect:/";
         }
-        String error = userService.login(dto);
-        if (error != null) {
-            view.addAttribute("username", dto.getUsername());
-            view.addAttribute("error", error);
-            return "login";
+        if (!accountService.login(view, dto)) {
+            dto.addToView(view);
+            return "register";
         }
-        sessionService.setCurrentUser(dto.getUsername());
         return "redirect:/";
     }
 }

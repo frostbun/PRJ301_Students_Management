@@ -9,42 +9,55 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.studentmanager.model.Class;
-import com.studentmanager.service.ClassService;
-import com.studentmanager.service.UserService;
+import com.studentmanager.service.ClassroomService;
+import com.studentmanager.service.SessionService;
 
 @Controller
 @RequestMapping("/class")
 public class ClassController {
     @Autowired
-    private UserService userService;
+    private SessionService session;
     @Autowired
-    private ClassService classService;
+    private ClassroomService classroomService;
 
     @GetMapping("/create")
-    public String create() {
-        return "PLACEHOLDER";
+    public String createGet() {
+        if (!session.loggedIn()) {
+            return "redirect:/login";
+        }
+        return "create_class";
     }
 
     @PostMapping("/create")
-    public String createSubmit(Model view, Class _class) {
-        if (!classService.createClass(_class)) {
-            view.addAttribute("error", "Wrong username or password");
-            return "login";
+    public String createPost(Model view, String name) {
+        if (!session.loggedIn()) {
+            return "redirect:/login";
         }
-        return "redirect:/class";
+        Long id = classroomService.create(name);
+        if (id == null) {
+            return "index";
+        }
+        return "redirect:/class/" + id;
     }
 
-    @GetMapping("/{id}")
-    public String homeworks(Model view, @PathVariable int id) {
-        view.addAttribute("title", id);
-        return "class";
+    @PostMapping("/join")
+    public String joinPost(Model view, String inviteCode) {
+        if (!session.loggedIn()) {
+            return "redirect:/login";
+        }
+        Long id = classroomService.join(view, inviteCode);
+        if (id == null) {
+            return "index";
+        }
+        return "redirect:/class/" + id;
     }
 
     @GetMapping("/{id}/members")
-    public String members(Model view, @PathVariable int id, @RequestParam(defaultValue = "1") int page,
-            @RequestParam(defaultValue = "10") int size) {
-        view.addAttribute("members", classService.viewClassMembers(id, page, size));
-        return "class";
+    public String members(Model view, @PathVariable Long id, @RequestParam(defaultValue = "0") int page) {
+        if (!session.loggedIn()) {
+            return "redirect:/login";
+        }
+        view.addAttribute("members", classroomService.getClassroomMembers(id, page, 25));
+        return "members";
     }
 }
