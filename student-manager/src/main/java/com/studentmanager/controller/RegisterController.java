@@ -8,8 +8,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.studentmanager.dto.RegisterDTO;
-import com.studentmanager.service.SessionService;
+import com.studentmanager.model.Account;
 import com.studentmanager.service.AccountService;
+import com.studentmanager.service.SessionService;
 
 @Controller
 @RequestMapping("/register")
@@ -21,21 +22,24 @@ public class RegisterController {
 
     @GetMapping
     public String get(Model view) {
-        if (session.loggedIn()) {
-            return "redirect:/";
+        Account account = session.getCurrentAccount();
+        if (account == null) {
+            return "register";
         }
-        return "register";
+        return "redirect:/";
     }
 
     @PostMapping
     public String post(Model view, RegisterDTO dto) {
-        if (session.loggedIn()) {
-            return "redirect:/";
+        Account account = session.getCurrentAccount();
+        if (account == null) {
+            account = accountService.register(view, dto);
+            if (account == null) {
+                dto.addToView(view);
+                return "register";
+            }
         }
-        if (!accountService.register(view, dto)) {
-            dto.addToView(view);
-            return "register";
-        }
+        session.setCurrentAccount(account);
         return "redirect:/";
     }
 }

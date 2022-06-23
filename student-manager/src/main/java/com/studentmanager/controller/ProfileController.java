@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.studentmanager.dto.ChangeAccountInformationDTO;
 import com.studentmanager.dto.ChangeAccountPasswordDTO;
+import com.studentmanager.model.Account;
 import com.studentmanager.service.AccountService;
 import com.studentmanager.service.SessionService;
 
@@ -23,23 +24,28 @@ public class ProfileController {
 
     @GetMapping
     public String profile(Model view) {
-        if (!session.loggedIn()) {
+        Account account = session.getCurrentAccount();
+        if (account == null) {
             return "redirect:/login";
         }
+        view.addAttribute("account", account);
         return "profile";
     }
 
     @GetMapping("/{id}")
     public String profileById(Model view, @PathVariable int id) {
-        if (!session.loggedIn()) {
+        Account account = session.getCurrentAccount();
+        if (account == null) {
             return "redirect:/login";
         }
+        view.addAttribute("account", account);
         return "profile";
     }
 
     @GetMapping("/edit")
     public String edit(Model view) {
-        if (!session.loggedIn()) {
+        Account account = session.getCurrentAccount();
+        if (account == null) {
             return "redirect:/login";
         }
         return "editProfile";
@@ -47,10 +53,11 @@ public class ProfileController {
     
     @PostMapping("/edit/information")
     public String changeInformation(Model view, ChangeAccountInformationDTO dto) {
-        if (!session.loggedIn()) {
+        Account account = session.getCurrentAccount();
+        if (account == null) {
             return "redirect:/login";
         }
-        if (!accountService.changeInformation(view, dto)){
+        if (!accountService.changeInformation(view, account, dto)){
             dto.addToView(view);
             return "editProfile";
         }
@@ -59,10 +66,12 @@ public class ProfileController {
 
     @PostMapping("/edit/password")
     public String changePassword(Model view, ChangeAccountPasswordDTO dto) {
-        if (!session.loggedIn()) {
+        Account account = session.getCurrentAccount();
+        if (account == null) {
             return "redirect:/login";
         }
-        if (!accountService.changePassword(view, dto)){
+        if (!accountService.changePassword(view, account, dto)){
+            dto.addToView(view);
             return "editProfile";
         }
         return "redirect:/profile";

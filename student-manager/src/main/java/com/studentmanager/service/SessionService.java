@@ -17,22 +17,19 @@ public class SessionService {
     @Autowired
     private AccountRepository accountRepo;
 
-    public boolean loggedIn() {
+    public Account getCurrentAccount() {
         Account account = (Account)session.getAttribute("account");
         if (account == null) {
-            return false;
+            return null;
         }
-        Optional<Account> uOptional = accountRepo.findByUsername(account.getUsername());
-        if (!uOptional.isPresent()) {
+        Optional<Account> aOptional = accountRepo.findByUsername(account.getUsername());
+        if (!aOptional.isPresent()) {
             setCurrentAccount(null);
-            return false;
+            return null;
         }
-        setCurrentAccount(uOptional.get());
-        return true;
-    }
-
-    public Account getCurrentAccount() {
-        return (Account)session.getAttribute("account");
+        account = aOptional.get();
+        setCurrentAccount(account);
+        return account;
     }
 
     public void setCurrentAccount(Account account) {

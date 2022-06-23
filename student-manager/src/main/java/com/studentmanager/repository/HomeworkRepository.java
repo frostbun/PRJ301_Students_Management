@@ -15,5 +15,9 @@ public interface HomeworkRepository extends JpaRepository<Homework, Long> {
 
     public Optional<Homework> findById(Long id);
 
+    public Optional<Homework> findByIdAndClassroom(Long id, Classroom classroom);
+
     public List<Homework> findByClassroom(Classroom classroom, Pageable pageable);
+
+    public Long countByClassroom(Classroom classroom);
 }

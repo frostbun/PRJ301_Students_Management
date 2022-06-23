@@ -35,12 +35,12 @@ public class ChangeAccountInformationDTO implements DTO {
         view.addAttribute("address", address);
     }
 
-    public Account mapToAccount(Account accounr) {
-        accounr.setFirstName(firstName);
-        accounr.setLastName(lastName);
-        accounr.setPhone(phone);
-        accounr.setEmail(email);
-        accounr.setAddress(address);
-        return accounr;
+    public Account mapToAccount(Account account) {
+        account.setFirstName(firstName);
+        account.setLastName(lastName);
+        account.setPhone(phone);
+        account.setEmail(email);
+        account.setAddress(address);
+        return account;
     }
 }

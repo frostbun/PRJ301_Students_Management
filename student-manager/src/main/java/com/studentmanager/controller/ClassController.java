@@ -9,6 +9,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.studentmanager.config.PagingConfig;
+import com.studentmanager.model.Account;
+import com.studentmanager.model.Classroom;
 import com.studentmanager.service.ClassroomService;
 import com.studentmanager.service.SessionService;
 
@@ -20,20 +23,13 @@ public class ClassController {
     @Autowired
     private ClassroomService classroomService;
 
-    @GetMapping("/create")
-    public String createGet() {
-        if (!session.loggedIn()) {
-            return "redirect:/login";
-        }
-        return "create_class";
-    }
-
     @PostMapping("/create")
-    public String createPost(Model view, String name) {
-        if (!session.loggedIn()) {
+    public String create(Model view, String name) {
+        Account account = session.getCurrentAccount();
+        if (account == null) {
             return "redirect:/login";
         }
-        Long id = classroomService.create(name);
+        Long id = classroomService.create(view, account, name);
         if (id == null) {
             return "index";
         }
@@ -41,11 +37,12 @@ public class ClassController {
     }
 
     @PostMapping("/join")
-    public String joinPost(Model view, String inviteCode) {
-        if (!session.loggedIn()) {
+    public String join(Model view, String inviteCode) {
+        Account account = session.getCurrentAccount();
+        if (account == null) {
             return "redirect:/login";
         }
-        Long id = classroomService.join(view, inviteCode);
+        Long id = classroomService.join(view, account, inviteCode);
         if (id == null) {
             return "index";
         }
@@ -54,10 +51,16 @@ public class ClassController {
 
     @GetMapping("/{id}/members")
     public String members(Model view, @PathVariable Long id, @RequestParam(defaultValue = "0") int page) {
-        if (!session.loggedIn()) {
+        Account account = session.getCurrentAccount();
+        if (account == null) {
             return "redirect:/login";
         }
-        view.addAttribute("members", classroomService.getClassroomMembers(id, page, 25));
+        Classroom classroom = classroomService.getClassroomById(id, account);
+        if (classroom == null) {
+            return "redirect:/";
+        }
+        view.addAttribute("members", classroomService.getClassroomMembers(classroom, page, PagingConfig.SIZE));
+        view.addAttribute("pages", classroomService.countClassroomMembers(classroom) / PagingConfig.SIZE);
         return "members";
     }
 }

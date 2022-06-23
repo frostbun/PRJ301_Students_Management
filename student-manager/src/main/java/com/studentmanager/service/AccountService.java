@@ -17,55 +17,53 @@ import com.studentmanager.repository.AccountRepository;
 @Service
 public class AccountService {
     @Autowired
-    private SessionService session;
-    @Autowired
     private AccountRepository accountRepo;
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    public boolean login(Model view, LoginDTO dto) {
-        Optional<Account> uOptional = accountRepo.findByUsername(dto.getUsername());
-        if (!uOptional.isPresent()) {
-            view.addAttribute("error", "Wrong username");
-            return false;
-        }
-        Account account = uOptional.get();
-        if (!passwordEncoder.matches(dto.getPassword(), account.getPassword())) {
-            view.addAttribute("error", "Wrong password");
-            return false;
-        }
-        session.setCurrentAccount(account);
-        return true;
-    }
-
-    public boolean register(Model view, RegisterDTO dto) {
+    public Account login(Model view, LoginDTO dto) {
         String error = dto.validate();
         if (error != null) {
             view.addAttribute("error", error);
-            return false;
+            return null;
         }
-        Optional<Account> uOptional = accountRepo.findByUsername(dto.getUsername());
-        if (uOptional.isPresent()) {
+        Optional<Account> aOptional = accountRepo.findByUsername(dto.getUsername());
+        if (!aOptional.isPresent()) {
+            view.addAttribute("error", "Wrong username");
+            return null;
+        }
+        Account account = aOptional.get();
+        if (!passwordEncoder.matches(dto.getPassword(), account.getPassword())) {
+            view.addAttribute("error", "Wrong password");
+            return null;
+        }
+        return account;
+    }
+
+    public Account register(Model view, RegisterDTO dto) {
+        String error = dto.validate();
+        if (error != null) {
+            view.addAttribute("error", error);
+            return null;
+        }
+        Optional<Account> aOptional = accountRepo.findByUsername(dto.getUsername());
+        if (aOptional.isPresent()) {
             view.addAttribute("error", "Username existed");
-            return false;
+            return null;
         }
         if (!dto.getPassword().equals(dto.getConfirmPassword())) {
             view.addAttribute("error", "Password not match");
-            return false;
+            return null;
         }
-        Account account = dto.mapToAccount(new Account());
-        accountRepo.save(account);
-        session.setCurrentAccount(account);
-        return true;
+        return accountRepo.save(dto.mapToAccount(new Account()));
     }
 
-    public boolean changePassword(Model view, ChangeAccountPasswordDTO dto) {
+    public boolean changePassword(Model view, Account account, ChangeAccountPasswordDTO dto) {
         String error = dto.validate();
         if (error != null) {
             view.addAttribute("error", error);
             return false;
         }
-        Account account = session.getCurrentAccount();
         if (!passwordEncoder.matches(dto.getPassword(), account.getPassword())) {
             view.addAttribute("error", "Wrong password");
             return false;
@@ -79,13 +77,12 @@ public class AccountService {
         return true;
     }
 
-    public boolean changeInformation(Model view, ChangeAccountInformationDTO dto) {
+    public boolean changeInformation(Model view, Account account, ChangeAccountInformationDTO dto) {
         String error = dto.validate();
         if (error != null) {
             view.addAttribute("error", error);
             return false;
         }
-        Account account = session.getCurrentAccount();
         dto.mapToAccount(account);
         accountRepo.save(account);
         return true;

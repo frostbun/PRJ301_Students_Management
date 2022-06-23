@@ -36,10 +36,10 @@ public class Homework {
     private Account author;
 
     @Column
-    private String fileLink;
+    private String filePath;
 
     @Column(columnDefinition = "NVARCHAR(MAX)")
-    private String decription;
+    private String description;
 
     @Column
     private Instant deadline;
