@@ -1,16 +1,19 @@
 package com.studentmanager.dto;
 
+import org.springframework.ui.Model;
+
+import com.studentmanager.model.Account;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class RegisterDTO extends ChangeUserInformationDTO {
+public class RegisterDTO extends ChangeAccountInformationDTO {
     private String username;
     private String password;
     private String confirmPassword;
 
-    @Override
     public String validate() {
         if (!username.matches(USERNAME_REGEX)) {
             return USERNAME_MESSAGE;
@@ -18,6 +21,20 @@ public class RegisterDTO extends ChangeUserInformationDTO {
         if (!password.matches(PASSWORD_REGEX)) {
             return PASSWORD_MESSAGE;
         }
+        if (!password.equals(confirmPassword)) {
+            return "Passwords not match";
+        }
         return super.validate();
+    }
+
+    public void addToView(Model view) {
+        view.addAttribute("username", username);
+        super.addToView(view);
+    }
+
+    public Account mapToAccount(Account account) {
+        account.setUsername(username);
+        account.setPassword(password);
+        return super.mapToAccount(account);
     }
 }

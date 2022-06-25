@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title th:text="${session.user.username + '''s profile'}">Edit profile</title>
+  <title th:text="${session.account.username + '''s profile'}">Edit profile</title>
   <th:block th:insert="components/head"></th:block>
 </head>
 
@@ -15,7 +15,7 @@
       <div class="row">
         <div class="col-md-3 border-right">
           <div class="d-flex flex-column align-items-center text-center p-3 py-5"><img class="rounded-circle mt-5"
-              width="150px" th:src="${../static/img/hehe.jpg}"><span class="font-weight-bold">(Name takre from
+              width="150px" th:src="@{/img/hehe.jpg}"><span class="font-weight-bold">(Name takre from
               DB)</span><span class="text-black-50">(mail@fpt.vn take from DB)</span><span> </span></div>
         </div>
         <div class="col-md-5 border-right">

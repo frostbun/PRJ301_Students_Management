@@ -7,78 +7,71 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
-import com.studentmanager.dto.ChangeUserInformationDTO;
-import com.studentmanager.dto.ChangeUserPasswordDTO;
-import com.studentmanager.model.User;
+import com.studentmanager.dto.ChangeAccountInformationDTO;
+import com.studentmanager.dto.ChangeAccountPasswordDTO;
+import com.studentmanager.model.Account;
+import com.studentmanager.service.AccountService;
 import com.studentmanager.service.SessionService;
-import com.studentmanager.service.UserService;
 
 @Controller
 @RequestMapping("/profile")
 public class ProfileController {
     @Autowired
-    private UserService userService;
+    private AccountService accountService;
     @Autowired
-    private SessionService sessionService;
+    private SessionService session;
 
     @GetMapping
     public String profile(Model view) {
-        User user = sessionService.getCurrentUser();
-        if (user == null) {
-            return "redirect:/";
+        Account account = session.getCurrentAccount();
+        if (account == null) {
+            return "redirect:/login";
         }
+        view.addAttribute("account", account);
         return "profile";
     }
 
     @GetMapping("/{id}")
     public String profileById(Model view, @PathVariable int id) {
-        User user = sessionService.getCurrentUser();
-        if (user == null) {
-            return "redirect:/";
+        Account account = session.getCurrentAccount();
+        if (account == null) {
+            return "redirect:/login";
         }
+        view.addAttribute("account", account);
         return "profile";
     }
 
     @GetMapping("/edit")
-    public String edit(Model view, @RequestParam(defaultValue = "") String error) {
-        User user = sessionService.getCurrentUser();
-        if (user == null) {
-            return "redirect:/";
+    public String edit(Model view) {
+        Account account = session.getCurrentAccount();
+        if (account == null) {
+            return "redirect:/login";
         }
-        view.addAttribute("error", error);
         return "editProfile";
     }
     
     @PostMapping("/edit/information")
-    public String changeInformation(Model view, ChangeUserInformationDTO dto) {
-        User user = sessionService.getCurrentUser();
-        if (user == null) {
-            return "redirect:/";
+    public String changeInformation(Model view, ChangeAccountInformationDTO dto) {
+        Account account = session.getCurrentAccount();
+        if (account == null) {
+            return "redirect:/login";
         }
-        String error = userService.changeInformation(user.getUsername(), dto);
-        if (error != null) {
-            view.addAttribute("firstName", dto.getFirstName());
-            view.addAttribute("lastName", dto.getLastName());
-            view.addAttribute("phone", dto.getPhone());
-            view.addAttribute("email", dto.getEmail());
-            view.addAttribute("address", dto.getAddress());
-            view.addAttribute("error", error);
+        if (!accountService.changeInformation(view, account, dto)){
+            dto.addToView(view);
             return "editProfile";
         }
         return "redirect:/profile";
     }
 
     @PostMapping("/edit/password")
-    public String changePassword(Model view, ChangeUserPasswordDTO dto) {
-        User user = sessionService.getCurrentUser();
-        if (user == null) {
-            return "redirect:/";
+    public String changePassword(Model view, ChangeAccountPasswordDTO dto) {
+        Account account = session.getCurrentAccount();
+        if (account == null) {
+            return "redirect:/login";
         }
-        String error = userService.changePassword(user.getUsername(), dto);
-        if (error != null) {
-            view.addAttribute("error", error);
+        if (!accountService.changePassword(view, account, dto)){
+            dto.addToView(view);
             return "editProfile";
         }
         return "redirect:/profile";

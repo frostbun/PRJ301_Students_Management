@@ -6,49 +6,40 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import com.studentmanager.dto.RegisterDTO;
-import com.studentmanager.model.User;
+import com.studentmanager.model.Account;
+import com.studentmanager.service.AccountService;
 import com.studentmanager.service.SessionService;
-import com.studentmanager.service.UserService;
 
 @Controller
 @RequestMapping("/register")
 public class RegisterController {
     @Autowired
-    private UserService userService;
+    private AccountService accountService;
     @Autowired
-    private SessionService sessionService;
+    private SessionService session;
 
     @GetMapping
-    public String get(Model view, @RequestParam(defaultValue = "") String error) {
-        User user = sessionService.getCurrentUser();
-        if (user != null) {
-            return "redirect:/";
+    public String get(Model view) {
+        Account account = session.getCurrentAccount();
+        if (account == null) {
+            return "register";
         }
-        view.addAttribute("error", error);
-        return "register";
+        return "redirect:/";
     }
 
     @PostMapping
     public String post(Model view, RegisterDTO dto) {
-        User user = sessionService.getCurrentUser();
-        if (user != null) {
-            return "redirect:/";
+        Account account = session.getCurrentAccount();
+        if (account == null) {
+            account = accountService.register(view, dto);
+            if (account == null) {
+                dto.addToView(view);
+                return "register";
+            }
         }
-        String error = userService.register(dto);
-        if (error != null) {
-            view.addAttribute("username", dto.getUsername());
-            view.addAttribute("firstName", dto.getFirstName());
-            view.addAttribute("lastName", dto.getLastName());
-            view.addAttribute("phone", dto.getPhone());
-            view.addAttribute("email", dto.getEmail());
-            view.addAttribute("address", dto.getAddress());
-            view.addAttribute("error", error);
-            return "register";
-        }
-        sessionService.setCurrentUser(dto.getUsername());
+        session.setCurrentAccount(account);
         return "redirect:/";
     }
 }

@@ -6,8 +6,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import lombok.AllArgsConstructor;
@@ -21,25 +19,21 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Submission {
+public class Classroom {
     @Id
     @GeneratedValue
     @Column
     private Long id;
 
-    @ManyToOne
-    @JoinColumn
-    private Homework homework;
+    @Column(columnDefinition = "NVARCHAR(50)")
+    private String name;
 
-    @ManyToOne
-    @JoinColumn
-    private Account author;
-
-    @Column
-    private String fileLink;
+    @GeneratedValue
+    @Column(unique = true)
+    private String inviteCode;
 
     @Column
-    private Integer mark;
+    private String coverURL;
 
     @Column
     @Builder.Default
