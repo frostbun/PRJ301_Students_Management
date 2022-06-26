@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.studentmanager.dto.LoginDTO;
+import com.studentmanager.dto.ServiceResponse;
 import com.studentmanager.model.Account;
 import com.studentmanager.service.AccountService;
 import com.studentmanager.service.SessionService;
@@ -33,13 +34,13 @@ public class LoginController {
     public String post(Model view, LoginDTO dto) {
         Account account = session.getCurrentAccount();
         if (account == null) {
-            account = accountService.login(view, dto);
-            if (account == null) {
-                dto.addToView(view);
+            ServiceResponse<Account> response = accountService.login(dto);
+            if (response.isError()) {
+                dto.addToView(view, response.getError());
                 return "login";
             }
+            session.setCurrentAccount(response.getResponse());
         }
-        session.setCurrentAccount(account);
         return "redirect:/";
     }
 }

@@ -5,9 +5,11 @@ import org.springframework.ui.Model;
 import com.studentmanager.model.Account;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Data
-public class ChangeAccountInformationDTO implements DTO {
+@EqualsAndHashCode(callSuper = false)
+public class ChangeAccountInformationDTO extends DTO {
     private String firstName;
     private String lastName;
     private String phone;
@@ -27,12 +29,13 @@ public class ChangeAccountInformationDTO implements DTO {
         return null;
     }
 
-    public void addToView(Model view) {
+    public Model addToView(Model view) {
         view.addAttribute("firstName", firstName);
         view.addAttribute("lastName", lastName);
         view.addAttribute("phone", phone);
         view.addAttribute("email", email);
         view.addAttribute("address", address);
+        return view;
     }
 
     public Account mapToAccount(Account account) {

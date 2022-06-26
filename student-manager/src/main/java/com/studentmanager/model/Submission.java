@@ -36,7 +36,7 @@ public class Submission {
     private Account author;
 
     @Column
-    private String fileLink;
+    private String filePath;
 
     @Column
     private Integer mark;

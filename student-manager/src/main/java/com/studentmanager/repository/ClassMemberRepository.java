@@ -15,14 +15,15 @@ import com.studentmanager.model.Account;
 public interface ClassMemberRepository extends JpaRepository<ClassMember, Long> {
 
     public Optional<ClassMember> findById(Long id);
+    public Optional<ClassMember> findByAccountAndClassroom(Account account, Classroom classroom);
+    public Optional<ClassMember> findByAccountAndClassroomId(Account account, Long cid);
+    public Optional<ClassMember> findByAccountUsernameAndClassroom(String username, Classroom classroom);
+    public Optional<ClassMember> findByAccountUsernameAndClassroomId(String username, Long cid);
 
     public List<ClassMember> findByClassroom(Classroom classroom, Pageable pageable);
+    public Long countByClassroom(Classroom classroom);
 
     public List<ClassMember> findByAccount(Account account, Pageable pageable);
-
-    public Optional<ClassMember> findByAccountAndClassroom(Account account, Classroom classroom);
-
     public Long countByAccount(Account account);
-
-    public Long countByClassroom(Classroom classroom);
+    
 }

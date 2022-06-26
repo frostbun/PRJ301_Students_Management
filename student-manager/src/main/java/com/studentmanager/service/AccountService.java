@@ -5,86 +5,75 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.Model;
 
 import com.studentmanager.dto.ChangeAccountInformationDTO;
 import com.studentmanager.dto.ChangeAccountPasswordDTO;
 import com.studentmanager.dto.LoginDTO;
 import com.studentmanager.dto.RegisterDTO;
+import com.studentmanager.dto.ServiceResponse;
 import com.studentmanager.model.Account;
 import com.studentmanager.repository.AccountRepository;
 
 @Service
 public class AccountService {
     @Autowired
-    private AccountRepository accountRepo;
-    @Autowired
     private PasswordEncoder passwordEncoder;
+    @Autowired
+    private AccountRepository accountRepo;
 
-    public Account login(Model view, LoginDTO dto) {
+    public ServiceResponse<Account> login(LoginDTO dto) {
         String error = dto.validate();
         if (error != null) {
-            view.addAttribute("error", error);
-            return null;
+            return ServiceResponse.error(error);
         }
         Optional<Account> aOptional = accountRepo.findByUsername(dto.getUsername());
         if (!aOptional.isPresent()) {
-            view.addAttribute("error", "Wrong username");
-            return null;
+            return ServiceResponse.error("Wrong username");
         }
         Account account = aOptional.get();
         if (!passwordEncoder.matches(dto.getPassword(), account.getPassword())) {
-            view.addAttribute("error", "Wrong password");
-            return null;
+            return ServiceResponse.error("Wrong password");
         }
-        return account;
+        return ServiceResponse.success(account);
     }
 
-    public Account register(Model view, RegisterDTO dto) {
+    public ServiceResponse<Account> register(RegisterDTO dto) {
         String error = dto.validate();
         if (error != null) {
-            view.addAttribute("error", error);
-            return null;
+            return ServiceResponse.error(error);
         }
         Optional<Account> aOptional = accountRepo.findByUsername(dto.getUsername());
         if (aOptional.isPresent()) {
-            view.addAttribute("error", "Username existed");
-            return null;
+            return ServiceResponse.error("Username existed");
         }
         if (!dto.getPassword().equals(dto.getConfirmPassword())) {
-            view.addAttribute("error", "Password not match");
-            return null;
+            return ServiceResponse.error("Password not match");
         }
-        return accountRepo.save(dto.mapToAccount(new Account()));
+        return ServiceResponse.success(accountRepo.save(dto.mapToAccount(new Account())));
     }
 
-    public boolean changePassword(Model view, Account account, ChangeAccountPasswordDTO dto) {
+    public ServiceResponse<Account> changePassword(Account account, ChangeAccountPasswordDTO dto) {
         String error = dto.validate();
         if (error != null) {
-            view.addAttribute("error", error);
-            return false;
+            return ServiceResponse.error(error);
         }
         if (!passwordEncoder.matches(dto.getPassword(), account.getPassword())) {
-            view.addAttribute("error", "Wrong password");
-            return false;
+            return ServiceResponse.error("Wrong password");
         }
         if (!dto.getNewPassword().equals(dto.getConfirmPassword())) {
-            view.addAttribute("error", "Password not match");
-            return false;
+            return ServiceResponse.error("Password not match");
         }
         account.setPassword(passwordEncoder.encode(dto.getNewPassword()));
-        accountRepo.save(account);
-        return true;
+        return ServiceResponse.success(accountRepo.save(account));
     }
 
-    public boolean changeInformation(Model view, Account account, ChangeAccountInformationDTO dto) {
+    public ServiceResponse<Account> changeInformation(Account account, ChangeAccountInformationDTO dto) {
         String error = dto.validate();
         if (error != null) {
-            view.addAttribute("error", error);
-            return false;
+            return ServiceResponse.error(error);
         }
         dto.mapToAccount(account);
         accountRepo.save(account);
-        return true;
+        return ServiceResponse.success(accountRepo.save(account));
     }
 }

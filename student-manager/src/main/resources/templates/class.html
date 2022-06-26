@@ -13,12 +13,12 @@
     <div class="row position-relative">
       <img class="img-fluid class-cover" th:src="@{/img/class_cover.png}" alt="class cover image">
       <div class="row align-items-end position-absolute bottom-0 text-white">
-        <h1 class="col-8 ps-5 fw-bold" th:text="${members}"></h1>
+        <h1 class="col-8 ps-5 fw-bold" th:text=""></h1>
         <div class="col-4">
           <a class="class-nav-item" href="leave">Leave</a>
           <a class="class-nav-item" href="member">Members</a>
           <br>
-          <span class="class-nav-item" onclick='navigator.clipboard.writeText("${inviteCode}")'>Copy invite code</span>
+          <span class="class-nav-item" onclick='navigator.clipboard.writeText("")'>Copy invite code</span>
           <a class="class-nav-item" href="homework/new">New homework</a>
         </div>
       </div>
