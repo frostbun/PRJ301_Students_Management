@@ -11,6 +11,5 @@ import com.studentmanager.model.Classroom;
 public interface ClassroomRepository extends JpaRepository<Classroom, Long> {
 
     public Optional<Classroom> findById(Long id);
-
     public Optional<Classroom> findByInviteCode(String inviteCode);
 }

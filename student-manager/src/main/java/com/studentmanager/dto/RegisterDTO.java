@@ -27,9 +27,9 @@ public class RegisterDTO extends ChangeAccountInformationDTO {
         return super.validate();
     }
 
-    public void addToView(Model view) {
+    public Model addToView(Model view) {
         view.addAttribute("username", username);
-        super.addToView(view);
+        return super.addToView(view);
     }
 
     public Account mapToAccount(Account account) {

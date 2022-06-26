@@ -3,28 +3,29 @@ package com.studentmanager.dto;
 import java.time.Instant;
 
 import org.springframework.ui.Model;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.studentmanager.model.Homework;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Data
-public class CreateHomeworkDTO implements DTO {
+@EqualsAndHashCode(callSuper = true)
+public class CreateHomeworkDTO extends CreateSubmissionDTO {
     private String description;
-    private MultipartFile file;
     private Instant deadline;
 
     public String validate() {
         if (deadline.compareTo(Instant.now()) < 0) {
             return "??? :D";
         }
-        return null;
+        return super.validate();
     }
 
-    public void addToView(Model view) {
+    public Model addToView(Model view) {
         view.addAttribute("description", description);
         view.addAttribute("deadline", deadline);
+        return super.addToView(view);
     }
 
     public Homework mapToHomework(Homework homework) {

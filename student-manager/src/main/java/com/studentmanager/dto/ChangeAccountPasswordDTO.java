@@ -3,9 +3,11 @@ package com.studentmanager.dto;
 import org.springframework.ui.Model;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Data
-public class ChangeAccountPasswordDTO implements DTO {
+@EqualsAndHashCode(callSuper = false)
+public class ChangeAccountPasswordDTO extends DTO {
     private String password;
     private String newPassword;
     private String confirmPassword;
@@ -17,6 +19,7 @@ public class ChangeAccountPasswordDTO implements DTO {
         return null;
     }
 
-    public void addToView(Model view) {
+    public Model addToView(Model view) {
+        return view;
     }
 }

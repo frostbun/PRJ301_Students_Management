@@ -7,16 +7,15 @@ import lombok.EqualsAndHashCode;
 
 @Data
 @EqualsAndHashCode(callSuper = false)
-public class LoginDTO extends DTO {
-    private String username;
-    private String password;
+public class CreateClassroomDTO extends DTO {
+    private String name;
 
     public String validate() {
         return null;
     }
 
     public Model addToView(Model view) {
-        view.addAttribute("username", username);
+        view.addAttribute("name", name);
         return view;
     }
 }

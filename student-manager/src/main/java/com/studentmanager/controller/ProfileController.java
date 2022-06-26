@@ -1,5 +1,6 @@
 package com.studentmanager.controller;
 
+import org.hibernate.cfg.NotYetImplementedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.studentmanager.dto.ChangeAccountInformationDTO;
 import com.studentmanager.dto.ChangeAccountPasswordDTO;
+import com.studentmanager.dto.ServiceResponse;
 import com.studentmanager.model.Account;
 import com.studentmanager.service.AccountService;
 import com.studentmanager.service.SessionService;
@@ -26,27 +28,22 @@ public class ProfileController {
     public String profile(Model view) {
         Account account = session.getCurrentAccount();
         if (account == null) {
-            return "redirect:/login";
+            return "redirect:/";
         }
         view.addAttribute("account", account);
         return "profile";
     }
 
-    @GetMapping("/{id}")
-    public String profileById(Model view, @PathVariable int id) {
-        Account account = session.getCurrentAccount();
-        if (account == null) {
-            return "redirect:/login";
-        }
-        view.addAttribute("account", account);
-        return "profile";
+    @GetMapping("/{username}")
+    public String profileById(Model view, @PathVariable String username) {
+        throw new NotYetImplementedException();
     }
 
     @GetMapping("/edit")
     public String edit(Model view) {
         Account account = session.getCurrentAccount();
         if (account == null) {
-            return "redirect:/login";
+            return "redirect:/";
         }
         return "editProfile";
     }
@@ -55,10 +52,11 @@ public class ProfileController {
     public String changeInformation(Model view, ChangeAccountInformationDTO dto) {
         Account account = session.getCurrentAccount();
         if (account == null) {
-            return "redirect:/login";
+            return "redirect:/";
         }
-        if (!accountService.changeInformation(view, account, dto)){
-            dto.addToView(view);
+        ServiceResponse<Account> response = accountService.changeInformation(account, dto);
+        if (response.isError()){
+            dto.addToView(view, response.getError());
             return "editProfile";
         }
         return "redirect:/profile";
@@ -68,10 +66,11 @@ public class ProfileController {
     public String changePassword(Model view, ChangeAccountPasswordDTO dto) {
         Account account = session.getCurrentAccount();
         if (account == null) {
-            return "redirect:/login";
+            return "redirect:/";
         }
-        if (!accountService.changePassword(view, account, dto)){
-            dto.addToView(view);
+        ServiceResponse<Account> response = accountService.changePassword(account, dto);
+        if (response.isError()){
+            dto.addToView(view, response.getError());
             return "editProfile";
         }
         return "redirect:/profile";
