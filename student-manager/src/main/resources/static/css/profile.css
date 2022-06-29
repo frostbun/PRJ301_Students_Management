@@ -28,7 +28,8 @@ body div div ul li{
 	text-decoration: none;
 	margin-top: 5%;
 	padding: 0;
-	height: 524px;
+	height: 500px;
+	width: 260px;
 
 }
 
@@ -43,6 +44,14 @@ body div div ul li{
 	margin: 2px;
 	padding: 0  25px;
 	border-bottom: solid 5px var(--primary);
+}
+
+.nav-nav{
+	height: 720px;
+}
+
+.button{
+	height: 100px
 }
 
 .option-edit{
@@ -85,6 +94,17 @@ body div div ul li{
 	font-weight: bold;
 	
 }
+
+.big-nav{
+	padding-top: 0;
+	margin: 0;
+}
+
+.btn{
+	margin-bottom: 120px;
+}
+
+
 
 
 
