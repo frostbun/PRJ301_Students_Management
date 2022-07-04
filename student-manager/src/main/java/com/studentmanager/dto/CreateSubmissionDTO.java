@@ -1,3 +1,23 @@
+<<<<<<< HEAD
+
+package com.studentmanager.dto;
+
+import java.time.LocalDateTime;
+import lombok.Data;
+
+@Data
+public class CreateSubmissionDTO {
+    private int homeworkID;
+    private String username;
+    private String fileLink;
+    private int mark;
+    private LocalDateTime createdAt;
+    private boolean deleted;
+    
+    public String validate(){
+        return null;
+    }
+=======
 package com.studentmanager.dto;
 
 import org.springframework.ui.Model;
@@ -18,4 +38,5 @@ public class CreateSubmissionDTO extends DTO {
     public Model addToView(Model view) {
         return view;
     }
+>>>>>>> cd1d3930141ce8e85d38e5d587f76f49eb204293
 }

@@ -1,0 +1,116 @@
+:root {
+	--primary: #14375f;
+	--primary-light: #6c8299;
+	--white: #ffffff;
+	--secondary-light:  #e24943;
+	--secondary: #df322b;
+}
+
+body{
+	font-family: sans-serif;
+}
+
+.main-profile{
+	color: var(--white)
+}
+
+body div div ul li{
+	text-decoration: none !important;
+	color: var(--primary) !important
+}
+
+.labels {
+    font-size: 16px
+}
+
+.nav-pro{
+	background-color: var(--primary);
+	text-decoration: none;
+	margin-top: 5%;
+	padding: 0;
+	height: 500px;
+	width: 260px;
+
+}
+
+.nav-item{
+	margin-top: 0;
+}
+
+.nav{
+	text-align: left;
+	background-color: var(--primary-light);
+	color: var(--white) !important;
+	margin: 2px;
+	padding: 0  25px;
+	border-bottom: solid 5px var(--primary);
+}
+
+.nav-nav{
+	height: 720px;
+}
+
+.button{
+	height: 100px
+}
+
+.option-edit{
+	color: var(--primary) !important;
+	text-decoration: none;
+	font-size: 20px;
+	line-height: 5;
+	
+}
+
+.option-edit-nav{
+	height: 200px;
+}
+
+.option-edit-nav div{
+	border-bottom: 1px solid var(--primary-light);
+}
+
+.option-edit-nav div:last-child{
+	border-bottom: none
+}
+
+.option-edit-div a{
+	height: 100px
+}
+
+.option-edit-nav div:hover{
+	border-left: 3px solid var(--primary);
+	
+}
+
+.nav-pro .option-edit-nav{
+	background-color: #e9ecef;
+	box-shadow: 10px;
+	color:var(--primary);
+}
+
+.active{
+	text-transform: uppercase;
+	font-weight: bold;
+	
+}
+
+.big-nav{
+	padding-top: 0;
+	margin: 0;
+}
+
+.btn{
+	margin-bottom: 120px;
+}
+
+
+
+
+
+
+
+
+
+
+
