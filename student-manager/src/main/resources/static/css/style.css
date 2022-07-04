@@ -666,7 +666,7 @@ select {
 }
 /* CHATBOX */
 @media screen and (max-width: 576px) {
-	.chatbox-message-wrapper {F
+	.chatbox-message-wrapper {
 		width: calc(100vw - 2rem);
 	}
 	.chatbox-wrapper {
