@@ -48,21 +48,21 @@ public class SubmissionController {
         if (homework == null) {
             return "redirect:/";
         }
-        view.addAttribute("homeworks", submissionService.getSubmissions(homework, page, PagingConfig.SIZE));
+        view.addAttribute("submissions", submissionService.getSubmissions(homework, page, PagingConfig.SIZE));
         view.addAttribute("pages", submissionService.countSubmissions(homework) / PagingConfig.SIZE);
-        return "homework";
+        return "submission";
     }
 
-    @GetMapping
+    @GetMapping("/{sid}")
     public String submitGet(Model view, @PathVariable Long cid, @PathVariable Long sid) {
         ClassMember classMember = classMemberService.getClassMember(session.getCurrentAccount(), cid);
-        if (classMember == null || !classMember.getRole().equals(ClassMember.TEACHER)) {
+        if (classMember == null || classMember.getRole().equals(ClassMember.TEACHER)) {
             return "redirect:/";
         }
         return "submit_homework";
     }
 
-    @PostMapping
+    @PostMapping("/{sid}")
     public String submitPost(Model view, @PathVariable Long cid, @PathVariable Long hid, CreateSubmissionDTO dto) {
         Account account = session.getCurrentAccount();
         Classroom classroom = classMemberService.getClassroom(account, cid);

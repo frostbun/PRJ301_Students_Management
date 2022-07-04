@@ -19,6 +19,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Account {
+    public static final String ADMIN = "ADMIN";
+    public static final String USER = "USER";
+
     @Id
     @Column
     private String username;
@@ -45,7 +48,8 @@ public class Account {
     private String avatarURL;
 
     @Column
-    private String role;
+    @Builder.Default
+    private String role = USER;
 
     @Column
     @Builder.Default

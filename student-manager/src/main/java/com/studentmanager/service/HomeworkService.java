@@ -3,7 +3,6 @@ package com.studentmanager.service;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -50,11 +49,9 @@ public class HomeworkService {
     }
 
     public Homework getHomework(Classroom classroom, Long hid) {
-        Optional<Homework> hOptional =  homeworkRepo.findByIdAndClassroom(hid, classroom);
-        if (!hOptional.isPresent()) {
-            return null;
-        }
-        return hOptional.get();
+        return homeworkRepo
+            .findByIdAndClassroom(hid, classroom)
+            .orElse(null);
     }
 
     public List<Homework> getHomeworks(Classroom classroom, int page, int size) {

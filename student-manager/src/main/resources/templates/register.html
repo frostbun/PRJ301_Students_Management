@@ -12,11 +12,11 @@
       <div class="col-md-6 row m-0 align-items-center">
         <div class="login-form-link">
           <p class="h4">Already have an account?</p>
-          <a class="btn btn-secondary" th:href="@{/login}">&lt;-- Login here</a>
+          <a class="btn btn-secondary" href="./login">&lt;-- Login here</a>
         </div>
       </div>
       <div class="col-md-6 row m-0 align-items-center bg-light">
-        <form class="login-form" th:action="@{/register}" method="post">
+        <form class="login-form" method="post">
           <h1>Register</h1>
           <!-- Username -->
           <div class="form-floating m-3">
@@ -67,7 +67,7 @@
           </div>
           <!-- Submit -->
           <p class="text-danger" th:text="${error}"></p>
-          <a class="btn btn-secondary" th:href="@{/}">Cancel</a>
+          <a class="btn btn-secondary" href="../">Cancel</a>
           <button class="btn btn-primary" name="submit">Register</button>
         </form>
       </div>

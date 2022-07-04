@@ -1,7 +1,5 @@
 package com.studentmanager.service;
 
-import java.util.Optional;
-
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,16 +16,13 @@ public class SessionService {
     private AccountRepository accountRepo;
 
     public Account getCurrentAccount() {
+        // find in session
         Account account = (Account)session.getAttribute("account");
         if (account == null) {
             return null;
         }
-        Optional<Account> aOptional = accountRepo.findByUsername(account.getUsername());
-        if (!aOptional.isPresent()) {
-            setCurrentAccount(null);
-            return null;
-        }
-        account = aOptional.get();
+        // check in database
+        account = accountRepo.findByUsername(account.getUsername()).orElse(null);
         setCurrentAccount(account);
         return account;
     }

@@ -2,45 +2,13 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <link rel="stylesheet" href="profile.css">
-    <link rel="stylesheet" href="navbar.css">
     <title>Edit Profile</title>
+    <th:block th:insert="components/head"></th:block>
+    <link rel="stylesheet" href="navbar.css">
 </head>
 
 <body>
-    <nav class="navbar fixed-top navbar-expand-md navbar-dark bg-light">
-        <div class="container">
-            <a href="#" class="navbar-brand mb-0 h1 colorNav">STUDENT MANAGEMENT</a>
-            <button type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" class="navbar-toggler"
-                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation"> <span
-                    class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a href="#" class="nav-link colorNav">Home</a>
-                    </li>
-                    <li czlass="nav-item">
-                        <a href="#" class="nav-link colorNav">Homework List</a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#" class="nav-link colorNav">Send message</a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#" class="nav-link colorNav">Profile</a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#" class="nav-link colorNav">Logout</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
+    <header th:insert="components/header"></header>
 
     <div class="container rounded bg-white mt-5 mb-5">
         <div class="row">
@@ -57,7 +25,7 @@
                     <div><a href="profile.html" class="option-edit active">Profile</a></div>
                     <div><a href="changePassword.html" class="option-edit">Change Password</a></div>
                 </div>
-                
+
             </div>
             <div class="col-md-6 border-right">
                 <div class="p-3 py-5">
@@ -76,7 +44,8 @@
                     </div>
                     <div class="row mt-2">
                         <div class="col-md-12"><label class="labels">Mobile Number</label><input type="text"
-                                class="form-control " placeholder="Your mobile number" id="mobile" value="" readonly></div>
+                                class="form-control " placeholder="Your mobile number" id="mobile" value="" readonly>
+                        </div>
                         <div class="col-md-12"><label class="labels">Email</label><input type="text"
                                 class="form-control " placeholder="Your email" id="email" value="" readonly></div>
                         <div class="col-md-12"><label class="labels">Address</label><input type="text"
@@ -87,18 +56,14 @@
         </div>
     </div>
 
-    <div class="text-center"><button class="btn btn-primary profile-button" type="button" style="background-color:var(--primary)" id="editButton" onclick="change()" >Edit Profile</button></div>
+    <div class="text-center"><button class="btn btn-primary profile-button" type="button"
+            style="background-color:var(--primary)" id="editButton" onclick="change()">Edit Profile</button></div>
 
-    
-    <div class="footer">
-        <p>Powered by "change name" | <a href="#" class="colorNav">About Us</a></p>
-    </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
-        crossorigin="anonymous"></script>
-        <script type ="text/javascript" src="editProfile.js"></script>
+    <footer th:insert="components/footer"></footer>
+    <div th:insert="components/script"></div>
 
+    <script type="text/javascript" src="editProfile.js"></script>
 
 </body>
 

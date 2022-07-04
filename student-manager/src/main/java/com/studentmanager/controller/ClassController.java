@@ -76,4 +76,15 @@ public class ClassController {
         view.addAttribute("pages", classMemberService.countMembers(classroom) / PagingConfig.SIZE);
         return "member";
     }
+
+    // @GetMapping("/{cid}/leave")
+    // public String leave(Model view, @PathVariable Long cid, @RequestParam(defaultValue = "0") int page) {
+    //     Classroom classroom = classMemberService.getClassroom(session.getCurrentAccount(), cid);
+    //     if (classroom == null) {
+    //         return "redirect:/";
+    //     }
+    //     view.addAttribute("members", classMemberService.getMembers(classroom, page, PagingConfig.SIZE));
+    //     view.addAttribute("pages", classMemberService.countMembers(classroom) / PagingConfig.SIZE);
+    //     return "member";
+    // }
 }

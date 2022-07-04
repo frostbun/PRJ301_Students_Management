@@ -10,7 +10,7 @@
   <div class="container m-0">
     <div class="row vw-100 vh-100 text-center login-bg">
       <div class="col-md-6 row m-0 align-items-center bg-light">
-        <form class="login-form" th:action="@{/login}" method="post">
+        <form class="login-form" method="post">
           <h1>Login</h1>
           <div class="form-floating m-3">
             <input class="form-control" type="text" name="username" id="username" placeholder="Username"
@@ -22,14 +22,14 @@
             <label for="password">Password</label>
           </div>
           <p class="text-danger" th:text="${error}"></p>
-          <a class="btn btn-secondary" th:href="@{/}">Cancel</a>
+          <a class="btn btn-secondary" href="../">Cancel</a>
           <button class="btn btn-primary" name="submit">Login</button>
         </form>
       </div>
       <div class="col-md-6 row m-0 align-items-center login-form-bg-right">
         <div class="login-form-link">
           <p class="h4">Don't have an account?</p>
-          <a class="btn btn-secondary" th:href="@{/register}">Register here --&gt;</a>
+          <a class="btn btn-secondary" href="./register">Register here --&gt;</a>
         </div>
       </div>
     </div>

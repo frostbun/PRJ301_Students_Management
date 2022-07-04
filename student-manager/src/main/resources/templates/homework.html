@@ -1,69 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
 
-    <nav class="navbar fixed-top navbar-expand-sm navbar-dark bg-light">
-        <div class="container">
-            <div class="navbar-brand mb-0 h1 colorNav">CREATE HOMEWORK</div>
-            <button type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" class="navbar-toggler"
-                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation"> <span
-                    class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a href="#" class="nav-link colorNav">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#" class="nav-link colorNav">Homework List</a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#" class="nav-link colorNav">Send message</a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#" class="nav-link colorNav">Profile</a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#" class="nav-link colorNav">Logout</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
+<head>
+  <title th:text="${class.className}">Class</title>
+  <th:block th:insert="components/head"></th:block>
+</head>
 
-    <div class="container rounded bg-white mt-4 mb-6">
-        <div class="row">
-            <div class="col-md-7 border-right p-4 py-4 row mt-5">
-                <div class="col-md-12"><label class="labels">
-                        <h5>Title</h5>
-                    </label><input type="text" class="form-control" value=""></div>
-                <div class="col-md-12 my-3">
-                    <h5>Description</h5><textarea class="form-control" id="exampleFormControlTextarea1"
-                        rows="3"></textarea>
-                </div>
-                <div class="mb-3 mt-5">
-                    <label for="formFile" class="form-label">Attach file</label>
-                    <input class="form-control" type="file" id="formFile">
-                </div>
-            </div>
-            <div class="col-md-5 border-right p-3 py-4 row mt-5">
-                <div class="col-md-8">
-                    <h6>Grade Mark</h6>
-                    <select class="form-select form-select-md">
-                        <option value="1">10</option>
-                        <option value="2">Ungrade</option>
-                    </select>
-                </div>
-                <div class="col-md-12">
-    
-                    <h6>Deadline</h6>
-                    <input type="date">
-                    <input type="time">
-                </div>
-                <div class="col-md-12 mt-5">
-                    
-                </div>
-            </div>
+<body>
+  <header th:insert="components/header"></header>
+
+  <div class="container mt-5">
+    <div class="row position-relative">
+      <img class="img-fluid class-cover" th:src="@{/img/class_cover.png}" alt="class cover image">
+      <div class="row align-items-end position-absolute bottom-0 text-white">
+        <h1 class="col-8 ps-5 fw-bold" th:text="${classroom.name}"></h1>
+        <div class="col-4">
+          <a class="class-nav-item" href="../member">Members</a>
+          <span class="class-nav-item" th:onclick='|navigator.clipboard.writeText("${classroom.inviteCode}")|'>Copy invite
+            code</span>
+          <br>
+          <th:block th:switch="${role}">
+            <th:block th:case="TEACHER">
+              <a class="class-nav-item" href="new">New homework</a>
+              <a class="class-nav-item" href="../delete">Leave</a>
+            </th:block>
+            <th:block th:case="STUDENT">
+              <a class="class-nav-item" href="../leave">Leave</a>
+            </th:block>
+          </th:block>
         </div>
-        <div class="text-center"><button class="btn btn-primary profile-button" type="button" style="background-color:var(--primary)">Assign Homework</button></div>
+      </div>
     </div>
-    <div class="footer">
-        <p>Powered by "change name" | <a href="#" class="colorNav">About Us</a></p>
+
+    <div th:each="hsPair : ${homeworks}">
+      <th:block th:switch="${role}" th:with="homework=${hsPair.first}" th:with="submission=${hsPair.second}">
+        <th:block th:case="TEACHER">
+          <div th:replace="components/homework_card :: teacher"></div>
+        </th:block>
+        <th:block th:case="STUDENT">
+          <th:block th:switch="submission">
+            <th:block th:case="null">
+              <div th:replace="components/homework_card :: not-submitted"></div>
+            </th:block>
+            <th:block th:case="*">
+              <div th:replace="components/homework_card :: submitted"></div>
+            </th:block>
+          </th:block>
+        </th:block>
+      </th:block>
     </div>
+  </div>
+
+  <footer th:insert="components/footer"></footer>
+  <div th:insert="components/script"></div>
+</body>
+
+</html>

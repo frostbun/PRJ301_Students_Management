@@ -1,7 +1,6 @@
 package com.studentmanager.service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,41 +19,36 @@ public class ClassMemberService {
     private ClassMemberRepository classMemberRepo;
 
     public ClassMember getClassMember(Account account, Long cid) {
-        Optional<ClassMember> cmOptional = classMemberRepo.findByAccountAndClassroomId(account, cid);
-        if (!cmOptional.isPresent()) {
-            return null;
-        }
-        return cmOptional.get();
+        return classMemberRepo
+            .findByAccountAndClassroomId(account, cid)
+            .orElse(null);
     }
 
     public ClassMember getClassMember(Account account, Classroom classroom) {
-        Optional<ClassMember> cmOptional = classMemberRepo.findByAccountAndClassroom(account, classroom);
-        if (!cmOptional.isPresent()) {
-            return null;
-        }
-        return cmOptional.get();
+        return classMemberRepo
+            .findByAccountAndClassroom(account, classroom)
+            .orElse(null);
     }
 
     public Classroom getClassroom(Account account, Long cid) {
-        Optional<ClassMember> cmOptional = classMemberRepo.findByAccountAndClassroomId(account, cid);
-        if (!cmOptional.isPresent()) {
-            return null;
-        }
-        return cmOptional.get().getClassroom();
+        return classMemberRepo
+            .findByAccountAndClassroomId(account, cid)
+            .map(ClassMember::getClassroom)
+            .orElse(null);
     }
 
     public List<Classroom> getClassrooms(Account account, int page, int size) {
         return classMemberRepo.findByAccount(
-                    account,
-                    PageRequest.of(
-                        page,
-                        size,
-                        Sort.by("createdAt").descending()
-                    )
+                account,
+                PageRequest.of(
+                    page,
+                    size,
+                    Sort.by("createdAt").descending()
                 )
-                .stream()
-                .map(ClassMember::getClassroom)
-                .collect(Collectors.toList());
+            )
+            .stream()
+            .map(ClassMember::getClassroom)
+            .collect(Collectors.toList());
     }
 
     public Long countClassrooms(Account account) {
@@ -62,11 +56,10 @@ public class ClassMemberService {
     }
 
     public Account getMember(String username, Classroom classroom) {
-        Optional<ClassMember> cmOptional = classMemberRepo.findByAccountUsernameAndClassroom(username, classroom);
-        if (!cmOptional.isPresent()) {
-            return null;
-        }
-        return cmOptional.get().getAccount();
+        return classMemberRepo
+            .findByAccountUsernameAndClassroom(username, classroom)
+            .map(ClassMember::getAccount)
+            .orElse(null);
     }
 
     public List<Account> getMembers(Classroom classroom, int page, int size) {
@@ -87,5 +80,9 @@ public class ClassMemberService {
 
     public Long countMembers(Classroom classroom) {
         return classMemberRepo.countByClassroom(classroom);
+    }
+
+    public Long countStudents(Classroom classroom) {
+        return classMemberRepo.countByClassroomAndRole(classroom, ClassMember.STUDENT);
     }
 }

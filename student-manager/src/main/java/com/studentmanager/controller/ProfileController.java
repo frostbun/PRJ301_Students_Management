@@ -39,15 +39,6 @@ public class ProfileController {
         throw new NotYetImplementedException();
     }
 
-    @GetMapping("/edit")
-    public String edit(Model view) {
-        Account account = session.getCurrentAccount();
-        if (account == null) {
-            return "redirect:/";
-        }
-        return "editProfile";
-    }
-    
     @PostMapping("/edit/information")
     public String changeInformation(Model view, ChangeAccountInformationDTO dto) {
         Account account = session.getCurrentAccount();
