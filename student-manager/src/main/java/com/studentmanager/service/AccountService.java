@@ -49,6 +49,7 @@ public class AccountService {
         if (!dto.getPassword().equals(dto.getConfirmPassword())) {
             return ServiceResponse.error("Password not match");
         }
+        dto.setPassword(passwordEncoder.encode(dto.getPassword()));
         return ServiceResponse.success(accountRepo.save(dto.mapToAccount(new Account())));
     }
 
@@ -72,8 +73,6 @@ public class AccountService {
         if (error != null) {
             return ServiceResponse.error(error);
         }
-        dto.mapToAccount(account);
-        accountRepo.save(account);
-        return ServiceResponse.success(accountRepo.save(account));
+        return ServiceResponse.success(accountRepo.save(dto.mapToAccount(account)));
     }
 }

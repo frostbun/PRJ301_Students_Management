@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.studentmanager.dto.ChangeAccountInformationDTO;
 import com.studentmanager.dto.ChangeAccountPasswordDTO;
@@ -25,12 +27,13 @@ public class ProfileController {
     private SessionService session;
 
     @GetMapping
-    public String profile(Model view) {
+    public String profile(Model view, @RequestParam(required = false) String error) {
         Account account = session.getCurrentAccount();
         if (account == null) {
             return "redirect:/";
         }
         view.addAttribute("account", account);
+        view.addAttribute("error", error);
         return "profile";
     }
 
@@ -40,30 +43,24 @@ public class ProfileController {
     }
 
     @PostMapping("/edit/information")
-    public String changeInformation(Model view, ChangeAccountInformationDTO dto) {
+    public String changeInformation(Model view, ChangeAccountInformationDTO dto, RedirectAttributes redirect) {
         Account account = session.getCurrentAccount();
         if (account == null) {
             return "redirect:/";
         }
         ServiceResponse<Account> response = accountService.changeInformation(account, dto);
-        if (response.isError()){
-            dto.addToView(view, response.getError());
-            return "editProfile";
-        }
+        redirect.addAttribute("error", response.isError() ? response.getError() : "Information changed successfully");
         return "redirect:/profile";
     }
 
     @PostMapping("/edit/password")
-    public String changePassword(Model view, ChangeAccountPasswordDTO dto) {
+    public String changePassword(Model view, ChangeAccountPasswordDTO dto,  RedirectAttributes redirect) {
         Account account = session.getCurrentAccount();
         if (account == null) {
             return "redirect:/";
         }
         ServiceResponse<Account> response = accountService.changePassword(account, dto);
-        if (response.isError()){
-            dto.addToView(view, response.getError());
-            return "editProfile";
-        }
+        redirect.addAttribute("error", response.isError() ? response.getError() : "Password changed successfully");
         return "redirect:/profile";
     }
 }

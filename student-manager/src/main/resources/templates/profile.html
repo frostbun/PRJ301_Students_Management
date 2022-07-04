@@ -2,69 +2,36 @@
 <html lang="en">
 
 <head>
-    <title>Edit Profile</title>
-    <th:block th:insert="components/head"></th:block>
-    <link rel="stylesheet" href="navbar.css">
+  <title th:text="|${account.fullName}'s Profile|"></title>
+  <th:block th:insert="components/head"></th:block>
+  <link rel="stylesheet" th:href="@{/css/profile.css}">
 </head>
 
 <body>
-    <header th:insert="components/header"></header>
+  <header th:insert="components/header"></header>
 
-    <div class="container rounded bg-white mt-5 mb-5">
-        <div class="row">
-            <div class="col-md-3 border-right nav-pro">
-                <div class="d-flex flex-column align-items-center text-center my-2"><img class="rounded-circle mt-5"
-                        width="150px"
-                        src="https://www.nicepng.com/png/detail/402-4023750_fill-educational-background-comments-educational-background-icon-png.png">
-                    <span class="main-profile mt-3">username</span>
-                    <span class="main-profile">Your Name</span>
-                    <span class="main-profile">youremail@email.com</span>
-                    <span> </span>
-                </div>
-                <div class="col-md-12 option-edit-nav mt-3">
-                    <div><a href="profile.html" class="option-edit active">Profile</a></div>
-                    <div><a href="changePassword.html" class="option-edit">Change Password</a></div>
-                </div>
-
-            </div>
-            <div class="col-md-6 border-right">
-                <div class="p-3 py-5">
-                    <div class="d-flex justify-content-between align-items-center mb-3">
-                        <h4 class="text-right"><b>Your Profile</b></h4>
-                    </div>
-                    <div class="row mt-2">
-                        <div class="col-md-6"><label class="labels">Role</label><input type="text" class="form-control"
-                                placeholder="Your role" value="" readonly></div>
-                    </div>
-                    <div class="row mt-2">
-                        <div class="col-md-6"><label class="labels">Firstname</label><input id="firstname" type="text"
-                                class="form-control option_edit" placeholder="Your firstname" value="" readonly></div>
-                        <div class="col-md-6"><label class="labels">Surname</label><input type="text"
-                                class="form-control " placeholder="Your surname" id="surname" value="" readonly></div>
-                    </div>
-                    <div class="row mt-2">
-                        <div class="col-md-12"><label class="labels">Mobile Number</label><input type="text"
-                                class="form-control " placeholder="Your mobile number" id="mobile" value="" readonly>
-                        </div>
-                        <div class="col-md-12"><label class="labels">Email</label><input type="text"
-                                class="form-control " placeholder="Your email" id="email" value="" readonly></div>
-                        <div class="col-md-12"><label class="labels">Address</label><input type="text"
-                                class="form-control " placeholder="Your address" id="address" value="" readonly></div>
-                    </div>
-                </div>
-            </div>
+  <div class="container rounded bg-white mt-5 mb-5">
+    <div class="row">
+      <div class="col-md-3 border-right nav-pro">
+        <div class="d-flex flex-column align-items-center text-center my-2">
+          <img class="rounded-circle mt-5" width="150px" th:src="@{/img/white_avt.png}">
+          <span class="main-profile mt-3" th:text="${account.username}"></span>
+          <span class="main-profile" th:text="${account.fullName}"></span>
+          <span class="main-profile" th:text="${account.email}"></span>
         </div>
+        <div class="col-md-12 option-edit-nav mt-3">
+          <div><p class="option-edit active">Profile</p></div>
+          <div><p class="option-edit">Change Password</p></div>
+        </div>
+      </div>
+      <div th:replace="components/profileForm :: information"></div>
+      <div th:replace="components/profileForm :: password"></div>
     </div>
+  </div>
 
-    <div class="text-center"><button class="btn btn-primary profile-button" type="button"
-            style="background-color:var(--primary)" id="editButton" onclick="change()">Edit Profile</button></div>
-
-
-    <footer th:insert="components/footer"></footer>
-    <div th:insert="components/script"></div>
-
-    <script type="text/javascript" src="editProfile.js"></script>
-
+  <footer th:insert="components/footer"></footer>
+  <div th:insert="components/script"></div>
+  <script type="text/javascript" th:src="@{/js/profile.js}"></script>
 </body>
 
 </html>

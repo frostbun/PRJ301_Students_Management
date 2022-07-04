@@ -54,4 +54,8 @@ public class Account {
     @Column
     @Builder.Default
     private Instant createdAt = Instant.now();
+
+    public String getFullName() {
+        return firstName + " " + lastName;
+    }
 }

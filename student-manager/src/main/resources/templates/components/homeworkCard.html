@@ -1,7 +1,7 @@
 <div th:fragment="header">
   <div>
-    <img class="img-fluid rounded-circle" th:src="@{/img/white_avt.jpg}" alt="class member avatar" width="40px">
-    <span th:text="|${homework.author.firstName} ${homework.author.lastName}|"></span>
+    <img class="img-fluid rounded-circle" th:src="@{/img/white_avt.png}" alt="class member avatar" width="40px">
+    <span th:text="${homework.author.fullName}"></span>
   </div>
   <p class="text-muted m-0" th:text="|${homework.createdAt} (${homework.maxMark} point(s))|"></p>
   <h3 th:text="${homework.title}"></h3>
@@ -36,7 +36,7 @@
 
 <div class="card" th:fragment="teacher">
   <div th:replace=":: header"></div>
-  <h6 class="col-lg-6" th:text="|Status: ${homework.submissions.size}/{countStudents}|"></h6>
+  <h6 class="col-lg-6" th:text="|Status: ${homework.submissions.size}/{studentCount} submitted|"></h6>
   <div class="col-4 col-lg-2">
     <a class="btn btn-primary" th:href="@{${homework.id}/submission}">View</a>
   </div>

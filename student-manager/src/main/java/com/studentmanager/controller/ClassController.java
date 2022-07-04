@@ -28,14 +28,14 @@ public class ClassController {
     private ClassMemberService classMemberService;
 
     @GetMapping
-    public String list(Model view, @RequestParam(defaultValue = "0") int page) {
+    public String list(Model view, @RequestParam(defaultValue = "1") int page) {
         Account account = session.getCurrentAccount();
         if (account == null) {
             return "redirect:/";
         }
-        view.addAttribute("classes", classMemberService.getClassrooms(account, page, PagingConfig.SIZE));
-        view.addAttribute("pages", classMemberService.countClassrooms(account) / PagingConfig.SIZE);
-        return "class_list";
+        view.addAttribute("classes", classMemberService.getClassrooms(account, page-1, PagingConfig.SIZE));
+        view.addAttribute("pages", PagingConfig.pageCountOf(classMemberService.countClassrooms(account)));
+        return "class";
     }
 
     @PostMapping("/create")
@@ -67,18 +67,29 @@ public class ClassController {
     }
 
     @GetMapping("/{cid}/member")
-    public String member(Model view, @PathVariable Long cid, @RequestParam(defaultValue = "0") int page) {
+    public String member(Model view, @PathVariable Long cid, @RequestParam(defaultValue = "1") int page) {
         Classroom classroom = classMemberService.getClassroom(session.getCurrentAccount(), cid);
         if (classroom == null) {
             return "redirect:/";
         }
-        view.addAttribute("members", classMemberService.getMembers(classroom, page, PagingConfig.SIZE));
-        view.addAttribute("pages", classMemberService.countMembers(classroom) / PagingConfig.SIZE);
+        view.addAttribute("members", classMemberService.getMembers(classroom, page-1, PagingConfig.SIZE));
+        view.addAttribute("pages", PagingConfig.pageCountOf(classMemberService.countMembers(classroom)));
         return "member";
     }
 
     // @GetMapping("/{cid}/leave")
-    // public String leave(Model view, @PathVariable Long cid, @RequestParam(defaultValue = "0") int page) {
+    // public String leave(Model view, @PathVariable Long cid) {
+    //     Classroom classroom = classMemberService.getClassroom(session.getCurrentAccount(), cid);
+    //     if (classroom == null) {
+    //         return "redirect:/";
+    //     }
+    //     view.addAttribute("members", classMemberService.getMembers(classroom, page, PagingConfig.SIZE));
+    //     view.addAttribute("pages", classMemberService.countMembers(classroom) / PagingConfig.SIZE);
+    //     return "member";
+    // }
+
+    // @GetMapping("/{cid}/delete")
+    // public String delete(Model view, @PathVariable Long cid) {
     //     Classroom classroom = classMemberService.getClassroom(session.getCurrentAccount(), cid);
     //     if (classroom == null) {
     //         return "redirect:/";

@@ -23,7 +23,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.studentmanager.config.PagingConfig;
 import com.studentmanager.dto.CreateHomeworkDTO;
 import com.studentmanager.dto.ServiceResponse;
-import com.studentmanager.model.Account;
 import com.studentmanager.model.ClassMember;
 import com.studentmanager.model.Classroom;
 import com.studentmanager.model.Homework;
@@ -45,7 +44,7 @@ public class HomeworkController {
     private SubmissionService submissionService;
 
     @GetMapping
-    public String homework(Model view, @PathVariable Long cid, @RequestParam(defaultValue = "0") int page) {
+    public String homework(Model view, @PathVariable Long cid, @RequestParam(defaultValue = "1") int page) {
         ClassMember classMember = classMemberService.getClassMember(session.getCurrentAccount(), cid);
         if (classMember == null) {
             return "redirect:/";
@@ -53,40 +52,40 @@ public class HomeworkController {
         Classroom classroom = classMember.getClassroom();
         view.addAttribute("role", classMember.getRole());
         view.addAttribute("classroom", classroom);
-        view.addAttribute("countStudents", classMemberService.countStudents(classroom));
+        view.addAttribute("studentCount", classMemberService.countStudents(classroom));
         view.addAttribute(
             "homeworks",
             homeworkService
-                .getHomeworks(classroom, page, PagingConfig.SIZE)
+                .getHomeworks(classroom, page-1, PagingConfig.SIZE)
                 .stream()
                 .map(homework -> Pair.of(homework, submissionService.getSubmission(session.getCurrentAccount(), homework)))
                 .collect(Collectors.toList())
         );
-        view.addAttribute("pages", homeworkService.countHomeworks(classroom) / PagingConfig.SIZE);
+        view.addAttribute("pageCount", PagingConfig.pageCountOf(homeworkService.countHomeworks(classroom)));
         return "homework";
     }
 
     @GetMapping("/create")
     public String createGet(Model view, @PathVariable Long cid) {
         ClassMember classMember = classMemberService.getClassMember(session.getCurrentAccount(), cid);
-        if (classMember == null || !classMember.getRole().equals(ClassMember.TEACHER)) {
+        if (classMember == null || classMember.getRole().equals(ClassMember.STUDENT)) {
             return "redirect:/";
         }
-        return "create_homework";
+        view.addAttribute("classroom", classMember.getClassroom());
+        return "createHomework";
     }
 
     @PostMapping("/create")
     public String createPost(Model view, @PathVariable Long cid, CreateHomeworkDTO dto) throws IllegalStateException, IOException {
-        Account account = session.getCurrentAccount();
-        Classroom classroom = classMemberService.getClassroom(account, cid);
-        ClassMember classMember = classMemberService.getClassMember(account, classroom);
+        ClassMember classMember = classMemberService.getClassMember(session.getCurrentAccount(), cid);
         if (classMember == null || classMember.getRole().equals(ClassMember.STUDENT)) {
             return "redirect:/";
         }
-        ServiceResponse<Homework> response = homeworkService.create(account, classroom, dto);
+        ServiceResponse<Homework> response = homeworkService.create(classMember.getAccount(), classMember.getClassroom(), dto);
         if (response.isError()) {
+            view.addAttribute("classroom", classMember.getClassroom());
             dto.addToView(view, response.getError());
-            return "create_homework";
+            return "createHomework";
         }
         return "redirect:/class/" + cid;
     }

@@ -27,5 +27,6 @@ public interface ClassMemberRepository extends JpaRepository<ClassMember, Long> 
     public Long countByAccount(Account account);
 
     public Long countByClassroomAndRole(Classroom classroom, String role);
-    
+
+    public List<ClassMember> findByAccountAndClassroomNameContains(Account account, String name, Pageable pageable);
 }

@@ -1,56 +1,56 @@
-    <nav class="navbar fixed-top navbar-expand-sm navbar-dark bg-light">
-      <div class="container">
-      <a href="#" class="navbar-brand mb-0 h1 colorNav">STUDENTS MANAGEMENT</a>
-      <button 
-      type="button"
-      data-bs-toggle="collapse"
-      data-bs-target="#navbarNav"
-      class="navbar-toggler"
-      aria-controls="navbarNav"
-      aria-expanded="false"
-      aria-label="Toggle navigation"
-      > <span class="navbar-toggler-icon"></span>
+<nav class="navbar fixed-top navbar-expand-sm navbar-dark bg-light">
+  <div class="container">
+    <a class="navbar-brand mb-0 h1 colorNav" th:href="@{${classroom} ? '/class/${classroom.id}' : '/'}"
+      th:text="${classroom} ? '/class/${classroom.name}' : 'STUDENTS MANAGEMENT'"></a>
+    <button type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" class="navbar-toggler"
+      aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
     </button>
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav ms-auto">
-          <li class="nav-item">
-            <a href="#" class="nav-link colorNav">Home</a>
-          </li>
-          <li class="nav-item">
-            <a href="#" class="nav-link colorNav">Homework List</a>
-          </li>
-          <li class="nav-item">
-            <a href="#" class="nav-link colorNav">Send message</a>
-          </li>
-          <li class="nav-item">
-            <a href="#" class="nav-link colorNav">Profile</a>
-          </li>
-          <li class="nav-item">
-            <a href="#" class="nav-link colorNav">Logout</a>
-          </li>
-        </ul>
-      </div>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ms-auto">
+        <th:block th:switch="${session.account}">
+          <th:block th:case="null">
+            <li class="nav-item"><a th:href="@{/login}" class="nav-link colorNav">Login</a></li>
+            <li class="nav-item"><a th:href="@{/register}" class="nav-link colorNav">Register</a></li>
+          </th:block>
+          <th:block th:case="*">
+            <th:block th:if="${classroom}">
+              <li class="nav-item">
+                <a th:href="@{/class/${classroom.id}/member}" class="nav-link colorNav">Class members</a>
+              </li>
+              <li class="nav-item">
+                <span class="nav-link colorNav" th:onclick='|navigator.clipboard.writeText("${classroom.inviteCode}")|'>
+                  Copy invite code
+                </span>
+              </li>
+              <th:block th:switch="${role}">
+                <th:block th:case="TEACHER">
+                  <li class="nav-item">
+                    <a th:href="@{/class/${classroom.id}/homework/new}" class="nav-link colorNav">New homework</a>
+                  </li>
+                  <li class="nav-item">
+                    <a th:href="@{/class/${classroom.id}/delete}" class="nav-link colorNav">Delete class</a>
+                  </li>
+                </th:block>
+                <th:block th:case="STUDENT">
+                  <li class="nav-item">
+                    <a th:href="@{/class/${classroom.id}/leave}" class="nav-link colorNav">Leave class</a>
+                  </li>
+                </th:block>
+              </th:block>
+            </th:block>
+            <li class="nav-item">
+              <a th:href="@{/class}" class="nav-link colorNav">Classrooms</a>
+            </li>
+            <li class="nav-item">
+              <a th:href="@{/profile}" class="nav-link colorNav">Profile</a>
+            </li>
+            <li class="nav-item">
+              <a th:href="@{/logout}" class="nav-link colorNav">Logout</a>
+            </li>
+          </th:block>
+        </th:block>
+      </ul>
     </div>
-    </nav>
-
-<!-- <th:block th:switch="${session.account}">
-  <th:block th:case="null">
-    <li class="nav-item">
-      <a th:href="@{/login}" class="nav-link colorNav">Login</a>
-    </li>
-    <li class="nav-item">
-      <a th:href="@{/register}" class="nav-link colorNav">Register</a>
-    </li>
-  </th:block>
-  <th:block th:case="*">
-    <li class="nav-item">
-      <a th:href="@{/class}" class="nav-link colorNav">Classrooms</a>
-    </li>
-    <li class="nav-item">
-      <a th:href="@{/profile}" class="nav-link colorNav">Profile</a>
-    </li>
-    <li class="nav-item">
-      <a th:href="@{/logout}" class="nav-link colorNav">Logout</a>
-    </li>
-  </th:block>
-</th:block> -->
+  </div>
+</nav>

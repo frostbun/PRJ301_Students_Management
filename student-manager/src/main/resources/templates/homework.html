@@ -13,37 +13,22 @@
     <div class="row position-relative">
       <img class="img-fluid class-cover" th:src="@{/img/class_cover.png}" alt="class cover image">
       <div class="row align-items-end position-absolute bottom-0 text-white">
-        <h1 class="col-8 ps-5 fw-bold" th:text="${classroom.name}"></h1>
-        <div class="col-4">
-          <a class="class-nav-item" href="../member">Members</a>
-          <span class="class-nav-item" th:onclick='|navigator.clipboard.writeText("${classroom.inviteCode}")|'>Copy invite
-            code</span>
-          <br>
-          <th:block th:switch="${role}">
-            <th:block th:case="TEACHER">
-              <a class="class-nav-item" href="new">New homework</a>
-              <a class="class-nav-item" href="../delete">Leave</a>
-            </th:block>
-            <th:block th:case="STUDENT">
-              <a class="class-nav-item" href="../leave">Leave</a>
-            </th:block>
-          </th:block>
-        </div>
+        <h1 class="ps-5 fw-bold" th:text="${classroom.name}"></h1>
       </div>
     </div>
 
     <div th:each="hsPair : ${homeworks}">
       <th:block th:switch="${role}" th:with="homework=${hsPair.first}" th:with="submission=${hsPair.second}">
         <th:block th:case="TEACHER">
-          <div th:replace="components/homework_card :: teacher"></div>
+          <div th:replace="components/homeworkCard :: teacher"></div>
         </th:block>
         <th:block th:case="STUDENT">
           <th:block th:switch="submission">
             <th:block th:case="null">
-              <div th:replace="components/homework_card :: not-submitted"></div>
+              <div th:replace="components/homeworkCard :: not-submitted"></div>
             </th:block>
             <th:block th:case="*">
-              <div th:replace="components/homework_card :: submitted"></div>
+              <div th:replace="components/homeworkCard :: submitted"></div>
             </th:block>
           </th:block>
         </th:block>

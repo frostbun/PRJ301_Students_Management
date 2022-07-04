@@ -43,13 +43,13 @@ public class SubmissionController {
     private SubmissionService submissionService;
 
     @GetMapping
-    public String submission(Model view, @PathVariable Long cid, @PathVariable Long hid, @RequestParam(defaultValue = "0") int page) {
+    public String submission(Model view, @PathVariable Long cid, @PathVariable Long hid, @RequestParam(defaultValue = "1") int page) {
         Homework homework = homeworkService.getHomework(classMemberService.getClassroom(session.getCurrentAccount(), cid), hid);
         if (homework == null) {
             return "redirect:/";
         }
-        view.addAttribute("submissions", submissionService.getSubmissions(homework, page, PagingConfig.SIZE));
-        view.addAttribute("pages", submissionService.countSubmissions(homework) / PagingConfig.SIZE);
+        view.addAttribute("submissions", submissionService.getSubmissions(homework, page-1, PagingConfig.SIZE));
+        view.addAttribute("pages", PagingConfig.pageCountOf(submissionService.countSubmissions(homework)));
         return "submission";
     }
 

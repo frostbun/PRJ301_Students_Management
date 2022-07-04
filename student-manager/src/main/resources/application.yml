@@ -10,7 +10,7 @@ spring:
       # location: c:/Users/manhn/upload
   jpa:
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: none
     show-sql: true
   datasource:
     url: jdbc:sqlserver://localhost:1433;databaseName=StudentManager;encrypt=true;trustServerCertificate=true;
