@@ -1,0 +1,37 @@
+:root {
+	--primary: #14375f;
+	--primary-light: #6c8299;
+	--white: #ffffff;
+	--secondary-light:  #e24943;
+	--secondary: #df322b;
+}
+
+.navbar{
+    background-color: var(--primary) !important;
+}
+
+.colorNav{
+    color: #ffffff !important
+}
+z
+.navbar-brand{
+	font-size: 28px;
+	margin: 0;
+	padding: 0;
+	line-height: 1;
+	font-weight: 700;
+}
+
+.navbar-toggler-icon{
+    color: #ffffff;
+}
+
+
+body nav div a:hover{
+    color: var(--secondary-light) !important;
+}
+
+body nav div a:active{
+    color: var(--secondary-light) !important;
+}
+
