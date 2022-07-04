@@ -6,14 +6,7 @@
 	--secondary: #df322b;
 }
 
-.navbar{
-    background-color: var(--primary) !important;
-}
 
-.colorNav{
-    color: #ffffff !important
-}
-z
 .navbar-brand{
 	font-size: 28px;
 	margin: 0;

@@ -84,27 +84,29 @@
 
 
 /* Navbar */
-.colorNav {
-    color: #ffffff !important;
+.navbar{
+  background-color: var(--primary) !important;
 }
 
-nav {
-    background: var(--primary);
-    padding: 15px;
-
+.colorNav{
+  color: #ffffff !important
 }
 
-.nav {
-    background-color: black;
+
+.navbar-brand{
+	font-size: 28px;
+	margin: 0;
+	padding: 0;
+	line-height: 1;
+	font-weight: 700;
 }
 
-.navbar-brand {
-    font-size: 28px;
-    margin: 0;
-    padding: 0;
-    line-height: 1;
-    font-weight: 700;
-    color: hotpink;
+body nav div a:hover{
+  color: var(--secondary-light) !important;
+}
+
+body nav div a:active{
+  color: var(--secondary-light) !important;
 }
 
 .footer {
@@ -119,16 +121,15 @@ nav {
     z-index: 2;
 }
 
-.footer a {
-    color: #712421;
-    text-align: center;
+.footer p, a{
+  color: #ffffff
 }
 
-.footer a:hover {
-    text-decoration: none;
-    color: #000000;
-
+.colorNav:hover{
+  color: var(--secondary-light) !important;
 }
+
+
 
 
 /* Minh */
@@ -666,7 +667,7 @@ select {
 }
 /* CHATBOX */
 @media screen and (max-width: 576px) {
-	.chatbox-message-wrapper {F
+	.chatbox-message-wrapper {
 		width: calc(100vw - 2rem);
 	}
 	.chatbox-wrapper {
