@@ -1,7 +1,5 @@
 package com.studentmanager.dto;
 
-import org.springframework.ui.Model;
-
 import com.studentmanager.model.Account;
 
 import lombok.Data;
@@ -25,11 +23,6 @@ public class RegisterDTO extends ChangeAccountInformationDTO {
             return "Passwords not match";
         }
         return super.validate();
-    }
-
-    public Model addToView(Model view) {
-        view.addAttribute("username", username);
-        return super.addToView(view);
     }
 
     public Account mapToAccount(Account account) {

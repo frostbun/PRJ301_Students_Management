@@ -43,23 +43,15 @@ public class SubmissionController {
     private SubmissionService submissionService;
 
     @GetMapping
-    public String submission(Model view, @PathVariable Long cid, @PathVariable Long hid, @RequestParam(defaultValue = "1") int page) {
+    public String list(Model view, @PathVariable Long cid, @PathVariable Long hid, @RequestParam(defaultValue = "1") int page) {
         Homework homework = homeworkService.getHomework(classMemberService.getClassroom(session.getCurrentAccount(), cid), hid);
         if (homework == null) {
-            return "redirect:/";
+            return "redirect:/login";
         }
         view.addAttribute("submissions", submissionService.getSubmissions(homework, page-1, PagingConfig.SIZE));
-        view.addAttribute("pages", PagingConfig.pageCountOf(submissionService.countSubmissions(homework)));
+        view.addAttribute("page", page);
+        view.addAttribute("pageCount", PagingConfig.pageCountOf(submissionService.countSubmissions(homework)));
         return "submission";
-    }
-
-    @GetMapping("/{sid}")
-    public String submitGet(Model view, @PathVariable Long cid, @PathVariable Long sid) {
-        ClassMember classMember = classMemberService.getClassMember(session.getCurrentAccount(), cid);
-        if (classMember == null || classMember.getRole().equals(ClassMember.TEACHER)) {
-            return "redirect:/";
-        }
-        return "submit_homework";
     }
 
     @PostMapping("/{sid}")
@@ -68,12 +60,12 @@ public class SubmissionController {
         Classroom classroom = classMemberService.getClassroom(account, cid);
         ClassMember classMember = classMemberService.getClassMember(account, classroom);
         if (classMember == null || classMember.getRole().equals(ClassMember.TEACHER)) {
-            return "redirect:/";
+            return "redirect:/login";
         }
         Homework homework = homeworkService.getHomework(classroom, hid);
         ServiceResponse<Submission> response = submissionService.create(account, homework, dto);
         if (response.isError()) {
-            dto.addToView(view, response.getError());
+            view.addAttribute("error", response.getError());
             return "submit_homework";
         }
         return "redirect:/class/" + cid;

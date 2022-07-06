@@ -30,7 +30,7 @@ public class ProfileController {
     public String profile(Model view, @RequestParam(required = false) String error) {
         Account account = session.getCurrentAccount();
         if (account == null) {
-            return "redirect:/";
+            return "redirect:/login";
         }
         view.addAttribute("account", account);
         view.addAttribute("error", error);
@@ -43,10 +43,10 @@ public class ProfileController {
     }
 
     @PostMapping("/edit/information")
-    public String changeInformation(Model view, ChangeAccountInformationDTO dto, RedirectAttributes redirect) {
+    public String changeInformation(RedirectAttributes redirect, ChangeAccountInformationDTO dto) {
         Account account = session.getCurrentAccount();
         if (account == null) {
-            return "redirect:/";
+            return "redirect:/login";
         }
         ServiceResponse<Account> response = accountService.changeInformation(account, dto);
         redirect.addAttribute("error", response.isError() ? response.getError() : "Information changed successfully");
@@ -54,10 +54,10 @@ public class ProfileController {
     }
 
     @PostMapping("/edit/password")
-    public String changePassword(Model view, ChangeAccountPasswordDTO dto,  RedirectAttributes redirect) {
+    public String changePassword(RedirectAttributes redirect, ChangeAccountPasswordDTO dto) {
         Account account = session.getCurrentAccount();
         if (account == null) {
-            return "redirect:/";
+            return "redirect:/login";
         }
         ServiceResponse<Account> response = accountService.changePassword(account, dto);
         redirect.addAttribute("error", response.isError() ? response.getError() : "Password changed successfully");

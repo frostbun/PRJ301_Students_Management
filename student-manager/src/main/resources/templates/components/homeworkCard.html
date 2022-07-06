@@ -1,17 +1,24 @@
 <div th:fragment="header">
   <div>
-    <img class="img-fluid rounded-circle" th:src="@{/img/white_avt.png}" alt="class member avatar" width="40px">
+    <img class="avatar img-fluid rounded-circle" th:src="${homework.author.avatarURL} ?: @{/img/white_avt.png}" alt="teacher avatar" width="40px">
     <span th:text="${homework.author.fullName}"></span>
+    <span class="text-muted m-0" th:text="${homework.createdAt}"></span>
   </div>
-  <p class="text-muted m-0" th:text="|${homework.createdAt} (${homework.maxMark} point(s))|"></p>
+  <p class="text-muted m-0" th:text="'Deadline:' + (${homework.deadline} ?: 'No deadline') + | (${homework.maxMark} point(s))|"></p>
   <h3 th:text="${homework.title}"></h3>
   <p th:text="${homework.description}"></p>
+</div>
+
+<div th:fragment="footer">
+  
 </div>
 
 <div class="card" th:fragment="not-submitted">
   <div th:replace=":: header"></div>
   <form class="row align-items-center" th:action="@{${homework.id}/submit}" method="post">
-    <h6 class="col-lg-6 text-danger">Status: Not submitted</h6>
+    <div class="col-lg-6">
+      <h5>Status: Not submitted</h5>
+    </div>
     <div class="col-sm-9 col-lg-4">
       <input class="form-control hw-file" type="file" name="file">
     </div>
@@ -24,7 +31,10 @@
 <div class="card" th:fragment="submitted">
   <div th:replace=":: header"></div>
   <form class="row align-items-center" th:action="@{${homework.id}/submit}" method="post">
-    <h6 class="col-lg-6">Status: Submitted<br>Mark: <span th:text="${submission.mark}"></span></h6>
+    <div class="col-lg-6">
+      <h5>Status: Submitted</h5>
+      <h5 th:text="|Mark: ${submission.mark}|"></h5>
+    </div>
     <div class="col-sm-9 col-lg-4">
       <input class="form-control hw-file" type="file" name="file">
     </div>
@@ -36,14 +46,18 @@
 
 <div class="card" th:fragment="teacher">
   <div th:replace=":: header"></div>
-  <h6 class="col-lg-6" th:text="|Status: ${homework.submissions.size}/{studentCount} submitted|"></h6>
-  <div class="col-4 col-lg-2">
-    <a class="btn btn-primary" th:href="@{${homework.id}/submission}">View</a>
-  </div>
-  <div class="col-4 col-lg-2">
-    <a class="btn btn-secondary" th:href="@{${homework.id}/edit}">Edit</a>
-  </div>
-  <div class="col-4 col-lg-2">
-    <a class="btn btn-danger" th:href="@{${homework.id}/delete}">Delete</a>
+  <div class="row align-items-center">
+    <div class="col-lg-6">
+      <h5 th:text="|Status: ${homework.submissions.size}/${studentCount} submitted|"></h5>
+    </div>
+    <div class="col-4 col-lg-2">
+      <a class="btn btn-primary" th:href="@{${homework.id}/submission}">View</a>
+    </div>
+    <div class="col-4 col-lg-2">
+      <a class="btn btn-secondary" th:href="@{${homework.id}/edit}">Edit</a>
+    </div>
+    <div class="col-4 col-lg-2">
+      <a class="btn btn-danger" th:href="@{${homework.id}/delete}">Delete</a>
+    </div>
   </div>
 </div>

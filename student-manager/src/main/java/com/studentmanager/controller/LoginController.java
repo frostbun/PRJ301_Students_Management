@@ -36,7 +36,8 @@ public class LoginController {
         if (account == null) {
             ServiceResponse<Account> response = accountService.login(dto);
             if (response.isError()) {
-                dto.addToView(view, response.getError());
+                view.addAttribute("account", dto);
+                view.addAttribute("error", response.getError());
                 return "login";
             }
             session.setCurrentAccount(response.getResponse());

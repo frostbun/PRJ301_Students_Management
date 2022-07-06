@@ -1,0 +1,26 @@
+<div class="search_wrap search_wrap_1" th:fragment="box">
+  <div class="search_box">
+    <input type="text" class="input" id="query" placeholder="Search...">
+    <button class="btn btn_common" id="search-btn">
+      <i class='bx bx-search'></i>
+    </button>
+  </div>
+  <script>
+    $(document).ready(function() {
+      $("#search-btn").click(function() {
+        window.location.href = "?query=" + $("#query").val();
+      });
+    });
+  </script>
+</div>
+
+<div class="search_wrap search_wrap_1" th:fragment="form">
+  <div class="search_box">
+    <form th:action="@{${action}}" method="post">
+      <input type="text" class="input" th:name="${name}" th:placeholder="${ph}">
+      <button class="btn btn_common">
+        <i th:class="${class}"></i>
+      </button>
+    </form>
+  </div>
+</div>

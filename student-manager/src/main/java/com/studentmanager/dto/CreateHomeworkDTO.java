@@ -2,8 +2,6 @@ package com.studentmanager.dto;
 
 import java.time.Instant;
 
-import org.springframework.ui.Model;
-
 import com.studentmanager.model.Homework;
 
 import lombok.Data;
@@ -25,14 +23,6 @@ public class CreateHomeworkDTO extends CreateSubmissionDTO {
             return "Deadline must be in the future";
         }
         return super.validate();
-    }
-
-    public Model addToView(Model view) {
-        view.addAttribute("title", title);
-        view.addAttribute("description", description);
-        view.addAttribute("maxMark", maxMark);
-        view.addAttribute("deadline", deadline);
-        return super.addToView(view);
     }
 
     public Homework mapToHomework(Homework homework) {

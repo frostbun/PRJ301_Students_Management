@@ -1,7 +1,5 @@
 package com.studentmanager.dto;
 
-import org.springframework.ui.Model;
-
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -17,9 +15,5 @@ public class ChangeAccountPasswordDTO extends DTO {
             return PASSWORD_MESSAGE;
         }
         return null;
-    }
-
-    public Model addToView(Model view) {
-        return view;
     }
 }

@@ -27,10 +27,6 @@ phục vụ cho cả giảng viên và sinh viên với giao diện dễ sử d�
     - Nộp bài tập
     - Viết mail cho giảng viên
 
-## Specifications
- - 1
- - 2
-
 ## Team Members
  - Nguyễn Đức Mạnh
  - Dư Lê Minh

@@ -21,7 +21,7 @@
           <!-- Username -->
           <div class="form-floating m-3">
             <input class="form-control" type="text" name="username" id="username" placeholder="Username"
-              th:value="${username}" required autofocus>
+              th:value="${account?.username}" required autofocus>
             <label class="form-label" for="username">Username</label>
           </div>
           <!-- Password -->
@@ -31,38 +31,43 @@
           </div>
           <!-- Confirm password -->
           <div class="form-floating m-3">
-            <input class="form-control" type="password" name="confirmPassword" id="confirmPassword" placeholder="Confirm password" required>
+            <input class="form-control" type="password" name="confirmPassword" id="confirmPassword"
+              placeholder="Confirm password" required>
             <label for="confirmPassword">Confirm password</label>
           </div>
           <!-- Name -->
           <div class="row">
             <div class="col-6">
               <div class="form-floating ms-3">
-                <input class="form-control" type="text" name="firstName" id="firstName" placeholder="First Name" th:value="${firstName}"
-                  required>
+                <input class="form-control" type="text" name="firstName" id="firstName" placeholder="First Name"
+                  th:value="${account?.firstName}" required>
                 <label for="firstName">First name</label>
               </div>
             </div>
             <div class="col-6">
               <div class="form-floating me-3">
-                <input class="form-control" type="text" name="lastName" id="lastName" placeholder="Last name" th:value="${lastName}" required>
+                <input class="form-control" type="text" name="lastName" id="lastName" placeholder="Last name"
+                  th:value="${account?.lastName}" required>
                 <label for="lastName">Last name</label>
               </div>
             </div>
           </div>
           <!-- Phone -->
           <div class="form-floating m-3">
-            <input class="form-control" type="tel" name="phone" id="phone" placeholder="Phone number" th:value="${phone}" required>
+            <input class="form-control" type="tel" name="phone" id="phone" placeholder="Phone number"
+              th:value="${account?.phone}" required>
             <label for="phone">Phone number</label>
           </div>
           <!-- Email -->
           <div class="form-floating m-3">
-            <input class="form-control" type="email" name="email" id="email" placeholder="Email" th:value="${email}" required>
+            <input class="form-control" type="email" name="email" id="email" placeholder="Email"
+              th:value="${account?.email}" required>
             <label for="email">Email</label>
           </div>
           <!-- Address -->
           <div class="form-floating m-3">
-            <input class="form-control" type="text" name="address" id="address" placeholder="Address" th:value="${address}" required>
+            <input class="form-control" type="text" name="address" id="address" placeholder="Address"
+              th:value="${account?.address}" required>
             <label for="address">Address</label>
           </div>
           <!-- Submit -->

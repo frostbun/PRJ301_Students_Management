@@ -36,7 +36,8 @@ public class RegisterController {
         if (account == null) {
             ServiceResponse<Account> response = accountService.register(dto);
             if (response.isError()) {
-                dto.addToView(view, response.getError());
+                view.addAttribute("account", dto);
+                view.addAttribute("error", response.getError());
                 return "register";
             }
             session.setCurrentAccount(response.getResponse());

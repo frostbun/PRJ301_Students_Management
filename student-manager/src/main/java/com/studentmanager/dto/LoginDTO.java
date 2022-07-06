@@ -1,7 +1,5 @@
 package com.studentmanager.dto;
 
-import org.springframework.ui.Model;
-
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -13,10 +11,5 @@ public class LoginDTO extends DTO {
 
     public String validate() {
         return null;
-    }
-
-    public Model addToView(Model view) {
-        view.addAttribute("username", username);
-        return view;
     }
 }

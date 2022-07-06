@@ -14,7 +14,7 @@
           <h1>Login</h1>
           <div class="form-floating m-3">
             <input class="form-control" type="text" name="username" id="username" placeholder="Username"
-              th:value="${username}" required autofocus>
+              th:value="${account?.username}" required autofocus>
             <label class="form-label" for="username">Username</label>
           </div>
           <div class="form-floating m-3">
@@ -26,7 +26,7 @@
           <button class="btn btn-primary" name="submit">Login</button>
         </form>
       </div>
-      <div class="col-md-6 row m-0 align-items-center login-form-bg-right">
+      <div class="col-md-6 row m-0 align-items-center">
         <div class="login-form-link">
           <p class="h4">Don't have an account?</p>
           <a class="btn btn-secondary" href="./register">Register here --&gt;</a>

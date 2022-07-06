@@ -5,6 +5,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.studentmanager.dto.CreateClassroomDTO;
 import com.studentmanager.dto.ServiceResponse;
 import com.studentmanager.model.Account;
 import com.studentmanager.model.ClassMember;
@@ -19,7 +20,11 @@ public class ClassroomService {
     @Autowired
     private ClassMemberRepository classMemberRepo;
 
-    public ServiceResponse<Classroom> create(Account account, String name) {
+    public ServiceResponse<Classroom> create(Account account, CreateClassroomDTO dto) {
+        String error = dto.validate();
+        if (error != null) {
+            return ServiceResponse.error(error);
+        }
         return ServiceResponse.success(
             classMemberRepo.save(
                     ClassMember.builder()
@@ -27,7 +32,7 @@ public class ClassroomService {
                         .classroom(
                             classroomRepo.save(Classroom
                                 .builder()
-                                .name(name)
+                                .name(dto.getName())
                                 .build()
                             )
                         )

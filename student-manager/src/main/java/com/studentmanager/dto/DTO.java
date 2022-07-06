@@ -1,7 +1,5 @@
 package com.studentmanager.dto;
 
-import org.springframework.ui.Model;
-
 public abstract class DTO {
     public static final String USERNAME_REGEX = "^(?=.{6,25}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9_]+(?<![_.])$";
     public static final String USERNAME_MESSAGE = "Username must be 6-25 characters long and contain only alphanumerics";
@@ -18,11 +16,4 @@ public abstract class DTO {
     public static final String EMAIL_MESSAGE = "Invalid email address";
 
     public abstract String validate();
-
-    public abstract Model addToView(Model view);
-
-    public Model addToView(Model view, String error) {
-        view.addAttribute("error", error);
-        return addToView(view);
-    }
 }

@@ -1,7 +1,7 @@
 <nav class="navbar fixed-top navbar-expand-sm navbar-dark bg-light">
   <div class="container">
-    <a class="navbar-brand mb-0 h1 colorNav" th:href="@{${classroom} ? '/class/${classroom.id}' : '/'}"
-      th:text="${classroom} ? '/class/${classroom.name}' : 'STUDENTS MANAGEMENT'"></a>
+    <a class="navbar-brand mb-0 h1 colorNav" th:href="@{${classroom} ? '/class/${classroom.id}/homework' : '/'}"
+      th:text="${classroom} ? ${classroom.name} : 'STUDENTS MANAGEMENT'"></a>
     <button type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" class="navbar-toggler"
       aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
@@ -19,7 +19,8 @@
                 <a th:href="@{/class/${classroom.id}/member}" class="nav-link colorNav">Class members</a>
               </li>
               <li class="nav-item">
-                <span class="nav-link colorNav" th:onclick='|navigator.clipboard.writeText("${classroom.inviteCode}")|'>
+                <span class="nav-link colorNav pointer"
+                  th:onclick="navigator.clipboard.writeText([[${classroom.inviteCode}]])">
                   Copy invite code
                 </span>
               </li>
@@ -42,11 +43,13 @@
             <li class="nav-item">
               <a th:href="@{/class}" class="nav-link colorNav">Classrooms</a>
             </li>
-            <li class="nav-item">
-              <a th:href="@{/profile}" class="nav-link colorNav">Profile</a>
-            </li>
-            <li class="nav-item">
-              <a th:href="@{/logout}" class="nav-link colorNav">Logout</a>
+            <li class="nav-item dropdown">
+              <a class="nav-link colorNav dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                data-bs-toggle="dropdown" aria-expanded="false" th:text="|Hello, ${session.account.fullName}|"></a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a class="dropdown-item" th:href="@{/profile}">Profile</a></li>
+                <li><a class="dropdown-item" th:href="@{/logout}">Logout</a></li>
+              </ul>
             </li>
           </th:block>
         </th:block>

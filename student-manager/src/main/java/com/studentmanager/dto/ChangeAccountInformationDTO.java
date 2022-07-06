@@ -1,7 +1,5 @@
 package com.studentmanager.dto;
 
-import org.springframework.ui.Model;
-
 import com.studentmanager.model.Account;
 
 import lombok.Data;
@@ -27,15 +25,6 @@ public class ChangeAccountInformationDTO extends DTO {
             return EMAIL_MESSAGE;
         }
         return null;
-    }
-
-    public Model addToView(Model view) {
-        view.addAttribute("firstName", firstName);
-        view.addAttribute("lastName", lastName);
-        view.addAttribute("phone", phone);
-        view.addAttribute("email", email);
-        view.addAttribute("address", address);
-        return view;
     }
 
     public Account mapToAccount(Account account) {

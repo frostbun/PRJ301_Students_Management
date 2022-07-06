@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-  <title th:text="${class.className}">Class</title>
+  <title th:text="${classroom.name}">Class</title>
   <th:block th:insert="components/head"></th:block>
 </head>
 
@@ -11,14 +11,14 @@
 
   <div class="container mt-5">
     <div class="row position-relative">
-      <img class="img-fluid class-cover" th:src="@{/img/class_cover.png}" alt="class cover image">
+      <img class="img-fluid class-cover" th:src="${classroom.coverURL} ?: @{/img/class_cover.png}" alt="class cover image">
       <div class="row align-items-end position-absolute bottom-0 text-white">
         <h1 class="ps-5 fw-bold" th:text="${classroom.name}"></h1>
       </div>
     </div>
 
-    <div th:each="hsPair : ${homeworks}">
-      <th:block th:switch="${role}" th:with="homework=${hsPair.first}" th:with="submission=${hsPair.second}">
+    <th:block th:each="hsPair: ${homeworks}" th:with="homework=${hsPair.key}, submission=${hsPair.value}">
+      <th:block th:switch="${role}">
         <th:block th:case="TEACHER">
           <div th:replace="components/homeworkCard :: teacher"></div>
         </th:block>
@@ -33,7 +33,7 @@
           </th:block>
         </th:block>
       </th:block>
-    </div>
+    </th:block>
   </div>
 
   <footer th:insert="components/footer"></footer>

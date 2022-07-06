@@ -37,9 +37,10 @@ public class ClassMemberService {
             .orElse(null);
     }
 
-    public List<Classroom> getClassrooms(Account account, int page, int size) {
-        return classMemberRepo.findByAccount(
+    public List<Classroom> getClassrooms(Account account, String name, int page, int size) {
+        return classMemberRepo.findByAccountAndClassroomNameContains(
                 account,
+                name,
                 PageRequest.of(
                     page,
                     size,
@@ -51,8 +52,8 @@ public class ClassMemberService {
             .collect(Collectors.toList());
     }
 
-    public Long countClassrooms(Account account) {
-        return classMemberRepo.countByAccount(account);
+    public Long countClassrooms(Account account, String name) {
+        return classMemberRepo.countByAccountAndClassroomNameContains(account, name);
     }
 
     public Account getMember(String username, Classroom classroom) {
@@ -69,8 +70,8 @@ public class ClassMemberService {
                     page,
                     size,
                     Sort.by("role").descending()
-                        .and(Sort.by("firstName").ascending())
-                        .and(Sort.by("lastName").ascending())
+                        .and(Sort.by("account.firstName").ascending())
+                        .and(Sort.by("account.lastName").ascending())
                 )
             )
             .stream()
@@ -82,7 +83,23 @@ public class ClassMemberService {
         return classMemberRepo.countByClassroom(classroom);
     }
 
-    public Long countStudents(Classroom classroom) {
-        return classMemberRepo.countByClassroomAndRole(classroom, ClassMember.STUDENT);
+    public List<Account> getMembersByRole(Classroom classroom, String role, int page, int size) {
+        return classMemberRepo.findByClassroomAndRole(
+                classroom,
+                role,
+                PageRequest.of(
+                    page,
+                    size,
+                    Sort.by("account.firstName").ascending()
+                        .and(Sort.by("account.lastName").ascending())
+                )
+            )
+            .stream()
+            .map(ClassMember::getAccount)
+            .collect(Collectors.toList());
+    }
+
+    public Long countMembersByRole(Classroom classroom, String role) {
+        return classMemberRepo.countByClassroomAndRole(classroom, role);
     }
 }

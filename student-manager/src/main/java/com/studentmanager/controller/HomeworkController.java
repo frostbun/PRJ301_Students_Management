@@ -7,7 +7,6 @@ import org.hibernate.cfg.NotYetImplementedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
-import org.springframework.data.util.Pair;
 import org.springframework.http.ContentDisposition;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -31,6 +30,8 @@ import com.studentmanager.service.HomeworkService;
 import com.studentmanager.service.SessionService;
 import com.studentmanager.service.SubmissionService;
 
+import javafx.util.Pair;
+
 @Controller
 @RequestMapping("/class/{cid}/homework")
 public class HomeworkController {
@@ -44,23 +45,24 @@ public class HomeworkController {
     private SubmissionService submissionService;
 
     @GetMapping
-    public String homework(Model view, @PathVariable Long cid, @RequestParam(defaultValue = "1") int page) {
+    public String list(Model view, @PathVariable Long cid, @RequestParam(defaultValue = "1") int page) {
         ClassMember classMember = classMemberService.getClassMember(session.getCurrentAccount(), cid);
         if (classMember == null) {
-            return "redirect:/";
+            return "redirect:/login";
         }
         Classroom classroom = classMember.getClassroom();
         view.addAttribute("role", classMember.getRole());
         view.addAttribute("classroom", classroom);
-        view.addAttribute("studentCount", classMemberService.countStudents(classroom));
+        view.addAttribute("studentCount", classMemberService.countMembersByRole(classroom, ClassMember.STUDENT));
         view.addAttribute(
             "homeworks",
             homeworkService
                 .getHomeworks(classroom, page-1, PagingConfig.SIZE)
                 .stream()
-                .map(homework -> Pair.of(homework, submissionService.getSubmission(session.getCurrentAccount(), homework)))
+                .map(homework -> new Pair<>(homework, submissionService.getSubmission(session.getCurrentAccount(), homework)))
                 .collect(Collectors.toList())
         );
+        view.addAttribute("page", page);
         view.addAttribute("pageCount", PagingConfig.pageCountOf(homeworkService.countHomeworks(classroom)));
         return "homework";
     }
@@ -69,7 +71,7 @@ public class HomeworkController {
     public String createGet(Model view, @PathVariable Long cid) {
         ClassMember classMember = classMemberService.getClassMember(session.getCurrentAccount(), cid);
         if (classMember == null || classMember.getRole().equals(ClassMember.STUDENT)) {
-            return "redirect:/";
+            return "redirect:/login";
         }
         view.addAttribute("classroom", classMember.getClassroom());
         return "createHomework";
@@ -79,12 +81,13 @@ public class HomeworkController {
     public String createPost(Model view, @PathVariable Long cid, CreateHomeworkDTO dto) throws IllegalStateException, IOException {
         ClassMember classMember = classMemberService.getClassMember(session.getCurrentAccount(), cid);
         if (classMember == null || classMember.getRole().equals(ClassMember.STUDENT)) {
-            return "redirect:/";
+            return "redirect:/login";
         }
         ServiceResponse<Homework> response = homeworkService.create(classMember.getAccount(), classMember.getClassroom(), dto);
         if (response.isError()) {
             view.addAttribute("classroom", classMember.getClassroom());
-            dto.addToView(view, response.getError());
+            view.addAttribute("homework", dto);
+            view.addAttribute("error", response.getError());
             return "createHomework";
         }
         return "redirect:/class/" + cid;

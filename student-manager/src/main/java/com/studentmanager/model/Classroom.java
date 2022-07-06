@@ -1,11 +1,13 @@
 package com.studentmanager.model;
 
 import java.time.Instant;
+import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.PrePersist;
 import javax.persistence.Table;
 
 import lombok.AllArgsConstructor;
@@ -28,7 +30,6 @@ public class Classroom {
     @Column(columnDefinition = "NVARCHAR(50)")
     private String name;
 
-    @GeneratedValue
     @Column(unique = true)
     private String inviteCode;
 
@@ -38,4 +39,11 @@ public class Classroom {
     @Column
     @Builder.Default
     private Instant createdAt = Instant.now();
+
+    @PrePersist
+    public void prePersist() {
+        if (this.inviteCode == null) {
+            this.inviteCode = UUID.randomUUID().toString().replace("-", "");
+        }
+    }
 }
