@@ -1,0 +1,28 @@
+.table-fixed tbody {
+    height: 500px;
+    overflow-y: auto;
+    width: 100%;
+}
+
+
+
+.table{
+    margin-top: 90px;
+    padding: 0;
+    margin-bottom: 90px;
+    background-color: #ffffff;
+    height: 500px;
+}
+.table thead tr th{
+    position: sticky;
+    background-color: #ffffff;
+    top: 3rem;
+    
+    
+}
+.header{
+    font-size: 20px;
+    position: sticky;
+    
+    
+}
