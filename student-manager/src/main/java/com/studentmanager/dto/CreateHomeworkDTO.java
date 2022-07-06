@@ -12,14 +12,16 @@ import lombok.EqualsAndHashCode;
 public class CreateHomeworkDTO extends CreateSubmissionDTO {
     private String title;
     private String description;
-    private int maxMark;
-    private Instant deadline;
+    private Double maxMark;
+    private String deadline;
+    private Instant deadlineInstant;
 
     public String validate() {
-        if (maxMark < 0) {
+        if (maxMark != null && maxMark < 0) {
             return "Max mark must be greater than 0";
         }
-        if (deadline.compareTo(Instant.now()) < 0) {
+        deadlineInstant = Instant.parse(deadline + ":00Z");
+        if (deadlineInstant != null && deadlineInstant.compareTo(Instant.now()) < 0) {
             return "Deadline must be in the future";
         }
         return super.validate();
@@ -29,7 +31,7 @@ public class CreateHomeworkDTO extends CreateSubmissionDTO {
         homework.setTitle(title);
         homework.setDescription(description);
         homework.setMaxMark(maxMark);
-        homework.setDeadline(deadline);
+        homework.setDeadline(deadlineInstant);
         return homework;
     }
 }

@@ -3,6 +3,7 @@ package com.studentmanager.service;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -28,16 +29,25 @@ public class SubmissionService {
         if (error != null) {
             return ServiceResponse.error(error);
         }
-        Submission submission = submissionRepo.save(
-            Submission.builder()
-                .author(account)
-                .homework(homework)
-                .build()
-        );
         MultipartFile file = dto.getFile();
-        String filePath = String.format("upload/submission/%ld/%s", submission.getId(), file.getOriginalFilename());
+        if (file.isEmpty()) {
+            return ServiceResponse.error("No file selected");
+        }
+        Optional<Submission> sOptional = submissionRepo.findByAuthorAndHomework(account, homework);
+        Submission submission =
+            sOptional.isPresent()
+            ? sOptional.get()
+            : submissionRepo.save(
+                Submission.builder()
+                    .author(account)
+                    .homework(homework)
+                    .build()
+            );
+        String filePath = String.format("upload/submission/%d/%s", submission.getId(), file.getOriginalFilename());
         try {
-            file.transferTo(new File(filePath));
+            File dest = new File(filePath);
+            dest.mkdirs();
+            file.transferTo(dest);
         }
         catch (IOException | IllegalStateException e) {
             submissionRepo.delete(submission);

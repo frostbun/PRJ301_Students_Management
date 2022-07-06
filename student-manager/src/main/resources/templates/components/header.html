@@ -1,7 +1,8 @@
 <nav class="navbar fixed-top navbar-expand-sm navbar-dark bg-light">
   <div class="container">
-    <a class="navbar-brand mb-0 h1 colorNav" th:href="@{${classroom} ? '/class/${classroom.id}/homework' : '/'}"
-      th:text="${classroom} ? ${classroom.name} : 'STUDENTS MANAGEMENT'"></a>
+    <a class="navbar-brand mb-0 h1 colorNav"
+      th:href="@{${classMember} ? |/class/${classMember.classroom.id}/homework| : '/'}"
+      th:text="${classMember} ? ${classMember.classroom.name} : 'STUDENTS MANAGEMENT'"></a>
     <button type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" class="navbar-toggler"
       aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
@@ -14,28 +15,30 @@
             <li class="nav-item"><a th:href="@{/register}" class="nav-link colorNav">Register</a></li>
           </th:block>
           <th:block th:case="*">
-            <th:block th:if="${classroom}">
+            <th:block th:if="${classMember}">
               <li class="nav-item">
-                <a th:href="@{/class/${classroom.id}/member}" class="nav-link colorNav">Class members</a>
+                <a th:href="@{|/class/${classMember.classroom.id}/member|}" class="nav-link colorNav">Class members</a>
               </li>
               <li class="nav-item">
                 <span class="nav-link colorNav pointer"
-                  th:onclick="navigator.clipboard.writeText([[${classroom.inviteCode}]])">
+                  th:onclick="navigator.clipboard.writeText([[${classMember.classroom.inviteCode}]])">
                   Copy invite code
                 </span>
               </li>
-              <th:block th:switch="${role}">
+              <th:block th:switch="${classMember.role}">
                 <th:block th:case="TEACHER">
                   <li class="nav-item">
-                    <a th:href="@{/class/${classroom.id}/homework/new}" class="nav-link colorNav">New homework</a>
+                    <a th:href="@{|/class/${classMember.classroom.id}/homework/create|}" class="nav-link colorNav">New
+                      homework</a>
                   </li>
                   <li class="nav-item">
-                    <a th:href="@{/class/${classroom.id}/delete}" class="nav-link colorNav">Delete class</a>
+                    <a th:href="@{|/class/${classMember.classroom.id}/delete|}" class="nav-link colorNav">Delete
+                      class</a>
                   </li>
                 </th:block>
                 <th:block th:case="STUDENT">
                   <li class="nav-item">
-                    <a th:href="@{/class/${classroom.id}/leave}" class="nav-link colorNav">Leave class</a>
+                    <a th:href="@{|/class/${classMember.classroom.id}/leave|}" class="nav-link colorNav">Leave class</a>
                   </li>
                 </th:block>
               </th:block>

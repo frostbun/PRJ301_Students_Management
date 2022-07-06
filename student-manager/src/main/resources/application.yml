@@ -3,6 +3,9 @@ server:
   port: 8080
 
 spring:
+  # mvc:
+  #   format:
+  #     date-time: dd/MM/yy HH:mm
   servlet:
     multipart:
       max-request-size: 25MB
@@ -10,8 +13,8 @@ spring:
       # location: c:/Users/manhn/upload
   jpa:
     hibernate:
-      ddl-auto: none
-    show-sql: true
+      ddl-auto: update
+    show-sql: false
   datasource:
     url: jdbc:sqlserver://localhost:1433;databaseName=StudentManager;encrypt=true;trustServerCertificate=true;
     username: student_manager

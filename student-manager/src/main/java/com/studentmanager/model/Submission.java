@@ -39,7 +39,7 @@ public class Submission {
     private String filePath;
 
     @Column
-    private Integer mark;
+    private Double mark;
 
     @Column
     @Builder.Default

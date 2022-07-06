@@ -30,6 +30,22 @@ public class ClassMemberService {
             .orElse(null);
     }
 
+    public List<ClassMember> getClassMembers(Classroom classroom, String name, int page, int size) {
+        return classMemberRepo.findByClassroomAndAccountFirstNameContainsOrClassroomAndAccountLastNameContains(
+                classroom,
+                name,
+                classroom,
+                name,
+                PageRequest.of(
+                    page,
+                    size,
+                    Sort.by("role").descending()
+                        .and(Sort.by("account.firstName").ascending())
+                        .and(Sort.by("account.lastName").ascending())
+                )
+            );
+    }
+
     public Classroom getClassroom(Account account, Long cid) {
         return classMemberRepo
             .findByAccountAndClassroomId(account, cid)

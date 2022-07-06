@@ -8,7 +8,7 @@
   <script>
     $(document).ready(function() {
       $("#search-btn").click(function() {
-        window.location.href = "?query=" + $("#query").val();
+        window.location.href = "?query=" + escape($("#query").val());
       });
     });
   </script>

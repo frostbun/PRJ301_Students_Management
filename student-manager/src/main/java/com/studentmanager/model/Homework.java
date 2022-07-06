@@ -12,6 +12,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.studentmanager.config.DateTimeConfig;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -47,7 +49,7 @@ public class Homework {
     private String description;
 
     @Column
-    private int maxMark;
+    private Double maxMark;
 
     @Column
     private Instant deadline;
@@ -56,6 +58,24 @@ public class Homework {
     @Builder.Default
     private Instant createdAt = Instant.now();
 
-    @OneToMany
+    @OneToMany(mappedBy = "homework")
     private List<Submission> submissions;
+
+    public String getFileName() {
+        return filePath.substring(filePath.lastIndexOf('/') + 1);
+    }
+
+    public String getDeadline() {
+        if (deadline == null) {
+            return null;
+        }
+        return DateTimeConfig.FMT.format(deadline);
+    }
+
+    public String getCreatedAt() {
+        if (createdAt == null) {
+            return null;
+        }
+        return DateTimeConfig.FMT.format(createdAt);
+    }
 }

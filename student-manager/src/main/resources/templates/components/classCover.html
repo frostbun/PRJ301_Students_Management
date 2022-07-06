@@ -1,0 +1,7 @@
+<div class="row position-relative">
+  <img class="img-fluid class-cover" th:src="${classMember.classroom.coverURL} ?: @{/img/class_cover.png}"
+    alt="class cover image">
+  <div class="row align-items-end position-absolute bottom-0 text-white">
+    <h1 class="ps-5 fw-bold" th:text="${classMember.classroom.name}"></h1>
+  </div>
+</div>

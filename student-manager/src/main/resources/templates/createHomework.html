@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-  <title th:text="|Create homework for ${classroom.name}|"></title>
+  <title th:text="|Create homework for ${classMember.classroom.name}|"></title>
   <th:block th:insert="components/head"></th:block>
 </head>
 
@@ -10,17 +10,17 @@
   <header th:insert="components/header"></header>
 
   <div class="container rounded bg-white mt-4 mb-6">
-    <form method="post">
+    <form method="post" enctype="multipart/form-data">
       <div class="row">
         <div class="col-md-7 border-right p-4 py-4 row mt-5">
           <div class="col-md-12">
             <label class="labels h5">Title</label>
-            <input type="text" class="form-control" name="title" th:value="${title}">
+            <input type="text" class="form-control" name="title" th:value="${homework?.title}" required>
           </div>
           <div class="col-md-12 my-3">
             <h5>Description</h5>
             <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" name="description"
-              th:text="${description"></textarea>
+              th:text="${homework?.description}" required></textarea>
           </div>
           <div class="mb-3 mt-5">
             <label for="formFile" class="form-label">Attach file</label>
@@ -30,20 +30,18 @@
         <div class="col-md-5 border-right p-3 py-4 row mt-5">
           <div class="col-md-8">
             <h6>Grade Mark</h6>
-            <select class="form-select form-select-md" name="maxMark">
-              <option value="10">10</option>
-              <option value="0">Ungrade</option>
-            </select>
+            <input type="number" step="any" name="maxMark" value="${homework?.maxMark}">
           </div>
           <div class="col-md-12">
             <h6>Deadline</h6>
-            <input type="datetime-local" name="deadline" value="${deadline}">
+            <input type="datetime-local" name="deadline" value="${homework?.deadline}">
           </div>
           <div class="col-md-12 mt-5">
           </div>
         </div>
       </div>
       <div class="text-center">
+        <p class="text-danger" th:text="${error}"></p>
         <button class="btn btn-primary profile-button">Assign Homework</button>
       </div>
     </form>

@@ -36,12 +36,10 @@ public class ClassController {
 
     @GetMapping
     public String list(Model view, @RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "") String query) {
-        session.setCurrentAccount(Account.builder().username("admin1").build());
         Account account = session.getCurrentAccount();
         if (account == null) {
             return "redirect:/login";
         }
-        view.addAttribute("classes", classMemberService.getClassrooms(account, query, page-1, PagingConfig.SIZE));
         view.addAttribute(
             "classes",
             classMemberService
@@ -86,12 +84,15 @@ public class ClassController {
     }
 
     @GetMapping("/{cid}/member")
-    public String member(Model view, @PathVariable Long cid, @RequestParam(defaultValue = "1") int page) {
-        Classroom classroom = classMemberService.getClassroom(session.getCurrentAccount(), cid);
-        if (classroom == null) {
+    public String member(Model view, @PathVariable Long cid, @RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "") String query) {
+        ClassMember classMember = classMemberService.getClassMember(session.getCurrentAccount(), cid);
+        if (classMember == null) {
             return "redirect:/login";
         }
-        view.addAttribute("members", classMemberService.getMembers(classroom, page-1, PagingConfig.SIZE));
+        Classroom classroom = classMember.getClassroom();
+        view.addAttribute("classMember", classMember);
+        view.addAttribute("members", classMemberService.getClassMembers(classroom, query, page-1, PagingConfig.SIZE));
+        view.addAttribute("memberCount", classMemberService.countMembers(classroom));
         view.addAttribute("page", page);
         view.addAttribute("pageCount", PagingConfig.pageCountOf(classMemberService.countMembers(classroom)));
         return "member";

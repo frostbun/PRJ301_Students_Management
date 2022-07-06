@@ -45,14 +45,13 @@ public class HomeworkController {
     private SubmissionService submissionService;
 
     @GetMapping
-    public String list(Model view, @PathVariable Long cid, @RequestParam(defaultValue = "1") int page) {
+    public String list(Model view, @PathVariable Long cid, @RequestParam(defaultValue = "1") int page, @RequestParam(required = false) String error) {
         ClassMember classMember = classMemberService.getClassMember(session.getCurrentAccount(), cid);
         if (classMember == null) {
             return "redirect:/login";
         }
         Classroom classroom = classMember.getClassroom();
-        view.addAttribute("role", classMember.getRole());
-        view.addAttribute("classroom", classroom);
+        view.addAttribute("classMember", classMember);
         view.addAttribute("studentCount", classMemberService.countMembersByRole(classroom, ClassMember.STUDENT));
         view.addAttribute(
             "homeworks",
@@ -64,6 +63,7 @@ public class HomeworkController {
         );
         view.addAttribute("page", page);
         view.addAttribute("pageCount", PagingConfig.pageCountOf(homeworkService.countHomeworks(classroom)));
+        view.addAttribute("error", error);
         return "homework";
     }
 
@@ -73,7 +73,7 @@ public class HomeworkController {
         if (classMember == null || classMember.getRole().equals(ClassMember.STUDENT)) {
             return "redirect:/login";
         }
-        view.addAttribute("classroom", classMember.getClassroom());
+        view.addAttribute("classMember", classMember);
         return "createHomework";
     }
 
@@ -85,12 +85,12 @@ public class HomeworkController {
         }
         ServiceResponse<Homework> response = homeworkService.create(classMember.getAccount(), classMember.getClassroom(), dto);
         if (response.isError()) {
-            view.addAttribute("classroom", classMember.getClassroom());
+            view.addAttribute("classMember", classMember);
             view.addAttribute("homework", dto);
             view.addAttribute("error", response.getError());
             return "createHomework";
         }
-        return "redirect:/class/" + cid;
+        return "redirect:/class/" + cid + "/homework";
     }
 
     @GetMapping("/{hid}/download")

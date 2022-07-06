@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.studentmanager.config.PagingConfig;
 import com.studentmanager.dto.CreateSubmissionDTO;
@@ -54,21 +55,21 @@ public class SubmissionController {
         return "submission";
     }
 
-    @PostMapping("/{sid}")
-    public String submitPost(Model view, @PathVariable Long cid, @PathVariable Long hid, CreateSubmissionDTO dto) {
+    @PostMapping("/create")
+    public String create(RedirectAttributes redirect, @PathVariable Long cid, @PathVariable Long hid, CreateSubmissionDTO dto, @RequestParam(defaultValue = "1") int page) {
         Account account = session.getCurrentAccount();
         Classroom classroom = classMemberService.getClassroom(account, cid);
-        ClassMember classMember = classMemberService.getClassMember(account, classroom);
+        ClassMember classMember = classMemberService.getClassMember(session.getCurrentAccount(), cid);
         if (classMember == null || classMember.getRole().equals(ClassMember.TEACHER)) {
             return "redirect:/login";
         }
         Homework homework = homeworkService.getHomework(classroom, hid);
         ServiceResponse<Submission> response = submissionService.create(account, homework, dto);
         if (response.isError()) {
-            view.addAttribute("error", response.getError());
-            return "submit_homework";
+            redirect.addAttribute("error", response.getError());
         }
-        return "redirect:/class/" + cid;
+        redirect.addAttribute("page", page);
+        return "redirect:/class/" + cid + "homework";
     }
 
     @GetMapping("/{sid}/download")

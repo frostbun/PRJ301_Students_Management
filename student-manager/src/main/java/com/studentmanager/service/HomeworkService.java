@@ -36,15 +36,20 @@ public class HomeworkService {
             )
         );
         MultipartFile file = dto.getFile();
-        String filePath = String.format("upload/homework/%ld/%s", homework.getId(), file.getOriginalFilename());
-        try {
-            file.transferTo(new File(filePath));
+        if (!file.isEmpty()) {
+            String filePath = String.format("upload/homework/%d/%s", homework.getId(), file.getOriginalFilename());
+            try {
+                File dest = new File(new File(filePath).getAbsolutePath());
+                dest.mkdirs();
+                file.transferTo(dest);
+            }
+            catch (IOException | IllegalStateException e) {
+                homeworkRepo.delete(homework);
+                e.printStackTrace();
+                return ServiceResponse.error("Failed to upload file");
+            }
+            homework.setFilePath(filePath);
         }
-        catch (IOException | IllegalStateException e) {
-            homeworkRepo.delete(homework);
-            return ServiceResponse.error("Failed to upload file");
-        }
-        homework.setFilePath(filePath);
         return ServiceResponse.success(homeworkRepo.save(homework));
     }
 
