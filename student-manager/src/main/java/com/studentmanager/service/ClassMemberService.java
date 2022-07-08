@@ -18,9 +18,35 @@ public class ClassMemberService {
     @Autowired
     private ClassMemberRepository classMemberRepo;
 
+    public void remove(ClassMember classMember) {
+        classMemberRepo.delete(classMember);
+    }
+
+    public void promote(ClassMember classMember) {
+        classMember.setRole(ClassMember.TEACHER);
+        classMemberRepo.save(classMember);
+    }
+
+    public void demote(ClassMember classMember) {
+        classMember.setRole(ClassMember.STUDENT);
+        classMemberRepo.save(classMember);
+    }
+
+    public ClassMember getClassMember(String username, Long cid) {
+        return classMemberRepo
+            .findByAccountUsernameAndClassroomId(username, cid)
+            .orElse(null);
+    }
+
     public ClassMember getClassMember(Account account, Long cid) {
         return classMemberRepo
             .findByAccountAndClassroomId(account, cid)
+            .orElse(null);
+    }
+
+    public ClassMember getClassMember(String username, Classroom classroom) {
+        return classMemberRepo
+            .findByAccountUsernameAndClassroom(username, classroom)
             .orElse(null);
     }
 
@@ -44,6 +70,10 @@ public class ClassMemberService {
                         .and(Sort.by("account.lastName").ascending())
                 )
             );
+    }
+
+    public Long countClassMembers(Classroom classroom) {
+        return classMemberRepo.countByClassroom(classroom);
     }
 
     public Classroom getClassroom(Account account, Long cid) {
@@ -72,37 +102,14 @@ public class ClassMemberService {
         return classMemberRepo.countByAccountAndClassroomNameContains(account, name);
     }
 
-    public Account getMember(String username, Classroom classroom) {
-        return classMemberRepo
-            .findByAccountUsernameAndClassroom(username, classroom)
-            .map(ClassMember::getAccount)
-            .orElse(null);
-    }
-
-    public List<Account> getMembers(Classroom classroom, int page, int size) {
-        return classMemberRepo.findByClassroom(
-                classroom,
-                PageRequest.of(
-                    page,
-                    size,
-                    Sort.by("role").descending()
-                        .and(Sort.by("account.firstName").ascending())
-                        .and(Sort.by("account.lastName").ascending())
-                )
-            )
-            .stream()
-            .map(ClassMember::getAccount)
-            .collect(Collectors.toList());
-    }
-
-    public Long countMembers(Classroom classroom) {
-        return classMemberRepo.countByClassroom(classroom);
-    }
-
-    public List<Account> getMembersByRole(Classroom classroom, String role, int page, int size) {
-        return classMemberRepo.findByClassroomAndRole(
+    private List<Account> getMembersByRole(Classroom classroom, String role, String name, int page, int size) {
+        return classMemberRepo.findByClassroomAndRoleAndAccountFirstNameContainsOrClassroomAndRoleAndAccountLastNameContains(
                 classroom,
                 role,
+                name,
+                classroom,
+                role,
+                name,
                 PageRequest.of(
                     page,
                     size,
@@ -115,7 +122,23 @@ public class ClassMemberService {
             .collect(Collectors.toList());
     }
 
-    public Long countMembersByRole(Classroom classroom, String role) {
+    public List<Account> getStudents(Classroom classroom, String name, int page, int size) {
+        return getMembersByRole(classroom, ClassMember.STUDENT, name,  page, size);
+    }
+
+    public List<Account> getTeachers(Classroom classroom, String name, int page, int size) {
+        return getMembersByRole(classroom, ClassMember.TEACHER, name, page, size);
+    }
+
+    private Long countMembersByRole(Classroom classroom, String role) {
         return classMemberRepo.countByClassroomAndRole(classroom, role);
+    }
+
+    public Long countStudents(Classroom classroom) {
+        return countMembersByRole(classroom, ClassMember.STUDENT);
+    }
+
+    public Long countTeachers(Classroom classroom) {
+        return countMembersByRole(classroom, ClassMember.TEACHER);
     }
 }

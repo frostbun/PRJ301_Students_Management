@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-  <title th:text="|Create homework for ${classMember.classroom.name}|"></title>
+  <title>Edit homework</title>
   <th:block th:insert="components/head"></th:block>
 </head>
 
@@ -11,8 +11,8 @@
 
   <div class="container rounded bg-white mt-5 mb-5">
     <th:block th:insert="components/classCover"></th:block>
-    <h1>Assign new homework</h1>
-    <th:block th:with="action='./create'" th:insert="components/homeworkForm"></th:block>
+    <h1>Edit homework</h1>
+    <th:block th:with="action=|./edit?page=${page}|" th:insert="components/homeworkForm"></th:block>
   </div>
 
   <footer th:insert="components/footer"></footer>

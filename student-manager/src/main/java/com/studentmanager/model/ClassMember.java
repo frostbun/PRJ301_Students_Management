@@ -1,6 +1,6 @@
 package com.studentmanager.model;
 
-import java.time.Instant;
+import java.time.LocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -43,5 +43,13 @@ public class ClassMember {
 
     @Column
     @Builder.Default
-    private Instant createdAt = Instant.now();
+    private LocalDateTime createdAt = LocalDateTime.now();
+
+    public boolean isTeacher() {
+        return role.equals(TEACHER);
+    }
+
+    public boolean isStudent() {
+        return role.equals(STUDENT);
+    }
 }

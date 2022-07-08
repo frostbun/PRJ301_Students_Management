@@ -21,15 +21,35 @@
     border-color: var(--secondary);
 }
 
+.link-primary {
+    color: var(--primary);
+    cursor: pointer;
+}
+
+.link-primary:hover {
+    color: var(--primary-light);
+    cursor: pointer;
+}
+
+.link-danger {
+    color: var(--secondary);
+    cursor: pointer;
+}
+
+.link-danger:hover {
+    color: var(--secondary-light);
+    cursor: pointer;
+}
+
 .text-danger {
     color: var(--secondary);
 }
 
-
 .big-fucking-text {
     color: var(--secondary);
-    font-size: 100px;
+    font-size: 10rem;
     text-align: center;
+    margin-top: 5rem;
 }
 
 /* Login, register */
@@ -53,31 +73,27 @@
 
 .class-cover {
     max-height: 25vh;
+    object-fit: cover;
+}
+
+.cover {
+    object-fit: cover;
+    width: 100%;
 }
 
 .card {
     text-align: center;
     max-width: 75%;
-    margin: 10px auto;
+    margin: 20px auto;
     border: 2px solid var(--primary-light);
     border-radius: 15px;
     background-color: whitesmoke;
     padding: 10px;
 }
 
-.hw-file {
-    margin-bottom: 5px;
-}
-
-.avatar {
-    display: inline-block;
-}
-
 .pointer:hover {
     cursor: pointer;
 }
-
-
 
 /* Navbar */
 .navbar {
@@ -97,12 +113,12 @@
     font-weight: 700;
 }
 
-body nav div a:hover {
+body nav div a:hover,
+body nav div a:active,
+body nav div span:hover,
+body nav div span:active {
     color: var(--secondary-light) !important;
-}
-
-body nav div a:active {
-    color: var(--secondary-light) !important;
+    cursor: pointer;
 }
 
 .footer {
@@ -201,10 +217,6 @@ body nav div a:active {
 
     .card {
         text-align: left;
-    }
-
-    .hw-file {
-        margin-bottom: 0;
     }
 }
 

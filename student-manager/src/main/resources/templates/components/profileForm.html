@@ -8,29 +8,29 @@
         <div class="col-md-6">
           <label class="labels">First name</label>
           <input id="firstName" type="text" class="form-control" placeholder="Your firstname"
-            th:value="${account.firstName}" name="firstName" readonly>
+            th:value="${account.firstName}" name="firstName" readonly required>
         </div>
         <div class="col-md-6">
           <label class="labels">Last name</label>
           <input type="text" class="form-control" placeholder="Your lastname" id="lastName"
-            th:value="${account.lastName}" name="lastName" readonly>
+            th:value="${account.lastName}" name="lastName" readonly required>
         </div>
       </div>
       <div class="row mt-2">
         <div class="col-md-12">
           <label class="labels">Mobile Number</label>
           <input type="text" class="form-control" placeholder="Your mobile number" id="phone"
-            th:value="${account.phone}" name="phone" readonly>
+            th:value="${account.phone}" name="phone" readonly required>
         </div>
         <div class="col-md-12">
           <label class="labels">Email</label>
           <input type="text" class="form-control" placeholder="Your email" id="email" th:value="${account.email}"
-            name="email" readonly>
+            name="email" readonly required>
         </div>
         <div class="col-md-12">
           <label class="labels">Address</label>
           <input type="text" class="form-control" placeholder="Your address" id="address" th:value="${account.address}"
-            name="address" readonly>
+            name="address" readonly required>
         </div>
       </div>
       <div class="text-center mt-3">
@@ -51,15 +51,15 @@
       <div class="row mt-2">
         <div class="col-md-12 row mt-3">
           <label class="labels">Old Password</label>
-          <input type="password" class="form-control" placeholder="Your Old Password" name="password">
+          <input type="password" class="form-control" placeholder="Your Old Password" name="password" required>
         </div>
         <div class="col-md-12 row mt-3">
           <label class="labels">New Password</label>
-          <input type="password" class="form-control" placeholder="Your New Password" name="newPassword">
+          <input type="password" class="form-control" placeholder="Your New Password" name="newPassword" required>
         </div>
         <div class="col-md-12 row mt-3">
           <label class="labels">Re-type New Password</label>
-          <input type="password" class="form-control" placeholder="Re-type Your New Password" name="confirmPassword">
+          <input type="password" class="form-control" placeholder="Re-type Your New Password" name="confirmPassword" required>
         </div>
       </div>
       <div class="text-center mt-3">

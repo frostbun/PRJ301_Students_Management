@@ -3,7 +3,6 @@ package com.studentmanager.controller;
 import java.io.IOException;
 import java.util.stream.Collectors;
 
-import org.hibernate.cfg.NotYetImplementedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
@@ -18,6 +17,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.studentmanager.config.PagingConfig;
 import com.studentmanager.dto.CreateHomeworkDTO;
@@ -33,7 +33,7 @@ import com.studentmanager.service.SubmissionService;
 import javafx.util.Pair;
 
 @Controller
-@RequestMapping("/class/{cid}/homework")
+@RequestMapping("/classroom/{cid}/homework")
 public class HomeworkController {
     @Autowired
     private SessionService session;
@@ -52,7 +52,7 @@ public class HomeworkController {
         }
         Classroom classroom = classMember.getClassroom();
         view.addAttribute("classMember", classMember);
-        view.addAttribute("studentCount", classMemberService.countMembersByRole(classroom, ClassMember.STUDENT));
+        view.addAttribute("studentCount", classMemberService.countStudents(classroom));
         view.addAttribute(
             "homeworks",
             homeworkService
@@ -70,7 +70,7 @@ public class HomeworkController {
     @GetMapping("/create")
     public String createGet(Model view, @PathVariable Long cid) {
         ClassMember classMember = classMemberService.getClassMember(session.getCurrentAccount(), cid);
-        if (classMember == null || classMember.getRole().equals(ClassMember.STUDENT)) {
+        if (classMember == null || classMember.isStudent()) {
             return "redirect:/login";
         }
         view.addAttribute("classMember", classMember);
@@ -78,9 +78,9 @@ public class HomeworkController {
     }
 
     @PostMapping("/create")
-    public String createPost(Model view, @PathVariable Long cid, CreateHomeworkDTO dto) throws IllegalStateException, IOException {
+    public String createPost(Model view, @PathVariable Long cid, CreateHomeworkDTO dto) {
         ClassMember classMember = classMemberService.getClassMember(session.getCurrentAccount(), cid);
-        if (classMember == null || classMember.getRole().equals(ClassMember.STUDENT)) {
+        if (classMember == null || classMember.isStudent()) {
             return "redirect:/login";
         }
         ServiceResponse<Homework> response = homeworkService.create(classMember.getAccount(), classMember.getClassroom(), dto);
@@ -90,7 +90,7 @@ public class HomeworkController {
             view.addAttribute("error", response.getError());
             return "createHomework";
         }
-        return "redirect:/class/" + cid + "/homework";
+        return "redirect:/classroom/" + cid + "/homework";
     }
 
     @GetMapping("/{hid}/download")
@@ -111,17 +111,55 @@ public class HomeworkController {
     }
 
     @GetMapping("/{hid}/edit")
-    public String editHomeworkGet(Model view, @PathVariable Long cid, @PathVariable Long hid) {
-        throw new NotYetImplementedException();
+    public String editGet(Model view, @PathVariable Long cid, @PathVariable Long hid, @RequestParam(defaultValue = "1") int page) {
+        ClassMember classMember = classMemberService.getClassMember(session.getCurrentAccount(), cid);
+        if (classMember == null || classMember.isStudent()) {
+            return "redirect:/login";
+        }
+        Homework homework = homeworkService.getHomework(classMember.getClassroom(), hid);
+        if (homework == null) {
+            return "redirect:/login";
+        }
+        view.addAttribute("homework", homework);
+        view.addAttribute("classMember", classMember);
+        view.addAttribute("page", page);
+        return "editHomework";
     }
 
     @PostMapping("/{hid}/edit")
-    public String editHomeworkPost(Model view, @PathVariable Long cid, @PathVariable Long hid) {
-        throw new NotYetImplementedException();
+    public String editPost(Model view, RedirectAttributes redirect, @PathVariable Long cid, @PathVariable Long hid, @RequestParam(defaultValue = "1") int page, CreateHomeworkDTO dto) {
+        ClassMember classMember = classMemberService.getClassMember(session.getCurrentAccount(), cid);
+        if (classMember == null || classMember.isStudent()) {
+            return "redirect:/login";
+        }
+        Homework homework = homeworkService.getHomework(classMember.getClassroom(), hid);
+        if (homework == null) {
+            return "redirect:/login";
+        }
+        ServiceResponse<Homework> response = homeworkService.edit(homework, dto);
+        if (response.isError()) {
+            view.addAttribute("homework", dto);
+            view.addAttribute("classMember", classMember);
+            view.addAttribute("page", page);
+            view.addAttribute("error", response.getError());
+            return "editHomework";
+        }
+        redirect.addAttribute("page", page);
+        return "redirect:/classroom/" + cid + "/homework";
     }
 
     @GetMapping("{hid}/delete")
-    public String deleteHomework(@PathVariable Long cid, @PathVariable Long hid) {
-        throw new NotYetImplementedException();
+    public String delete(RedirectAttributes redirect, @PathVariable Long cid, @PathVariable Long hid, @RequestParam(defaultValue = "1") int page) {
+        ClassMember classMember = classMemberService.getClassMember(session.getCurrentAccount(), cid);
+        if (classMember == null || classMember.isStudent()) {
+            return "redirect:/login";
+        }
+        Homework homework = homeworkService.getHomework(classMember.getClassroom(), hid);
+        if (homework == null) {
+            return "redirect:/login";
+        }
+        homeworkService.delete(homework);
+        redirect.addAttribute("page", page);
+        return "redirect:/classroom/" + cid + "/homework";
     }
 }

@@ -1,14 +1,12 @@
 package com.studentmanager.service;
 
-import java.io.File;
-import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.studentmanager.dto.CreateHomeworkDTO;
 import com.studentmanager.dto.ServiceResponse;
@@ -21,6 +19,10 @@ import com.studentmanager.repository.HomeworkRepository;
 public class HomeworkService {
     @Autowired
     private HomeworkRepository homeworkRepo;
+
+    public void delete(Homework homework) {
+        homeworkRepo.delete(homework);
+    }
 
     public ServiceResponse<Homework> create(Account account, Classroom classroom, CreateHomeworkDTO dto) {
         String error = dto.validate();
@@ -35,22 +37,26 @@ public class HomeworkService {
                     .build()
             )
         );
-        MultipartFile file = dto.getFile();
-        if (!file.isEmpty()) {
-            String filePath = String.format("upload/homework/%d/%s", homework.getId(), file.getOriginalFilename());
-            try {
-                File dest = new File(new File(filePath).getAbsolutePath());
-                dest.mkdirs();
-                file.transferTo(dest);
-            }
-            catch (IOException | IllegalStateException e) {
-                homeworkRepo.delete(homework);
-                e.printStackTrace();
-                return ServiceResponse.error("Failed to upload file");
-            }
-            homework.setFilePath(filePath);
+        String path = dto.upload(Paths.get("upload", "homework", homework.getId().toString()));
+        if (path == null && !dto.getFile().isEmpty()) {
+            homeworkRepo.delete(homework);
+            return ServiceResponse.error("Failed to upload file");
         }
+        homework.setFilePath(path);
         return ServiceResponse.success(homeworkRepo.save(homework));
+    }
+
+    public ServiceResponse<Homework> edit(Homework homework, CreateHomeworkDTO dto) {
+        String error = dto.validate();
+        if (error != null) {
+            return ServiceResponse.error(error);
+        }
+        String path = dto.upload(Paths.get("homework", homework.getId().toString()));
+        if (path == null && !dto.getFile().isEmpty()) {
+            return ServiceResponse.error("Failed to upload file");
+        }
+        homework.setFilePath(path);
+        return ServiceResponse.success(homeworkRepo.save(dto.mapToHomework(homework)));
     }
 
     public Homework getHomework(Classroom classroom, Long hid) {

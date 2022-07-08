@@ -1,8 +1,10 @@
 package com.studentmanager.model;
 
-import java.time.Instant;
+import java.io.File;
+import java.time.LocalDateTime;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -39,10 +41,10 @@ public class Homework {
     @JoinColumn
     private Account author;
 
-    @Column
+    @Column(columnDefinition = "VARCHAR(MAX)")
     private String filePath;
 
-    @Column(columnDefinition = "NVARCHAR(MAX)")
+    @Column(columnDefinition = "NVARCHAR(50)")
     private String title;
 
     @Column(columnDefinition = "NVARCHAR(MAX)")
@@ -52,17 +54,17 @@ public class Homework {
     private Double maxMark;
 
     @Column
-    private Instant deadline;
+    private LocalDateTime deadline;
 
     @Column
     @Builder.Default
-    private Instant createdAt = Instant.now();
+    private LocalDateTime createdAt = LocalDateTime.now();
 
-    @OneToMany(mappedBy = "homework")
+    @OneToMany(mappedBy = "homework", cascade = CascadeType.ALL)
     private List<Submission> submissions;
 
     public String getFileName() {
-        return filePath.substring(filePath.lastIndexOf('/') + 1);
+        return new File(filePath).getName();
     }
 
     public String getDeadline() {
@@ -70,6 +72,10 @@ public class Homework {
             return null;
         }
         return DateTimeConfig.FMT.format(deadline);
+    }
+
+    public LocalDateTime getRawDeadline() {
+        return deadline;
     }
 
     public String getCreatedAt() {

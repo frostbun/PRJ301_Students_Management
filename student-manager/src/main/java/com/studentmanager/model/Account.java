@@ -1,11 +1,13 @@
 package com.studentmanager.model;
 
-import java.time.Instant;
+import java.time.LocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+
+import com.studentmanager.config.ImageConfig;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -41,10 +43,10 @@ public class Account {
     @Column
     private String email;
 
-    @Column(columnDefinition = "NVARCHAR(50)")
+    @Column(columnDefinition = "NVARCHAR(MAX)")
     private String address;
 
-    @Column
+    @Column(columnDefinition = "VARCHAR(MAX)")
     private String avatarURL;
 
     @Column
@@ -53,9 +55,13 @@ public class Account {
 
     @Column
     @Builder.Default
-    private Instant createdAt = Instant.now();
+    private LocalDateTime createdAt = LocalDateTime.now();
 
     public String getFullName() {
         return firstName + " " + lastName;
+    }
+
+    public String getAvatarURL() {
+        return avatarURL == null ? ImageConfig.DEFAULT_ACCOUNT_AVATAR : avatarURL;
     }
 }

@@ -9,36 +9,18 @@
 <body>
   <header th:insert="components/header"></header>
 
-  <div class="container mt-5">
+  <div class="container mt-5 mb-5">
 
-    <div th:replace="components/classCover"></div>
+    <th:block th:insert="components/classCover"></th:block>
 
     <th:block th:each="hsPair: ${homeworks}" th:with="homework=${hsPair.key}, submission=${hsPair.value}">
-      <th:block th:switch="${classMember.role}">
-        <th:block th:case="TEACHER">
-          <div th:replace="components/homeworkCard :: teacher"></div>
-        </th:block>
-        <th:block th:case="STUDENT">
-          <th:block th:switch="submission">
-            <th:block th:case="null">
-              <div th:replace="components/homeworkCard :: not-submitted"></div>
-            </th:block>
-            <th:block th:case="*">
-              <div th:replace="components/homeworkCard :: submitted"></div>
-            </th:block>
-          </th:block>
-        </th:block>
-      </th:block>
+      <th:block th:if="${classMember.teacher}" th:insert="components/homeworkCard :: teacher"></th:block>
+      <th:block th:if="${classMember.student && submission != null}" th:insert="components/homeworkCard :: submitted"></th:block>
+      <th:block th:if="${classMember.student && submission == null}" th:insert="components/homeworkCard :: not-submitted"></th:block>
     </th:block>
   </div>
 
-  <p hidden id="error" th:text="${error}"></p>
-  <script>
-    var error = document.getElementById('error').innerText;
-    if (error) {
-      alert(error);
-    }
-  </script>
+  <div th:insert="components/hiddenError"></div>
 
   <footer th:insert="components/footer"></footer>
   <div th:insert="components/script"></div>

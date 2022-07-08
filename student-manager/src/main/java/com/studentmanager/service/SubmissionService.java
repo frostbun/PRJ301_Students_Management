@@ -1,7 +1,6 @@
 package com.studentmanager.service;
 
-import java.io.File;
-import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Optional;
 
@@ -9,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.studentmanager.dto.CreateSubmissionDTO;
 import com.studentmanager.dto.ServiceResponse;
@@ -24,14 +22,18 @@ public class SubmissionService {
     @Autowired
     private SubmissionRepository submissionRepo;
 
+    public ServiceResponse<Submission> mark(Submission submission, Double mark) {
+        if (mark == null || mark < 0 || (submission.getHomework().getMaxMark() != null && mark > submission.getHomework().getMaxMark())) {
+            return ServiceResponse.error("Invalid mark");
+        }
+        submission.setMark(mark);
+        return ServiceResponse.success(submissionRepo.save(submission));
+    }
+
     public ServiceResponse<Submission> create(Account account, Homework homework, CreateSubmissionDTO dto) {
         String error = dto.validate();
         if (error != null) {
             return ServiceResponse.error(error);
-        }
-        MultipartFile file = dto.getFile();
-        if (file.isEmpty()) {
-            return ServiceResponse.error("No file selected");
         }
         Optional<Submission> sOptional = submissionRepo.findByAuthorAndHomework(account, homework);
         Submission submission =
@@ -43,17 +45,14 @@ public class SubmissionService {
                     .homework(homework)
                     .build()
             );
-        String filePath = String.format("upload/submission/%d/%s", submission.getId(), file.getOriginalFilename());
-        try {
-            File dest = new File(filePath);
-            dest.mkdirs();
-            file.transferTo(dest);
-        }
-        catch (IOException | IllegalStateException e) {
-            submissionRepo.delete(submission);
+        String path = dto.upload(Paths.get("upload", "submission", submission.getId().toString()));
+        if (path == null) {
+            if (!sOptional.isPresent()) {
+                submissionRepo.delete(submission);
+            }
             return ServiceResponse.error("Failed to upload file");
         }
-        submission.setFilePath(filePath);
+        submission.setFilePath(path);
         return ServiceResponse.success(submissionRepo.save(submission));
     }
 

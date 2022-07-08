@@ -3,14 +3,10 @@ server:
   port: 8080
 
 spring:
-  # mvc:
-  #   format:
-  #     date-time: dd/MM/yy HH:mm
   servlet:
     multipart:
       max-request-size: 25MB
       max-file-size: 25MB
-      # location: c:/Users/manhn/upload
   jpa:
     hibernate:
       ddl-auto: update

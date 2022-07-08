@@ -1,6 +1,6 @@
 package com.studentmanager.dto;
 
-import java.time.Instant;
+import java.time.LocalDateTime;
 
 import com.studentmanager.model.Homework;
 
@@ -9,20 +9,32 @@ import lombok.EqualsAndHashCode;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class CreateHomeworkDTO extends CreateSubmissionDTO {
+public class CreateHomeworkDTO extends FileUploadDTO {
     private String title;
     private String description;
     private Double maxMark;
     private String deadline;
-    private Instant deadlineInstant;
+    private LocalDateTime dlLocal;
+
+    public LocalDateTime getRawDeadline() {
+        return dlLocal;
+    }
 
     public String validate() {
         if (maxMark != null && maxMark < 0) {
             return "Max mark must be greater than 0";
         }
-        deadlineInstant = Instant.parse(deadline + ":00Z");
-        if (deadlineInstant != null && deadlineInstant.compareTo(Instant.now()) < 0) {
-            return "Deadline must be in the future";
+        if (deadline != null && deadline.length() > 0) {
+            dlLocal = LocalDateTime.parse(deadline);
+            if (dlLocal.isBefore(LocalDateTime.now())) {
+                return "Deadline must be in the future";
+            }
+        }
+        if (title.length() == 0 || title.length() > 50) {
+            return "Title must be between 1 and 50 characters";
+        }
+        if (description.length() == 0) {
+            return "Description must be at least 1 character";
         }
         return super.validate();
     }
@@ -31,7 +43,7 @@ public class CreateHomeworkDTO extends CreateSubmissionDTO {
         homework.setTitle(title);
         homework.setDescription(description);
         homework.setMaxMark(maxMark);
-        homework.setDeadline(deadlineInstant);
+        homework.setDeadline(dlLocal);
         return homework;
     }
 }

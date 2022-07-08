@@ -1,0 +1,37 @@
+<form th:action="@{${action}}" method="post" enctype="multipart/form-data">
+  <div class="row">
+    <div class="col-md-7 border-right p-4 py-4 row mt-5">
+      <div class="col-md-12">
+        <label class="labels h5">Title</label>
+        <input type="text" class="form-control" name="title" th:value="${homework?.title}" required>
+      </div>
+      <div class="col-md-12 my-3">
+        <h5>Description</h5>
+        <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" name="description"
+          th:text="${homework?.description}" required></textarea>
+      </div>
+      <div class="mb-3 mt-5">
+        <label for="formFile" class="form-label">Attach file</label>
+        <input class="form-control" type="file" id="formFile" name="file">
+      </div>
+    </div>
+    <div class="col-md-5 border-right p-3 py-4 row mt-5">
+      <div class="col-md-8">
+        <h6>Grade Mark</h6>
+        <input type="number" step="any" name="maxMark" th:value="${homework?.maxMark}">
+      </div>
+      <div class="col-md-12">
+        <h6>Deadline</h6>
+        <input type="datetime-local" name="deadline" th:value="${homework?.rawDeadline}">
+      </div>
+      <div class="col-md-12 mt-5">
+      </div>
+    </div>
+  </div>
+  <div class="text-center">
+    <p class="text-danger" th:text="${error}"></p>
+    <a th:href="@{(|/classroom/${classMember.classroom.id}/homework| + (${page} ? |?page=${page}| : ''))}"
+      class="btn btn-secondary">Cancel</a>
+    <button class="btn btn-primary">Assign Homework</button>
+  </div>
+</form>

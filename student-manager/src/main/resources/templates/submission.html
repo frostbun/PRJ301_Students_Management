@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title th:text="${classMember.classroom.name}"></title>
+  <th:block th:insert="components/head"></th:block>
+</head>
+
+<body>
+  <header th:insert="components/header"></header>
+
+  <div class="container mt-5 mb-5">
+
+    <th:block th:with="coverTitle=|Total: ${studentCount} students|" th:insert="components/classCover"></th:block>
+
+    <div class="text-center">
+      <h1 th:text="|Viewing submissions for: ${homework.title}|"></h1>
+      <h3 th:text="'Deadline: ' + (${homework.deadline} ?: 'No deadline')
+        + (${homework.maxMark} ? | (${homework.maxMark} point(s))| : '')">
+      </h3>
+      <div th:replace="components/searchbox :: box"></div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-12 mx-auto bg-white">
+        <table class="table table-hover table-responsive-md">
+          <thead>
+            <tr>
+              <th class="header" scope="col">Username</th>
+              <th class="header" scope="col">Name</th>
+              <th class="header" scope="col">Status</th>
+              <th class="header" scope="col">Mark</th>
+              <th class="header" scope="col">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr th:each="ssPair: ${students}" th:with="student=${ssPair.key}, submission=${ssPair.value}">
+              <th scope="row">
+                <img class="img-fluid rounded-circle d-inline-block" th:src="@{${student.avatarURL}}"
+                  alt="teacher avatar" width="40px">
+                <span th:text="${student.username}"></span>
+              </th>
+              <td th:text="${student.fullName}"></td>
+              <td>
+                <p th:if="${submission}" th:class="${submission.late} ? 'text-warning' : ''">
+                  Status: Submitted at
+                  <span th:text="${submission.createdAt}"></span>
+                  <a th:href="|./submission/${submission.id}/download|"
+                    th:text="${submission.fileName}"></a>
+                </p>
+                <p th:unless="${submission}" class="text-danger">Not Submitted</p>
+              </td>
+              <td th:text="${submission?.mark}"></td>
+              <td class="w-25">
+                <form th:if="${submission}" class="input-group" th:action="|./submission/${submission.id}/mark?page=${page}&query=${query}|"
+                  method="post">
+                  <input type="number" step="any" name="mark" class="form-control" placeholder="Mark" required>
+                  <button class="btn btn-primary">Mark</button>
+                </form>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div th:insert="components/hiddenError"></div>
+
+  <footer th:insert="components/footer"></footer>
+  <div th:insert="components/script"></div>
+</body>
+
+</html>

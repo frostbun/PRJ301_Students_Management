@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Classroom</title>
+  <th:block th:insert="components/head"></th:block>
+</head>
+
+<body id="page-top">
+  <header th:insert="components/header"></header>
+
+  <div class="container mt-5 mb-5">
+    <div class="boxbox-top">
+      <p>Your classrooms</p>
+    </div>
+
+    <div class="boxbox">
+      <div class="row">
+        <div class="col-md-4" th:insert="components/searchbox :: box"></div>
+        <div class="col-md-4"
+          th:with="ph='Create new classroom', name='name', action='/classroom/create', class='bx bx-search'"
+          th:insert="components/searchbox :: form"></div>
+        <div class="col-md-4"
+          th:with="ph='Join classroom', name='inviteCode', action='/classroom/join', class='bx bx-search'"
+          th:insert="components/searchbox :: form"></div>
+      </div>
+
+      <div class="text-center">
+        <p class="text-danger" th:text="${error}"></p>
+      </div>
+
+      <th:block th:each="ctPair: ${classes}" th:with="classroom=${ctPair.key}, teachers=${ctPair.value}">
+        <div class="course-card">
+          <a class="text-danger text-decoration-none" th:href="|./classroom/${classroom.id}/homework|">
+            <div class="course-tumb">
+              <img class="cover" th:src="@{${classroom.coverURL}}" alt="class cover image">
+            </div>
+            <div class="course-details">
+              <h3 th:text="${classroom.name}"></h3>
+              <!-- icon -->
+              <div style="text-align: center" class="small-4 medium-4 large-4 columns">
+                <h4><i class="bi bi-box-arrow-in-right"></i></h4>
+              </div>
+              <div class="course-bottom-details">
+                <p>Teacher:</p>
+                <p class="m-0" th:each="teacher: ${teachers}" th:text="|- ${teacher.fullName}|"></p>
+              </div>
+            </div>
+          </a>
+        </div>
+      </th:block>
+    </div>
+  </div>
+
+  <!-- Scroll to Top Button-->
+  <a class="scroll-to-top rounded" href="#page-top"><i class="fas fa-angle-up"></i></a>
+
+  <footer th:insert="components/footer"></footer>
+  <div th:insert="components/script"></div>
+</body>
+
+</html>

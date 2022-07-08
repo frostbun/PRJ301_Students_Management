@@ -9,15 +9,13 @@
 <body>
   <header th:insert="components/header"></header>
 
-  <div class="container mt-5">
+  <div class="container mt-5 mb-5">
 
-    <div th:replace="components/classCover"></div>
+    <th:block th:with="coverTitle=|Total: ${memberCount} members|" th:insert="components/classCover"></th:block>
 
     <div class="text-center">
-      <h3 th:text="|Total: ${memberCount} members|"></h3>
       <div th:replace="components/searchbox :: box"></div>
     </div>
-
 
     <div class="row">
       <div class="col-md-12 mx-auto bg-white">
@@ -30,16 +28,58 @@
               <th class="header" scope="col">Phone</th>
               <th class="header" scope="col">Email</th>
               <th class="header" scope="col">Role</th>
+              <th class="header" scope="col">Action</th>
             </tr>
           </thead>
           <tbody>
-            <tr th:each="classMember: ${members}" th:with="account=${classMember.account}">
-              <th scope="row" th:text="${account.username}"></th>
+            <tr th:each="member: ${members}" th:with="account=${member.account}">
+              <th scope="row">
+                <img class="img-fluid rounded-circle d-inline-block"
+                  th:src="@{${account.avatarURL}}" alt="teacher avatar" width="40px">
+                <span th:text="${account.username}"></span>
+              </th>
               <td th:text="${account.firstName}"></td>
               <td th:text="${account.lastName}"></td>
               <td th:text="${account.phone}"></td>
               <td th:text="${account.email}"></td>
-              <td th:text="${classMember.role}"></td>
+              <td th:text="${member.role}"></td>
+              <td>
+                <th:block th:if="${classMember == member}">
+                  <span th:if="${classMember.teacher}" class="link-danger" th:onclick="
+                    confirmRedirect(
+                      [[|./member/${account.username}/demote?page=${page}&query=${query}|]],
+                      [[|Are you sure want to demote yourself|]]
+                    )">
+                    Demote
+                  </span>
+                </th:block>
+                <th:block th:if="${classMember != member}">
+                  <th:block th:if="${classMember.teacher}">
+                    <span th:if="${member.student}" class="link-primary" th:onclick="
+                      confirmRedirect(
+                        [[|./member/${account.username}/promote?page=${page}&query=${query}|]],
+                        [[|Are you sure want to promote ${account.fullName}|]]
+                      )">
+                      Promote |
+                    </span>
+                    <span th:if="${member.teacher}" class="link-danger" th:onclick="
+                      confirmRedirect(
+                        [[|./member/${account.username}/demote?page=${page}&query=${query}|]],
+                        [[|Are you sure want to demote ${account.fullName}|]]
+                      )">
+                      Demote |
+                    </span>
+                    <span class="link-danger" th:onclick="
+                      confirmRedirect(
+                        [[|./member/${account.username}/remove?page=${page}&query=${query}|]],
+                        [[|Are you sure want to kick ${account.fullName}|]]
+                      )">
+                      Kick |
+                    </span>
+                  </th:block>
+                  <a class="link-primary" href="#">Chat</a>
+                </th:block>
+              </td>
             </tr>
           </tbody>
         </table>

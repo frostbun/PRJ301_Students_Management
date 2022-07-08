@@ -74,3 +74,9 @@ function fadeIn(el, display) {
         }
     })();
 };
+
+function confirmRedirect(url, message) {
+    if (confirm(message)) {
+        window.location.href = url;
+    }
+}

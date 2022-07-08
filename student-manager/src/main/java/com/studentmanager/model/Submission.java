@@ -1,6 +1,7 @@
 package com.studentmanager.model;
 
-import java.time.Instant;
+import java.io.File;
+import java.time.LocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,6 +10,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
+import com.studentmanager.config.DateTimeConfig;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -35,7 +38,7 @@ public class Submission {
     @JoinColumn
     private Account author;
 
-    @Column
+    @Column(columnDefinition = "VARCHAR(MAX)")
     private String filePath;
 
     @Column
@@ -43,5 +46,23 @@ public class Submission {
 
     @Column
     @Builder.Default
-    private Instant createdAt = Instant.now();
+    private LocalDateTime createdAt = LocalDateTime.now();
+
+    public String getFileName() {
+        return new File(filePath).getName();
+    }
+
+    public String getCreatedAt() {
+        if (createdAt == null) {
+            return null;
+        }
+        return DateTimeConfig.FMT.format(createdAt);
+    }
+
+    public boolean isLate() {
+        if (homework.getDeadline() == null) {
+            return false;
+        }
+        return createdAt.isAfter(homework.getRawDeadline());
+    }
 }

@@ -1,60 +1,58 @@
 <nav class="navbar fixed-top navbar-expand-sm navbar-dark bg-light">
   <div class="container">
-    <a class="navbar-brand mb-0 h1 colorNav"
-      th:href="@{${classMember} ? |/class/${classMember.classroom.id}/homework| : '/'}"
-      th:text="${classMember} ? ${classMember.classroom.name} : 'STUDENTS MANAGEMENT'"></a>
+    <a class="navbar-brand mb-0 h1 colorNav" th:href="@{${classMember} ? '/classroom' : '/'}">STUDENTS MANAGEMENT</a>
     <button type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" class="navbar-toggler"
       aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav ms-auto">
-        <th:block th:switch="${session.account}">
-          <th:block th:case="null">
-            <li class="nav-item"><a th:href="@{/login}" class="nav-link colorNav">Login</a></li>
-            <li class="nav-item"><a th:href="@{/register}" class="nav-link colorNav">Register</a></li>
-          </th:block>
-          <th:block th:case="*">
-            <th:block th:if="${classMember}">
-              <li class="nav-item">
-                <a th:href="@{|/class/${classMember.classroom.id}/member|}" class="nav-link colorNav">Class members</a>
-              </li>
-              <li class="nav-item">
-                <span class="nav-link colorNav pointer"
-                  th:onclick="navigator.clipboard.writeText([[${classMember.classroom.inviteCode}]])">
-                  Copy invite code
-                </span>
-              </li>
-              <th:block th:switch="${classMember.role}">
-                <th:block th:case="TEACHER">
-                  <li class="nav-item">
-                    <a th:href="@{|/class/${classMember.classroom.id}/homework/create|}" class="nav-link colorNav">New
-                      homework</a>
-                  </li>
-                  <li class="nav-item">
-                    <a th:href="@{|/class/${classMember.classroom.id}/delete|}" class="nav-link colorNav">Delete
-                      class</a>
-                  </li>
-                </th:block>
-                <th:block th:case="STUDENT">
-                  <li class="nav-item">
-                    <a th:href="@{|/class/${classMember.classroom.id}/leave|}" class="nav-link colorNav">Leave class</a>
-                  </li>
-                </th:block>
-              </th:block>
-            </th:block>
-            <li class="nav-item">
-              <a th:href="@{/class}" class="nav-link colorNav">Classrooms</a>
-            </li>
+        <th:block th:if="!${session.account}">
+          <li class="nav-item"><a th:href="@{/login}" class="nav-link colorNav">Login</a></li>
+          <li class="nav-item"><a th:href="@{/register}" class="nav-link colorNav">Register</a></li>
+        </th:block>
+        <th:block th:if="${session.account}">
+          <th:block th:if="${classMember}" th:with="classroom=${classMember.classroom}">
             <li class="nav-item dropdown">
-              <a class="nav-link colorNav dropdown-toggle" href="#" id="navbarDropdown" role="button"
-                data-bs-toggle="dropdown" aria-expanded="false" th:text="|Hello, ${session.account.fullName}|"></a>
+              <a class="nav-link colorNav dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                aria-expanded="false" th:text="|Welcome to ${classroom.shortName}|"></a>
               <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <li><a class="dropdown-item" th:href="@{/profile}">Profile</a></li>
-                <li><a class="dropdown-item" th:href="@{/logout}">Logout</a></li>
+                <li>
+                  <a class="dropdown-item" th:if="${classMember.teacher}"
+                    th:href="@{|/classroom/${classroom.id}/homework/create|}">
+                    New homework</a>
+                </li>
+                <li>
+                  <a class="dropdown-item" th:href="@{|/classroom/${classroom.id}/homework|}">
+                    Class homeworks</a>
+                </li>
+                <li>
+                  <a class="dropdown-item" th:href="@{|/classroom/${classroom.id}/member|}">
+                    Class members</a>
+                </li>
+                <li>
+                  <span class="dropdown-item"
+                    th:onclick="navigator.clipboard.writeText([[${classroom.inviteCode}]])">
+                    Copy invite code</span>
+                </li>
+                <li>
+                  <a class="dropdown-item" th:href="@{|/classroom/${classroom.id}/member/leave|}">
+                    Leave class</a>
+                </li>
               </ul>
             </li>
           </th:block>
+          <li th:unless="${classMember}" class="nav-item">
+            <a th:href="@{/classroom}" class="nav-link colorNav">Your Classrooms</a>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link colorNav dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+              aria-expanded="false" th:text="|Hello, ${session.account.fullName}|"></a>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <li><a class="dropdown-item" th:href="@{/profile}">Profile</a></li>
+              <li><a class="dropdown-item" th:href="@{/logout}">Logout</a></li>
+            </ul>
+          </li>
         </th:block>
       </ul>
     </div>

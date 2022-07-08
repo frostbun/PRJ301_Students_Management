@@ -1,16 +1,16 @@
 package com.studentmanager.dto;
 
-import org.springframework.web.multipart.MultipartFile;
-
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 @Data
-@EqualsAndHashCode(callSuper = false)
-public class CreateSubmissionDTO extends DTO {
-    private MultipartFile file;
+@EqualsAndHashCode(callSuper = true)
+public class CreateSubmissionDTO extends FileUploadDTO {
 
     public String validate() {
+        if (getFile().isEmpty()) {
+            return "No file selected";
+        };
         return null;
     }
 }

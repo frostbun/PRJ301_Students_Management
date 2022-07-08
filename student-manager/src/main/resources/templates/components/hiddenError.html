@@ -1,0 +1,7 @@
+<p hidden id="error" th:text="${error}"></p>
+<script>
+  var error = document.getElementById('error').innerText;
+  if (error) {
+    alert(error);
+  }
+</script>
