@@ -16,7 +16,7 @@ public class SessionService {
     private AccountRepository accountRepo;
 
     public Account getCurrentAccount() {
-        setCurrentAccount(Account.builder().username("admin1").build());
+        // setCurrentAccount(Account.builder().username("admin1").build());
         // find in session
         Account account = (Account)session.getAttribute("account");
         if (account == null) {
