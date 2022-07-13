@@ -4,7 +4,7 @@
 <head>
   <title th:text="|${account.fullName}'s Profile|"></title>
   <th:block th:insert="components/head"></th:block>
-  <link rel="stylesheet" th:href="@{/css/profile.css}">
+  <link rel="stylesheet" th:href="@{/static/css/profile.css}">
 </head>
 
 <body>
@@ -31,7 +31,7 @@
 
   <footer th:insert="components/footer"></footer>
   <div th:insert="components/script"></div>
-  <script type="text/javascript" th:src="@{/js/profile.js}"></script>
+  <script type="text/javascript" th:src="@{/static/js/profile.js}"></script>
 </body>
 
 </html>

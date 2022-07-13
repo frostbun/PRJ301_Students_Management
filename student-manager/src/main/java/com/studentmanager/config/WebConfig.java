@@ -43,6 +43,7 @@ public class WebConfig implements WebMvcConfigurer {
                 .excludePathPatterns("/")
                 .excludePathPatterns("/login")
                 .excludePathPatterns("/register")
+                .excludePathPatterns("/static/**")
         ;
         registry.addInterceptor(classmemberInterceptor)
                 .addPathPatterns("/classroom/*/**")
@@ -71,7 +72,7 @@ public class WebConfig implements WebMvcConfigurer {
     }
 
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/**")
+        registry.addResourceHandler("/static/**")
                 .addResourceLocations("classpath:/static/")
         ;
     }
