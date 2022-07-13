@@ -23,25 +23,18 @@ public class RegisterController {
 
     @GetMapping
     public String get(Model view) {
-        Account account = session.getCurrentAccount();
-        if (account == null) {
-            return "register";
-        }
-        return "redirect:/";
+        return "register";
     }
 
     @PostMapping
     public String post(Model view, RegisterDTO dto) {
-        Account account = session.getCurrentAccount();
-        if (account == null) {
-            ServiceResponse<Account> response = accountService.register(dto);
-            if (response.isError()) {
-                view.addAttribute("account", dto);
-                view.addAttribute("error", response.getError());
-                return "register";
-            }
-            session.setCurrentAccount(response.getResponse());
+        ServiceResponse<Account> response = accountService.register(dto);
+        if (response.isError()) {
+            view.addAttribute("account", dto);
+            view.addAttribute("error", response.getError());
+            return "register";
         }
+        session.setCurrentAccount(response.getResponse());
         return "redirect:/";
     }
 }

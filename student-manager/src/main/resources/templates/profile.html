@@ -10,7 +10,7 @@
 <body>
   <header th:insert="components/header"></header>
 
-  <div class="container rounded bg-white mt-5 mb-5">
+  <div class="container rounded bg-white mt-5 mb-5" th:with="account=${session.account}">
     <div class="row">
       <div class="col-md-3 border-right nav-pro">
         <div class="d-flex flex-column align-items-center text-center my-2">

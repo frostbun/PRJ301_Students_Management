@@ -65,4 +65,8 @@ public class Submission {
         }
         return createdAt.isAfter(homework.getRawDeadline());
     }
+
+    public boolean checkAuthor(Account account) {
+        return author.equals(account);
+    }
 }

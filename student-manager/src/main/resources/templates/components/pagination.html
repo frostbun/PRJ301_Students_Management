@@ -5,8 +5,8 @@
   <li class="pageNumber"><a href="#">3</a></li>
   <li class="pageNumber"><a href="#">4</a></li>
   <li class="pageNumber"><a href="#">5</a></li> -->
-  <li th:each="i: ${#numbers.sequence(1, [[${page}]])}">
-    <a href="#" th:text="${i}">6</a>
+  <li th:each="i: ${#numbers.sequence(1, page)}">
+    <a class="pageNumber" href="#" th:text="${i}"></a>
   </li>
 
   <li><a href="#" class="next">Next</a></li>

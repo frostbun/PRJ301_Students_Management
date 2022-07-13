@@ -1,6 +1,5 @@
 package com.studentmanager.service;
 
-import java.nio.file.Paths;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +36,7 @@ public class HomeworkService {
                     .build()
             )
         );
-        String path = dto.upload(Paths.get("upload", "homework", homework.getId().toString()));
+        String path = dto.upload("upload/homework/" + homework.getId());
         if (path == null && !dto.getFile().isEmpty()) {
             homeworkRepo.delete(homework);
             return ServiceResponse.error("Failed to upload file");
@@ -51,18 +50,12 @@ public class HomeworkService {
         if (error != null) {
             return ServiceResponse.error(error);
         }
-        String path = dto.upload(Paths.get("homework", homework.getId().toString()));
+        String path = dto.upload("upload/homework/" + homework.getId());
         if (path == null && !dto.getFile().isEmpty()) {
             return ServiceResponse.error("Failed to upload file");
         }
         homework.setFilePath(path);
         return ServiceResponse.success(homeworkRepo.save(dto.mapToHomework(homework)));
-    }
-
-    public Homework getHomework(Classroom classroom, Long hid) {
-        return homeworkRepo
-            .findByIdAndClassroom(hid, classroom)
-            .orElse(null);
     }
 
     public List<Homework> getHomeworks(Classroom classroom, int page, int size) {

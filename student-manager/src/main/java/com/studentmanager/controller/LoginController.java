@@ -23,25 +23,18 @@ public class LoginController {
 
     @GetMapping
     public String get(Model view) {
-        Account account = session.getCurrentAccount();
-        if (account == null) {
-            return "login";
-        }
-        return "redirect:/";
+        return "login";
     }
 
     @PostMapping
     public String post(Model view, LoginDTO dto) {
-        Account account = session.getCurrentAccount();
-        if (account == null) {
-            ServiceResponse<Account> response = accountService.login(dto);
-            if (response.isError()) {
-                view.addAttribute("account", dto);
-                view.addAttribute("error", response.getError());
-                return "login";
-            }
-            session.setCurrentAccount(response.getResponse());
+        ServiceResponse<Account> response = accountService.login(dto);
+        if (response.isError()) {
+            view.addAttribute("account", dto);
+            view.addAttribute("error", response.getError());
+            return "login";
         }
+        session.setCurrentAccount(response.getResponse());
         return "redirect:/";
     }
 }

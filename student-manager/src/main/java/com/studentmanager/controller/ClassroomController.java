@@ -35,9 +35,7 @@ public class ClassroomController {
     @GetMapping
     public String list(Model view, @RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "") String query) {
         Account account = session.getCurrentAccount();
-        if (account == null) {
-            return "redirect:/login";
-        }
+        Long classCount = classMemberService.countClassrooms(account, query);
         view.addAttribute(
             "classes",
             classMemberService
@@ -46,7 +44,6 @@ public class ClassroomController {
                 .map(classroom -> new Pair<>(classroom, classMemberService.getTeachers(classroom, "", 0, 3)))
                 .collect(Collectors.toList())
         );
-        Long classCount = classMemberService.countClassrooms(account, query);
         view.addAttribute("classCount", classCount);
         view.addAttribute("page", page);
         view.addAttribute("query", query);
@@ -56,11 +53,7 @@ public class ClassroomController {
 
     @PostMapping("/create")
     public String create(RedirectAttributes redirect, CreateClassroomDTO dto) {
-        Account account = session.getCurrentAccount();
-        if (account == null) {
-            return "redirect:/login";
-        }
-        ServiceResponse<Classroom> response = classroomService.create(account, dto);
+        ServiceResponse<Classroom> response = classroomService.create(session.getCurrentAccount(), dto);
         if (response.isError()) {
             redirect.addAttribute("error", response.getError());
             return "redirect:/classroom";
@@ -70,11 +63,7 @@ public class ClassroomController {
 
     @PostMapping("/join")
     public String join(RedirectAttributes redirect, String inviteCode) {
-        Account account = session.getCurrentAccount();
-        if (account == null) {
-            return "redirect:/login";
-        }
-        ServiceResponse<Classroom> response = classroomService.join(account, inviteCode);
+        ServiceResponse<Classroom> response = classroomService.join(session.getCurrentAccount(), inviteCode);
         if (response.isError()) {
             redirect.addAttribute("error", response.getError());
             return "redirect:/classroom";
