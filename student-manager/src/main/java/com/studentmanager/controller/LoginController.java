@@ -6,6 +6,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.studentmanager.dto.LoginDTO;
 import com.studentmanager.dto.ServiceResponse;
@@ -22,19 +23,21 @@ public class LoginController {
     private SessionService session;
 
     @GetMapping
-    public String get(Model view) {
+    public String get(Model view, @RequestParam(defaultValue = "/") String redirect) {
+        view.addAttribute("redirect", redirect);
         return "login";
     }
 
     @PostMapping
-    public String post(Model view, LoginDTO dto) {
+    public String post(Model view, LoginDTO dto, @RequestParam(defaultValue = "/") String redirect) {
         ServiceResponse<Account> response = accountService.login(dto);
         if (response.isError()) {
             view.addAttribute("account", dto);
+            view.addAttribute("redirect", redirect);
             view.addAttribute("error", response.getError());
             return "login";
         }
         session.setCurrentAccount(response.getResponse());
-        return "redirect:/";
+        return "redirect:" + redirect;
     }
 }

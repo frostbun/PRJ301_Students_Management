@@ -33,7 +33,7 @@ public class ClassroomController {
     private ClassMemberService classMemberService;
 
     @GetMapping
-    public String list(Model view, @RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "") String query) {
+    public String list(Model view, @RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "") String query, @RequestParam(defaultValue = "") String error) {
         Account account = session.getCurrentAccount();
         Long classCount = classMemberService.countClassrooms(account, query);
         view.addAttribute(
@@ -48,6 +48,7 @@ public class ClassroomController {
         view.addAttribute("page", page);
         view.addAttribute("query", query);
         view.addAttribute("pageCount", PagingConfig.pageCountOf(classCount));
+        view.addAttribute("error", error);
         return "classroom";
     }
 

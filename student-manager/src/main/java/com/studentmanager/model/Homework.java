@@ -68,10 +68,7 @@ public class Homework {
     }
 
     public String getDeadline() {
-        if (deadline == null) {
-            return null;
-        }
-        return DateTimeConfig.FMT.format(deadline);
+        return deadline == null ? null : DateTimeConfig.FMT.format(deadline);
     }
 
     public LocalDateTime getRawDeadline() {
@@ -79,9 +76,6 @@ public class Homework {
     }
 
     public String getCreatedAt() {
-        if (createdAt == null) {
-            return null;
-        }
-        return DateTimeConfig.FMT.format(createdAt);
+        return createdAt == null ? null : DateTimeConfig.FMT.format(createdAt);
     }
 }

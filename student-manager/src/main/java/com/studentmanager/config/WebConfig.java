@@ -46,6 +46,8 @@ public class WebConfig implements WebMvcConfigurer {
         ;
         registry.addInterceptor(classmemberInterceptor)
                 .addPathPatterns("/classroom/*/**")
+                .excludePathPatterns("/classroom/create")
+                .excludePathPatterns("/classroom/join")
         ;
         registry.addInterceptor(homeworkInterceptor)
                 .addPathPatterns("/classroom/*/homework/*/**")

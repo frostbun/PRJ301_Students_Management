@@ -1,13 +1,14 @@
-<ul class="pagination">
-  <li><a href="#" class="prev">Prev</a></li>
-  <!-- <li class="pageNumber active"><a href="#">1</a></li>
-  <li class="pageNumber"><a href="#">2</a></li>
-  <li class="pageNumber"><a href="#">3</a></li>
-  <li class="pageNumber"><a href="#">4</a></li>
-  <li class="pageNumber"><a href="#">5</a></li> -->
-  <li th:each="i: ${#numbers.sequence(1, page)}">
-    <a class="pageNumber" href="#" th:text="${i}"></a>
+<ul class="pagination" style="margin-bottom: 100px;">
+  <li class="prev" th:onclick="toPage([[${page-1}]])">Prev</li>
+
+  <li th:each="i: ${#numbers.sequence(1, pageCount)}">
+    <span class="pageNumber" th:onclick="toPage([[${i}]])" th:text="${i}"></span>
   </li>
 
-  <li><a href="#" class="next">Next</a></li>
+  <li class="next" th:onclick="toPage([[${page+1}]])">Next</li>
 </ul>
+<script th:inline="javascript">
+  function toPage(page) {
+    window.location.href = `?page=${page}&query=${escape([[${query}]])}`;
+  }
+</script>

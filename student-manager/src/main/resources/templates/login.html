@@ -10,7 +10,7 @@
   <div class="container m-0">
     <div class="row vw-100 vh-100 text-center login-bg">
       <div class="col-md-6 row m-0 align-items-center bg-light">
-        <form class="login-form" method="post">
+        <form th:action="|./login?redirect=${redirect}|" class="login-form" method="post">
           <h1>Login</h1>
           <div class="form-floating m-3">
             <input class="form-control" type="text" name="username" id="username" placeholder="Username"
@@ -29,7 +29,7 @@
       <div class="col-md-6 row m-0 align-items-center">
         <div class="login-form-link">
           <p class="h4">Don't have an account?</p>
-          <a class="btn btn-secondary" href="./register">Register here --&gt;</a>
+          <a class="btn btn-secondary" th:href="|./register?redirect=${redirect}|">Register here --&gt;</a>
         </div>
       </div>
     </div>
