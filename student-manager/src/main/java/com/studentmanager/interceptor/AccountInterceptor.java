@@ -18,7 +18,7 @@ public class AccountInterceptor implements HandlerInterceptor {
 
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws IOException {
         if (!session.checkCurrentAccount()) {
-            response.sendRedirect("/login");
+            response.sendRedirect("/login?redirect=" + request.getRequestURI());
             return false;
         }
         return true;
