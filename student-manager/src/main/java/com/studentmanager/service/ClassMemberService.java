@@ -38,24 +38,6 @@ public class ClassMemberService {
             .orElse(null);
     }
 
-    public ClassMember getClassMember(Account account, Long cid) {
-        return classMemberRepo
-            .findByAccountAndClassroomId(account, cid)
-            .orElse(null);
-    }
-
-    public ClassMember getClassMember(String username, Classroom classroom) {
-        return classMemberRepo
-            .findByAccountUsernameAndClassroom(username, classroom)
-            .orElse(null);
-    }
-
-    public ClassMember getClassMember(Account account, Classroom classroom) {
-        return classMemberRepo
-            .findByAccountAndClassroom(account, classroom)
-            .orElse(null);
-    }
-
     public List<ClassMember> getClassMembers(Classroom classroom, String name, int page, int size) {
         return classMemberRepo.findByClassroomAndAccountFirstNameContainsOrClassroomAndAccountLastNameContains(
                 classroom,
@@ -74,13 +56,6 @@ public class ClassMemberService {
 
     public Long countClassMembers(Classroom classroom) {
         return classMemberRepo.countByClassroom(classroom);
-    }
-
-    public Classroom getClassroom(Account account, Long cid) {
-        return classMemberRepo
-            .findByAccountAndClassroomId(account, cid)
-            .map(ClassMember::getClassroom)
-            .orElse(null);
     }
 
     public List<Classroom> getClassrooms(Account account, String name, int page, int size) {

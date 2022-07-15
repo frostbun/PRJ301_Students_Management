@@ -4,25 +4,21 @@
     width: 100%;
 }
 
-
-
-.table{
+.table {
     margin-top: 90px;
     padding: 0;
     margin-bottom: 90px;
     background-color: #ffffff;
     height: 500px;
 }
-.table thead tr th{
+
+.table thead tr th {
     position: sticky;
     background-color: #ffffff;
     top: 3rem;
-    
-    
 }
-.header{
+
+.header {
     font-size: 20px;
     position: sticky;
-    
-    
 }

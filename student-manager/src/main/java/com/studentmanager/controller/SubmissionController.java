@@ -22,13 +22,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.studentmanager.config.PagingConfig;
 import com.studentmanager.dto.CreateSubmissionDTO;
 import com.studentmanager.dto.ServiceResponse;
-import com.studentmanager.model.Account;
-import com.studentmanager.model.ClassMember;
 import com.studentmanager.model.Classroom;
-import com.studentmanager.model.Homework;
 import com.studentmanager.model.Submission;
 import com.studentmanager.service.ClassMemberService;
-import com.studentmanager.service.HomeworkService;
 import com.studentmanager.service.SessionService;
 import com.studentmanager.service.SubmissionService;
 
@@ -42,37 +38,23 @@ public class SubmissionController {
     @Autowired
     private ClassMemberService classMemberService;
     @Autowired
-    private HomeworkService homeworkService;
-    @Autowired
     private SubmissionService submissionService;
 
     @GetMapping
     public String list(
             Model view,
-            @PathVariable Long cid,
-            @PathVariable Long hid,
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "") String query,
             @RequestParam(required = false) String error
     ) {
-        ClassMember classMember = classMemberService.getClassMember(session.getCurrentAccount(), cid);
-        if (classMember == null || classMember.isStudent()) {
-            return "redirect:/login";
-        }
-        Classroom classroom = classMember.getClassroom();
-        Homework homework = homeworkService.getHomework(classroom, hid);
-        if (homework == null) {
-            return "redirect:/login";
-        }
+        Classroom classroom = session.getCurrentClassroom();
         Long studentCount = classMemberService.countStudents(classroom);
-        view.addAttribute("homework", homework);
-        view.addAttribute("classMember", classMember);
         view.addAttribute(
             "students",
             classMemberService
                 .getStudents(classroom, query, page-1, PagingConfig.SIZE)
                 .stream()
-                .map((student) -> new Pair<>(student, submissionService.getSubmission(student, homework)))
+                .map((student) -> new Pair<>(student, submissionService.getSubmission(student, session.getCurrentHomework())))
                 .collect(Collectors.toList())
         );
         view.addAttribute("studentCount", studentCount);
@@ -88,38 +70,19 @@ public class SubmissionController {
             RedirectAttributes redirect,
             @PathVariable Long cid,
             @PathVariable Long hid,
-            @PathVariable Long sid,
             Double mark,
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "") String query
     ) {
-        ClassMember classMember = classMemberService.getClassMember(session.getCurrentAccount(), cid);
-        if (classMember == null || classMember.isStudent()) {
-            return "redirect:/login";
-        }
-        Submission submission = submissionService.getSubmission(classMember.getClassroom(), sid);
-        if (submission == null) {
-            return "redirect:/login";
-        }
-        redirect.addAttribute("error", submissionService.mark(submission, mark).getError());
+        redirect.addAttribute("error", submissionService.mark(session.getCurrentSubmission(), mark).getError());
         redirect.addAttribute("page", page);
         redirect.addAttribute("query", query);
         return "redirect:/classroom/" + cid + "/homework/" + hid + "/submission";
     }
 
     @PostMapping("/create")
-    public String create(RedirectAttributes redirect, @PathVariable Long cid, @PathVariable Long hid, CreateSubmissionDTO dto, @RequestParam(defaultValue = "1") int page) {
-        Account account = session.getCurrentAccount();
-        Classroom classroom = classMemberService.getClassroom(account, cid);
-        ClassMember classMember = classMemberService.getClassMember(account, classroom);
-        if (classMember == null || classMember.isTeacher()) {
-            return "redirect:/login";
-        }
-        Homework homework = homeworkService.getHomework(classroom, hid);
-        if (homework == null) {
-            return "redirect:/login";
-        }
-        ServiceResponse<Submission> response = submissionService.create(account, homework, dto);
+    public String create(RedirectAttributes redirect, @PathVariable Long cid, CreateSubmissionDTO dto, @RequestParam(defaultValue = "1") int page) {
+        ServiceResponse<Submission> response = submissionService.create(session.getCurrentAccount(), session.getCurrentHomework(), dto);
         if (response.isError()) {
             redirect.addAttribute("error", response.getError());
         }
@@ -128,15 +91,8 @@ public class SubmissionController {
     }
 
     @GetMapping("/{sid}/download")
-    public ResponseEntity<Resource> download(@PathVariable Long cid, @PathVariable Long sid) throws IOException {
-        Account account = session.getCurrentAccount();
-        Classroom classroom = classMemberService.getClassroom(account, cid);
-        ClassMember classMember = classMemberService.getClassMember(account, classroom);
-        Submission submission = submissionService.getSubmission(classroom, sid);
-        if (submission == null || classMember == null || (classMember.isStudent() && !submission.getAuthor().equals(account))) {
-            return ResponseEntity.notFound().build();
-        }
-        Resource file = new FileSystemResource(submission.getFilePath());
+    public ResponseEntity<Resource> download() throws IOException {
+        Resource file = new FileSystemResource(session.getCurrentSubmission().getFilePath());
         return ResponseEntity.ok()
             .contentType(MediaType.APPLICATION_OCTET_STREAM)
             .contentLength(file.contentLength())

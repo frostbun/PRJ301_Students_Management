@@ -4,13 +4,13 @@
 <head>
   <title th:text="|${account.fullName}'s Profile|"></title>
   <th:block th:insert="components/head"></th:block>
-  <link rel="stylesheet" th:href="@{/css/profile.css}">
+  <link rel="stylesheet" th:href="@{/static/css/profile.css}">
 </head>
 
 <body>
   <header th:insert="components/header"></header>
 
-  <div class="container rounded bg-white mt-5 mb-5">
+  <div class="container rounded bg-white mt-5 mb-5" th:with="account=${session.account}">
     <div class="row">
       <div class="col-md-3 border-right nav-pro">
         <div class="d-flex flex-column align-items-center text-center my-2">
@@ -31,7 +31,7 @@
 
   <footer th:insert="components/footer"></footer>
   <div th:insert="components/script"></div>
-  <script type="text/javascript" th:src="@{/js/profile.js}"></script>
+  <script type="text/javascript" th:src="@{/static/js/profile.js}"></script>
 </body>
 
 </html>

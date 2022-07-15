@@ -71,6 +71,7 @@
     background-color: var(--secondary-light);
 }
 
+/* Classroom */
 .class-cover {
     max-height: 25vh;
     object-fit: cover;
@@ -111,6 +112,10 @@
     padding: 0;
     line-height: 1;
     font-weight: 700;
+}
+
+.navbar-toggler-icon{
+    color: #ffffff;
 }
 
 body nav div a:hover,

@@ -1,6 +1,5 @@
 package com.studentmanager.service;
 
-import java.nio.file.Paths;
 import java.util.List;
 import java.util.Optional;
 
@@ -12,7 +11,6 @@ import org.springframework.stereotype.Service;
 import com.studentmanager.dto.CreateSubmissionDTO;
 import com.studentmanager.dto.ServiceResponse;
 import com.studentmanager.model.Account;
-import com.studentmanager.model.Classroom;
 import com.studentmanager.model.Homework;
 import com.studentmanager.model.Submission;
 import com.studentmanager.repository.SubmissionRepository;
@@ -45,7 +43,7 @@ public class SubmissionService {
                     .homework(homework)
                     .build()
             );
-        String path = dto.upload(Paths.get("upload", "submission", submission.getId().toString()));
+        String path = dto.upload("upload/submission/" + submission.getId());
         if (path == null) {
             if (!sOptional.isPresent()) {
                 submissionRepo.delete(submission);
@@ -58,10 +56,6 @@ public class SubmissionService {
 
     public Submission getSubmission(Account author, Homework homework) {
         return submissionRepo.findByAuthorAndHomework(author, homework).orElse(null);
-    }
-
-    public Submission getSubmission(Classroom classroom, Long sid) {
-        return submissionRepo.findByIdAndHomeworkClassroom(sid, classroom).orElse(null);
     }
 
     public List<Submission> getSubmissions(Homework homework, int page, int size) {
