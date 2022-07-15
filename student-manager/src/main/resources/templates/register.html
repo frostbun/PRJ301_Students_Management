@@ -12,11 +12,11 @@
       <div class="col-md-6 row m-0 align-items-center">
         <div class="login-form-link">
           <p class="h4">Already have an account?</p>
-          <a class="btn btn-secondary" href="./login">&lt;-- Login here</a>
+          <a class="btn btn-secondary" th:href="|./login?redirect=${redirect}|">&lt;-- Login here</a>
         </div>
       </div>
       <div class="col-md-6 row m-0 align-items-center bg-light">
-        <form class="login-form" method="post">
+        <form th:action="|./register?redirect=${redirect}|" class="login-form" method="post">
           <h1>Register</h1>
           <!-- Username -->
           <div class="form-floating m-3">

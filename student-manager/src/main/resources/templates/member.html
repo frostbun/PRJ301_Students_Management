@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-  <title th:text="${classMember.classroom.name}"></title>
+  <title th:text="${session.classroom.name}"></title>
   <th:block th:insert="components/head"></th:block>
 </head>
 
@@ -14,7 +14,7 @@
     <th:block th:with="coverTitle=|Total: ${memberCount} members|" th:insert="components/classCover"></th:block>
 
     <div class="text-center">
-      <div th:replace="components/searchbox :: box"></div>
+      <div th:replace="components/searchBox :: box"></div>
     </div>
 
     <div class="row">
@@ -44,8 +44,8 @@
               <td th:text="${account.email}"></td>
               <td th:text="${member.role}"></td>
               <td>
-                <th:block th:if="${classMember == member}">
-                  <span th:if="${classMember.teacher}" class="link-danger" th:onclick="
+                <th:block th:if="${session.classMember == member}">
+                  <span th:if="${session.isTeacher}" class="link-danger" th:onclick="
                     confirmRedirect(
                       [[|./member/${account.username}/demote?page=${page}&query=${query}|]],
                       [[|Are you sure want to demote yourself|]]
@@ -53,8 +53,8 @@
                     Demote
                   </span>
                 </th:block>
-                <th:block th:if="${classMember != member}">
-                  <th:block th:if="${classMember.teacher}">
+                <th:block th:if="${session.classMember != member}">
+                  <th:block th:if="${session.isTeacher}">
                     <span th:if="${member.student}" class="link-primary" th:onclick="
                       confirmRedirect(
                         [[|./member/${account.username}/promote?page=${page}&query=${query}|]],
@@ -77,7 +77,6 @@
                       Kick |
                     </span>
                   </th:block>
-                  <a class="link-primary" href="#">Chat</a>
                 </th:block>
               </td>
             </tr>

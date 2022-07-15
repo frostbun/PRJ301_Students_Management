@@ -53,16 +53,14 @@ public class Submission {
     }
 
     public String getCreatedAt() {
-        if (createdAt == null) {
-            return null;
-        }
-        return DateTimeConfig.FMT.format(createdAt);
+        return createdAt == null ? null : DateTimeConfig.FMT.format(createdAt);
     }
 
     public boolean isLate() {
-        if (homework.getDeadline() == null) {
-            return false;
-        }
-        return createdAt.isAfter(homework.getRawDeadline());
+        return homework.getDeadline() == null ? false : createdAt.isAfter(homework.getRawDeadline());
+    }
+
+    public boolean checkAuthor(Account account) {
+        return author.equals(account);
     }
 }

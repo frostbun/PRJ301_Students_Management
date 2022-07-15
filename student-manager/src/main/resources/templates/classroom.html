@@ -16,17 +16,13 @@
 
     <div class="boxbox">
       <div class="row">
-        <div class="col-md-4" th:insert="components/searchbox :: box"></div>
+        <div class="col-md-4" th:insert="components/searchBox :: box"></div>
         <div class="col-md-4"
           th:with="ph='Create new classroom', name='name', action='/classroom/create', class='bx bx-search'"
-          th:insert="components/searchbox :: form"></div>
+          th:insert="components/searchBox :: form"></div>
         <div class="col-md-4"
           th:with="ph='Join classroom', name='inviteCode', action='/classroom/join', class='bx bx-search'"
-          th:insert="components/searchbox :: form"></div>
-      </div>
-
-      <div class="text-center">
-        <p class="text-danger" th:text="${error}"></p>
+          th:insert="components/searchBox :: form"></div>
       </div>
 
       <th:block th:each="ctPair: ${classes}" th:with="classroom=${ctPair.key}, teachers=${ctPair.value}">
@@ -52,7 +48,9 @@
     </div>
   </div>
 
-  <!-- <div th:insert="components/pagination"></div> -->
+  <div th:insert="components/hiddenError"></div>
+
+  <div th:insert="components/pagination"></div>
 
   <!-- Scroll to Top Button-->
   <a class="scroll-to-top rounded" href="#page-top"><i class="fas fa-angle-up"></i></a>

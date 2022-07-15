@@ -22,7 +22,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.studentmanager.config.PagingConfig;
 import com.studentmanager.dto.CreateHomeworkDTO;
 import com.studentmanager.dto.ServiceResponse;
-import com.studentmanager.model.ClassMember;
 import com.studentmanager.model.Classroom;
 import com.studentmanager.model.Homework;
 import com.studentmanager.service.ClassMemberService;
@@ -45,13 +44,8 @@ public class HomeworkController {
     private SubmissionService submissionService;
 
     @GetMapping
-    public String list(Model view, @PathVariable Long cid, @RequestParam(defaultValue = "1") int page, @RequestParam(required = false) String error) {
-        ClassMember classMember = classMemberService.getClassMember(session.getCurrentAccount(), cid);
-        if (classMember == null) {
-            return "redirect:/login";
-        }
-        Classroom classroom = classMember.getClassroom();
-        view.addAttribute("classMember", classMember);
+    public String list(Model view, @RequestParam(defaultValue = "1") int page, @RequestParam(required = false) String error) {
+        Classroom classroom = session.getCurrentClassroom();
         view.addAttribute("studentCount", classMemberService.countStudents(classroom));
         view.addAttribute(
             "homeworks",
@@ -68,24 +62,14 @@ public class HomeworkController {
     }
 
     @GetMapping("/create")
-    public String createGet(Model view, @PathVariable Long cid) {
-        ClassMember classMember = classMemberService.getClassMember(session.getCurrentAccount(), cid);
-        if (classMember == null || classMember.isStudent()) {
-            return "redirect:/login";
-        }
-        view.addAttribute("classMember", classMember);
+    public String createGet() {
         return "createHomework";
     }
 
     @PostMapping("/create")
     public String createPost(Model view, @PathVariable Long cid, CreateHomeworkDTO dto) {
-        ClassMember classMember = classMemberService.getClassMember(session.getCurrentAccount(), cid);
-        if (classMember == null || classMember.isStudent()) {
-            return "redirect:/login";
-        }
-        ServiceResponse<Homework> response = homeworkService.create(classMember.getAccount(), classMember.getClassroom(), dto);
+        ServiceResponse<Homework> response = homeworkService.create(session.getCurrentAccount(), session.getCurrentClassroom(), dto);
         if (response.isError()) {
-            view.addAttribute("classMember", classMember);
             view.addAttribute("homework", dto);
             view.addAttribute("error", response.getError());
             return "createHomework";
@@ -94,12 +78,8 @@ public class HomeworkController {
     }
 
     @GetMapping("/{hid}/download")
-    public ResponseEntity<Resource> download(@PathVariable Long cid, @PathVariable Long hid) throws IOException {
-        Homework homework = homeworkService.getHomework(classMemberService.getClassroom(session.getCurrentAccount(), cid), hid);
-        if (homework == null) {
-            return ResponseEntity.notFound().build();
-        }
-        Resource file = new FileSystemResource(homework.getFilePath());
+    public ResponseEntity<Resource> download() throws IOException {
+        Resource file = new FileSystemResource(session.getCurrentHomework().getFilePath());
         return ResponseEntity.ok()
             .contentType(MediaType.APPLICATION_OCTET_STREAM)
             .contentLength(file.contentLength())
@@ -111,35 +91,17 @@ public class HomeworkController {
     }
 
     @GetMapping("/{hid}/edit")
-    public String editGet(Model view, @PathVariable Long cid, @PathVariable Long hid, @RequestParam(defaultValue = "1") int page) {
-        ClassMember classMember = classMemberService.getClassMember(session.getCurrentAccount(), cid);
-        if (classMember == null || classMember.isStudent()) {
-            return "redirect:/login";
-        }
-        Homework homework = homeworkService.getHomework(classMember.getClassroom(), hid);
-        if (homework == null) {
-            return "redirect:/login";
-        }
-        view.addAttribute("homework", homework);
-        view.addAttribute("classMember", classMember);
+    public String editGet(Model view, @RequestParam(defaultValue = "1") int page) {
+        view.addAttribute("homework", session.getCurrentHomework());
         view.addAttribute("page", page);
         return "editHomework";
     }
 
     @PostMapping("/{hid}/edit")
     public String editPost(Model view, RedirectAttributes redirect, @PathVariable Long cid, @PathVariable Long hid, @RequestParam(defaultValue = "1") int page, CreateHomeworkDTO dto) {
-        ClassMember classMember = classMemberService.getClassMember(session.getCurrentAccount(), cid);
-        if (classMember == null || classMember.isStudent()) {
-            return "redirect:/login";
-        }
-        Homework homework = homeworkService.getHomework(classMember.getClassroom(), hid);
-        if (homework == null) {
-            return "redirect:/login";
-        }
-        ServiceResponse<Homework> response = homeworkService.edit(homework, dto);
+        ServiceResponse<Homework> response = homeworkService.edit(session.getCurrentHomework(), dto);
         if (response.isError()) {
             view.addAttribute("homework", dto);
-            view.addAttribute("classMember", classMember);
             view.addAttribute("page", page);
             view.addAttribute("error", response.getError());
             return "editHomework";
@@ -150,15 +112,7 @@ public class HomeworkController {
 
     @GetMapping("{hid}/delete")
     public String delete(RedirectAttributes redirect, @PathVariable Long cid, @PathVariable Long hid, @RequestParam(defaultValue = "1") int page) {
-        ClassMember classMember = classMemberService.getClassMember(session.getCurrentAccount(), cid);
-        if (classMember == null || classMember.isStudent()) {
-            return "redirect:/login";
-        }
-        Homework homework = homeworkService.getHomework(classMember.getClassroom(), hid);
-        if (homework == null) {
-            return "redirect:/login";
-        }
-        homeworkService.delete(homework);
+        homeworkService.delete(session.getCurrentHomework());
         redirect.addAttribute("page", page);
         return "redirect:/classroom/" + cid + "/homework";
     }

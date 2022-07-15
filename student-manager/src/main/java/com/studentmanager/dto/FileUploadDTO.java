@@ -3,6 +3,7 @@ package com.studentmanager.dto;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import org.springframework.web.multipart.MultipartFile;
 
@@ -18,16 +19,16 @@ public class FileUploadDTO extends DTO {
         return null;
     }
 
-    public String upload(Path path) {
+    public String upload(String path) {
         if (file.isEmpty()) {
             return null;
         }
         try {
-            path = path.resolve(file.getOriginalFilename());
-            File dest = path.toAbsolutePath().toFile();
+            Path filePath = Paths.get(path, file.getOriginalFilename());
+            File dest = filePath.toAbsolutePath().toFile();
             dest.mkdirs();
             file.transferTo(dest);
-            return path.toString();
+            return filePath.toString();
         }
         catch (IOException e) {
             e.printStackTrace();
