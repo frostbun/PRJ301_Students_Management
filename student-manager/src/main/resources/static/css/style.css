@@ -321,8 +321,9 @@ body nav div span:active {
 /* course CARD */
 
 .course-card {
-    width: 200px;
-    position: relative;
+    width: 250px;
+    height: 350px;
+    /* position: relative; */
     box-shadow: 0 2px 7px gray;
     margin: 50px auto;
     background: #fafafa;
@@ -346,8 +347,20 @@ body nav div span:active {
 }
 
 .course-details {
+    height: 250px;
     padding: 30px;
+    overflow: hidden !important;
+    display: inline-block;
+    width: 300px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
+
+.className{
+    overflow: hidden !important;
+    text-overflow: ellipsis;
+}
+
 
 .course-details h6 a {
     font-weight: 500;
