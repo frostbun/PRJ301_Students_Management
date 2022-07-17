@@ -12,29 +12,27 @@ body {
     align-items: center;
 }
 
-ul {
+.pagination {
     background-color: var(--white);
     display: flex;
     padding: 5px 10px;
-    box-shadow: 0px 5px 15px var(--primary-light);
-    margin-top: 650px;
-
+    margin-top: 650px;    
 }
 
-ul li {
+.pageNumber, .prev, .next{
     list-style: none;
     line-height: 50px;
     margin: 0 5px
 }
 
-ul li.pageNumber {
+.pageNumber {
     width: 50px;
     height: 50px;
     line-height: 50px;
     text-align: center;
 }
 
-ul li a {
+.prev, .pageNumberLink, .next {
     display: block;
     text-decoration: none;
     color: var(--primary-light);
@@ -47,19 +45,19 @@ ul li a {
     color: var(--primary)
 }
 
-ul li.pageNumber:hover a,
-ul li.pageNumber.active a {
+.pageNumber:hover .pageNumberLink,
+.pageNumber.active .pageNumberLink {
     background-color: var(--primary);
     color: var(--white);
 }
 
-ul.li:first-child {
+#prev {
     margin-right: 30px;
     font-weight: 700;
     font-size: 20px
 }
 
-ul.li:last-child {
+#next {
     margin-left: 30px;
     font-weight: 700;
     font-size: 20px

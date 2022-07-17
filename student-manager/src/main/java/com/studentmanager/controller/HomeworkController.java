@@ -20,15 +20,15 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.studentmanager.config.PagingConfig;
 import com.studentmanager.dto.CreateHomeworkDTO;
+import com.studentmanager.dto.HomeworkDTO;
 import com.studentmanager.dto.ServiceResponse;
 import com.studentmanager.model.Account;
 import com.studentmanager.model.Classroom;
 import com.studentmanager.model.Homework;
 import com.studentmanager.service.ClassMemberService;
+import com.studentmanager.service.CommentService;
 import com.studentmanager.service.HomeworkService;
 import com.studentmanager.service.SubmissionService;
-
-import javafx.util.Pair;
 
 @Controller
 @RequestMapping("/classroom/{cid}/homework")
@@ -39,6 +39,8 @@ public class HomeworkController {
     private HomeworkService homeworkService;
     @Autowired
     private SubmissionService submissionService;
+    @Autowired
+    private CommentService commentService;
 
     @GetMapping
     public String list(
@@ -50,11 +52,17 @@ public class HomeworkController {
         view.addAttribute(
             "homeworks",
             homeworkService
-            .getHomeworks(classroom, page-1, PagingConfig.SIZE)
-            .stream()
-            .map(homework -> new Pair<>(homework, submissionService.getSubmission(account, homework)))
-            .collect(Collectors.toList())
-            );
+                .getHomeworks(classroom, page-1, PagingConfig.SIZE)
+                .stream()
+                .map(homework -> {
+                    HomeworkDTO dto = new HomeworkDTO();
+                    dto.setHomework(homework);
+                    dto.setSubmission(submissionService.getSubmission(account, homework));
+                    dto.setComments(commentService.listCommentByHomework(homework));
+                    return dto;
+                })
+                .collect(Collectors.toList())
+        );
         view.addAttribute("studentCount", classMemberService.countStudents(classroom));
         view.addAttribute("pageCount", PagingConfig.pageCountOf(homeworkService.countHomeworks(classroom)));
         return "homework";
@@ -93,6 +101,21 @@ public class HomeworkController {
             )
             .body(file);
     }
+
+    @PostMapping("/{hid}/comment")
+    public String comment(
+        RedirectAttributes redirect,
+        String comment,
+        @RequestAttribute Account account,
+        @RequestAttribute Classroom classroom,
+        @RequestAttribute Homework homework,
+        @RequestAttribute int page
+    ) {
+        commentService.comment(account, homework, comment);
+        redirect.addAttribute("page", page);
+        return "redirect:/classroom/" + classroom.getId() + "/homework";
+    }
+
 
     @GetMapping("/{hid}/edit")
     public String editGet() {

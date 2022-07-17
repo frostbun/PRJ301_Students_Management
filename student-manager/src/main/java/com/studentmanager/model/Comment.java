@@ -21,7 +21,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Message {
+public class Comment {
     @Id
     @GeneratedValue
     @Column
@@ -29,11 +29,11 @@ public class Message {
 
     @ManyToOne
     @JoinColumn
-    private Account sender;
+    private Account author;
 
     @ManyToOne
     @JoinColumn
-    private Account receiver;
+    private Homework homework;
 
     @Column(columnDefinition = "NVARCHAR(MAX)")
     private String content;
