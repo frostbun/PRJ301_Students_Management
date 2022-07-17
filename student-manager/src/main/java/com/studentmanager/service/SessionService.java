@@ -29,7 +29,7 @@ public class SessionService {
     private SubmissionRepository submissionRepo;
 
     public boolean checkCurrentAccount() {
-        setCurrentAccount(Account.builder().username("linhthuyy").build());
+        // setCurrentAccount(Account.builder().username("thanhienee").build());
         // find in session
         Account account = getCurrentAccount();
         if (account == null) {
