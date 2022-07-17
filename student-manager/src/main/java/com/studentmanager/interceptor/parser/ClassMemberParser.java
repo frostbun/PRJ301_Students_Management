@@ -1,4 +1,4 @@
-package com.studentmanager.interceptor;
+package com.studentmanager.interceptor.parser;
 
 import java.io.IOException;
 import java.util.Map;
@@ -11,21 +11,28 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.HandlerMapping;
 
-import com.studentmanager.service.SessionService;
+import com.studentmanager.model.Account;
+import com.studentmanager.model.ClassMember;
+import com.studentmanager.service.ClassMemberService;
 
 @Component
-public class SubmissionInterceptor implements HandlerInterceptor {
+public class ClassMemberParser implements HandlerInterceptor {
     @Autowired
-    private SessionService session;
+    private ClassMemberService classMemberService;
 
     @SuppressWarnings("rawtypes")
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws IOException {
         Map pathVariables = (Map)request.getAttribute(HandlerMapping.URI_TEMPLATE_VARIABLES_ATTRIBUTE);
-        Long sid = Long.parseLong(pathVariables.get("sid").toString());
-        if (!session.checkCurrentHomework(sid) || !session.isTeacher() && !session.getCurrentSubmission().checkAuthor(session.getCurrentAccount())) {
+        ClassMember classMember = classMemberService.getClassMember(
+            (Account)request.getAttribute("account"),
+            Long.parseLong(pathVariables.get("cid").toString())
+        );
+        if (classMember == null) {
             response.sendRedirect("/error/404");
             return false;
         }
+        request.setAttribute("classMember", classMember);
+        request.setAttribute("classroom", classMember.getClassroom());
         return true;
     }
 }

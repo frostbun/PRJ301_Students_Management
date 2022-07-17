@@ -58,6 +58,10 @@ public class HomeworkService {
         return ServiceResponse.success(homeworkRepo.save(dto.mapToHomework(homework)));
     }
 
+    public Homework getHomework(Long hid, Classroom classroom) {
+        return homeworkRepo.findByIdAndClassroom(hid, classroom).orElse(null);
+    }
+
     public List<Homework> getHomeworks(Classroom classroom, int page, int size) {
         return homeworkRepo.findByClassroom(
             classroom,

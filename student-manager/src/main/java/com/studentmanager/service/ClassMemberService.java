@@ -38,6 +38,18 @@ public class ClassMemberService {
             .orElse(null);
     }
 
+    public ClassMember getClassMember(Account account, Long cid) {
+        return classMemberRepo
+            .findByAccountAndClassroomId(account, cid)
+            .orElse(null);
+    }
+
+    public ClassMember getClassMember(String username, Classroom classroom) {
+        return classMemberRepo
+            .findByAccountUsernameAndClassroom(username, classroom)
+            .orElse(null);
+    }
+
     public List<ClassMember> getClassMembers(Classroom classroom, String name, int page, int size) {
         return classMemberRepo.findByClassroomAndAccountFirstNameContainsOrClassroomAndAccountLastNameContains(
                 classroom,

@@ -7,56 +7,64 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import com.studentmanager.interceptor.AccountInterceptor;
-import com.studentmanager.interceptor.ClassmemberInterceptor;
-import com.studentmanager.interceptor.GuestInterceptor;
-import com.studentmanager.interceptor.HomeworkInterceptor;
-import com.studentmanager.interceptor.StudentInterceptor;
-import com.studentmanager.interceptor.SubmissionInterceptor;
-import com.studentmanager.interceptor.TeacherInterceptor;
+import com.studentmanager.interceptor.filter.LoggedInFilter;
+import com.studentmanager.interceptor.filter.LoggedOutFilter;
+import com.studentmanager.interceptor.filter.StudentFilter;
+import com.studentmanager.interceptor.filter.TeacherFilter;
+import com.studentmanager.interceptor.parser.ClassMateParser;
+import com.studentmanager.interceptor.parser.ClassMemberParser;
+import com.studentmanager.interceptor.parser.GeneralParser;
+import com.studentmanager.interceptor.parser.HomeworkParser;
+import com.studentmanager.interceptor.parser.SubmissionParser;
 
 @Configuration
 @EnableWebMvc
 public class WebConfig implements WebMvcConfigurer {
     @Autowired
-    private GuestInterceptor guestInterceptor;
+    private LoggedOutFilter loggedOutFilter;
     @Autowired
-    private AccountInterceptor accountInterceptor;
+    private LoggedInFilter loggedinFilter;
     @Autowired
-    private ClassmemberInterceptor classmemberInterceptor;
+    private TeacherFilter teacherFilter;
     @Autowired
-    private HomeworkInterceptor homeworkInterceptor;
+    private StudentFilter studentFilter;
     @Autowired
-    private SubmissionInterceptor submissionInterceptor;
+    private ClassMemberParser classMemberParser;
     @Autowired
-    private TeacherInterceptor teacherInterceptor;
+    private ClassMateParser classMateParser;
     @Autowired
-    private StudentInterceptor studentInterceptor;
+    private HomeworkParser homeworkParser;
+    @Autowired
+    private SubmissionParser submissionParser;
+    @Autowired
+    private GeneralParser generalParser;
 
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(guestInterceptor)
+        registry.addInterceptor(loggedOutFilter)
                 .addPathPatterns("/login")
                 .addPathPatterns("/register")
         ;
-        registry.addInterceptor(accountInterceptor)
+        registry.addInterceptor(loggedinFilter)
                 .addPathPatterns("/**")
                 .excludePathPatterns("/")
                 .excludePathPatterns("/login")
                 .excludePathPatterns("/register")
+                .excludePathPatterns("/error/**")
                 .excludePathPatterns("/static/**")
         ;
-        registry.addInterceptor(classmemberInterceptor)
-                .addPathPatterns("/classroom/*/**")
-                .excludePathPatterns("/classroom/create")
-                .excludePathPatterns("/classroom/join")
+        registry.addInterceptor(classMemberParser)
+                .addPathPatterns("/classroom/*/*/**")
         ;
-        registry.addInterceptor(homeworkInterceptor)
-                .addPathPatterns("/classroom/*/homework/*/**")
+        registry.addInterceptor(classMateParser)
+                .addPathPatterns("/classroom/*/member/*/*/**")
         ;
-        registry.addInterceptor(submissionInterceptor)
-                .addPathPatterns("/classroom/*/homework/*/submission/*/**")
+        registry.addInterceptor(homeworkParser)
+                .addPathPatterns("/classroom/*/homework/*/*/**")
         ;
-        registry.addInterceptor(teacherInterceptor)
+        registry.addInterceptor(submissionParser)
+                .addPathPatterns("/classroom/*/homework/*/submission/*/*/**")
+        ;
+        registry.addInterceptor(teacherFilter)
                 .addPathPatterns("/classroom/*/member/*/remove")
                 .addPathPatterns("/classroom/*/member/*/promote")
                 .addPathPatterns("/classroom/*/member/*/demote")
@@ -66,9 +74,12 @@ public class WebConfig implements WebMvcConfigurer {
                 .addPathPatterns("/classroom/*/homework/*/submission")
                 .addPathPatterns("/classroom/*/homework/*/submission/*/mark")
         ;
-        registry.addInterceptor(studentInterceptor)
+        registry.addInterceptor(studentFilter)
                 .addPathPatterns("/classroom/*/homework/*/submission/create")
         ;
+        registry.addInterceptor(generalParser)
+                .addPathPatterns("/**")
+                .excludePathPatterns("/static/**");
     }
 
     public void addResourceHandlers(ResourceHandlerRegistry registry) {

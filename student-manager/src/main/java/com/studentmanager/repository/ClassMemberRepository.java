@@ -29,5 +29,4 @@ public interface ClassMemberRepository extends JpaRepository<ClassMember, Long> 
     
     public List<ClassMember> findByClassroomAndRoleAndAccountFirstNameContainsOrClassroomAndRoleAndAccountLastNameContains(Classroom c1, String r1, String q1, Classroom c2, String r2, String q2, Pageable pageable);
     public Long countByClassroomAndRole(Classroom classroom, String role);
-
 }

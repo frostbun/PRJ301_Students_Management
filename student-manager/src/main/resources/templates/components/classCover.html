@@ -1,8 +1,8 @@
 <div class="row position-relative">
-  <img class="img-fluid class-cover" th:src="@{${session.classroom.coverURL}}"
+  <img class="img-fluid class-cover" th:src="@{${classroom.coverURL}}"
     alt="class cover image">
   <div class="row align-items-end position-absolute bottom-0 text-white">
-    <h1 class="ps-3 fw-bold" th:text="${session.classroom.name}"></h1>
+    <h1 class="ps-3 fw-bold" th:text="${classroom.name}"></h1>
     <h3 class="ps-3" th:text="${coverTitle}"></h3>
   </div>
 </div>

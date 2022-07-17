@@ -54,6 +54,10 @@ public class SubmissionService {
         return ServiceResponse.success(submissionRepo.save(submission));
     }
 
+    public Submission getSubmission(Long sid, Homework homework) {
+        return submissionRepo.findByIdAndHomework(sid, homework).orElse(null);
+    }
+
     public Submission getSubmission(Account author, Homework homework) {
         return submissionRepo.findByAuthorAndHomework(author, homework).orElse(null);
     }

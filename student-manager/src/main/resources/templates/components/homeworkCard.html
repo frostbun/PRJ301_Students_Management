@@ -17,7 +17,24 @@
 </div>
 
 <div th:fragment="footer">
-
+  <table class="comment-list">
+    <th:block th:each="comment: ${comments}">
+      <tr>
+        <td rowspan="2">avt</td>
+        <td th:text="${comment.author.fullName}" style="font-weight: bold">name</td>
+      </tr>
+      <tr>
+        <td th:text="${comment.content}">comment</td>
+      </tr>
+    </th:block>
+  </table>
+  <br>
+  <form th:action="|./homework/${homework.id}/comment?page=${page}|" method="post">
+    <div class="comment">
+      <input class="input-comment" type="text" name="comment" id="comment" placeholder="Add a comment...">
+      <Button id="sendButton" style="border: none"><i class='bx bxs-send bx-md'></i></Button>
+    </div>
+  </form>
 </div>
 
 <div class="card" th:fragment="not-submitted">
