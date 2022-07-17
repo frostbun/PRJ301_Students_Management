@@ -17,10 +17,13 @@
 </div>
 
 <div th:fragment="footer">
+  <br>
   <table class="comment-list">
     <th:block th:each="comment: ${comments}">
       <tr>
-        <td rowspan="2">avt</td>
+        <td rowspan="2">
+          <img class="img-fluid rounded-circle d-inline-block" th:src="@{${homework.author.avatarURL}}" width="40px">
+        </td>
         <td th:text="${comment.author.fullName}" style="font-weight: bold">name</td>
       </tr>
       <tr>
