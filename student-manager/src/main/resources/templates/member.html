@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-  <title th:text="${session.classroom.name}"></title>
+  <title th:text="${classroom.name}"></title>
   <th:block th:insert="components/head"></th:block>
 </head>
 
@@ -44,8 +44,8 @@
               <td th:text="${account.email}"></td>
               <td th:text="${member.role}"></td>
               <td>
-                <th:block th:if="${session.classMember == member}">
-                  <span th:if="${session.isTeacher}" class="link-danger" th:onclick="
+                <th:block th:if="${classMember == member}">
+                  <span th:if="${classMember.isTeacher}" class="link-danger" th:onclick="
                     confirmRedirect(
                       [[|./member/${account.username}/demote?page=${page}&query=${query}|]],
                       [[|Are you sure want to demote yourself|]]
@@ -53,8 +53,8 @@
                     Demote
                   </span>
                 </th:block>
-                <th:block th:if="${session.classMember != member}">
-                  <th:block th:if="${session.isTeacher}">
+                <th:block th:if="${classMember != member}">
+                  <th:block th:if="${classMember.isTeacher}">
                     <span th:if="${member.student}" class="link-primary" th:onclick="
                       confirmRedirect(
                         [[|./member/${account.username}/promote?page=${page}&query=${query}|]],

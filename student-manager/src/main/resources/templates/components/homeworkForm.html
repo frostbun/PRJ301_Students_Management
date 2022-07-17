@@ -30,7 +30,7 @@
   </div>
   <div class="text-center">
     <p class="text-danger" th:text="${error}"></p>
-    <a th:href="@{(|/classroom/${session.classroom.id}/homework| + (${page} ? |?page=${page}| : ''))}"
+    <a th:href="@{(|/classroom/${classroom.id}/homework| + (${page} ? |?page=${page}| : ''))}"
       class="btn btn-secondary">Cancel</a>
     <button class="btn btn-primary">Assign Homework</button>
   </div>

@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-  <title th:text="${session.classroom.name}"></title>
+  <title th:text="${classroom.name}"></title>
   <th:block th:insert="components/head"></th:block>
 </head>
 
@@ -14,9 +14,9 @@
     <th:block th:insert="components/classCover"></th:block>
 
     <th:block th:each="hsPair: ${homeworks}" th:with="homework=${hsPair.key}, submission=${hsPair.value}">
-      <th:block th:if="${session.isTeacher == true}" th:insert="components/homeworkCard :: teacher"></th:block>
-      <th:block th:if="${session.isStudent == true && submission != null}" th:insert="components/homeworkCard :: submitted"></th:block>
-      <th:block th:if="${session.isStudent == true && submission == null}" th:insert="components/homeworkCard :: not-submitted"></th:block>
+      <th:block th:if="${classMember.isTeacher == true}" th:insert="components/homeworkCard :: teacher"></th:block>
+      <th:block th:if="${classMember.isStudent == true && submission != null}" th:insert="components/homeworkCard :: submitted"></th:block>
+      <th:block th:if="${classMember.isStudent == true && submission == null}" th:insert="components/homeworkCard :: not-submitted"></th:block>
     </th:block>
   </div>
 

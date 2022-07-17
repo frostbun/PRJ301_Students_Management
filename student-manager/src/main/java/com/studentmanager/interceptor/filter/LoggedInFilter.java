@@ -1,4 +1,4 @@
-package com.studentmanager.interceptor;
+package com.studentmanager.interceptor.filter;
 
 import java.io.IOException;
 
@@ -12,15 +12,16 @@ import org.springframework.web.servlet.HandlerInterceptor;
 import com.studentmanager.service.SessionService;
 
 @Component
-public class TeacherInterceptor implements HandlerInterceptor {
+public class LoggedInFilter implements HandlerInterceptor {
     @Autowired
     private SessionService session;
 
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws IOException {
-        if (!session.isTeacher()) {
-            response.sendRedirect("/error/404");
+        if (!session.checkCurrentAccount()) {
+            response.sendRedirect("/login?redirect=" + request.getRequestURI());
             return false;
         }
+        request.setAttribute("account", session.getCurrentAccount());
         return true;
     }
 }

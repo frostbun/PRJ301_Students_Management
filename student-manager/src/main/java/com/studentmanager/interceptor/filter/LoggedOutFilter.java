@@ -1,4 +1,4 @@
-package com.studentmanager.interceptor;
+package com.studentmanager.interceptor.filter;
 
 import java.io.IOException;
 
@@ -12,13 +12,13 @@ import org.springframework.web.servlet.HandlerInterceptor;
 import com.studentmanager.service.SessionService;
 
 @Component
-public class AccountInterceptor implements HandlerInterceptor {
+public class LoggedOutFilter implements HandlerInterceptor {
     @Autowired
     private SessionService session;
 
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws IOException {
-        if (!session.checkCurrentAccount()) {
-            response.sendRedirect("/login?redirect=" + request.getRequestURI());
+        if (session.checkCurrentAccount()) {
+            response.sendRedirect("/");
             return false;
         }
         return true;

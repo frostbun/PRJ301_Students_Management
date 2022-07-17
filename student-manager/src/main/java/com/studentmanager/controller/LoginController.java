@@ -34,7 +34,7 @@ public class LoginController {
         if (response.isError()) {
             view.addAttribute("account", dto);
             view.addAttribute("redirect", redirect);
-            view.addAttribute("error", response.getError());
+            view.addAttribute("error", response.getErrorMessage());
             return "login";
         }
         session.setCurrentAccount(response.getResponse());

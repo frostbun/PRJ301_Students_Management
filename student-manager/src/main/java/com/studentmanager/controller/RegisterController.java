@@ -34,7 +34,7 @@ public class RegisterController {
         if (response.isError()) {
             view.addAttribute("account", dto);
             view.addAttribute("redirect", redirect);
-            view.addAttribute("error", response.getError());
+            view.addAttribute("error", response.getErrorMessage());
             return "register";
         }
         session.setCurrentAccount(response.getResponse());

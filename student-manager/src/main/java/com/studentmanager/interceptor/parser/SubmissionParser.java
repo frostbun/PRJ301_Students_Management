@@ -1,4 +1,4 @@
-package com.studentmanager.interceptor;
+package com.studentmanager.interceptor.parser;
 
 import java.io.IOException;
 import java.util.Map;
@@ -11,21 +11,27 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.HandlerMapping;
 
-import com.studentmanager.service.SessionService;
+import com.studentmanager.model.Homework;
+import com.studentmanager.model.Submission;
+import com.studentmanager.service.SubmissionService;
 
 @Component
-public class HomeworkInterceptor implements HandlerInterceptor {
+public class SubmissionParser implements HandlerInterceptor {
     @Autowired
-    private SessionService session;
+    private SubmissionService submissionService;
 
     @SuppressWarnings("rawtypes")
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws IOException {
         Map pathVariables = (Map)request.getAttribute(HandlerMapping.URI_TEMPLATE_VARIABLES_ATTRIBUTE);
-        Long hid = Long.parseLong(pathVariables.get("hid").toString());
-        if (!session.checkCurrentHomework(hid)) {
+        Submission submission = submissionService.getSubmission(
+            Long.parseLong(pathVariables.get("sid").toString()),
+            (Homework)request.getAttribute("homework")
+        );
+        if (submission == null) {
             response.sendRedirect("/error/404");
             return false;
         }
+        request.setAttribute("submission", submission);
         return true;
     }
 }

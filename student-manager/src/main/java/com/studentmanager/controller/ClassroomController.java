@@ -7,8 +7,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.studentmanager.config.PagingConfig;
@@ -18,7 +18,6 @@ import com.studentmanager.model.Account;
 import com.studentmanager.model.Classroom;
 import com.studentmanager.service.ClassMemberService;
 import com.studentmanager.service.ClassroomService;
-import com.studentmanager.service.SessionService;
 
 import javafx.util.Pair;
 
@@ -26,15 +25,17 @@ import javafx.util.Pair;
 @RequestMapping("/classroom")
 public class ClassroomController {
     @Autowired
-    private SessionService session;
-    @Autowired
     private ClassroomService classroomService;
     @Autowired
     private ClassMemberService classMemberService;
 
     @GetMapping
-    public String list(Model view, @RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "") String query, @RequestParam(defaultValue = "") String error) {
-        Account account = session.getCurrentAccount();
+    public String list(
+        Model view,
+        @RequestAttribute Account account,
+        @RequestAttribute int page,
+        @RequestAttribute String query
+    ) {
         Long classCount = classMemberService.countClassrooms(account, query);
         view.addAttribute(
             "classes",
@@ -45,28 +46,33 @@ public class ClassroomController {
                 .collect(Collectors.toList())
         );
         view.addAttribute("classCount", classCount);
-        view.addAttribute("page", page);
-        view.addAttribute("query", query);
         view.addAttribute("pageCount", PagingConfig.pageCountOf(classCount));
-        view.addAttribute("error", error);
         return "classroom";
     }
 
     @PostMapping("/create")
-    public String create(RedirectAttributes redirect, CreateClassroomDTO dto) {
-        ServiceResponse<Classroom> response = classroomService.create(session.getCurrentAccount(), dto);
+    public String create(
+        RedirectAttributes redirect,
+        CreateClassroomDTO dto,
+        @RequestAttribute Account account
+    ) {
+        ServiceResponse<Classroom> response = classroomService.create(account, dto);
         if (response.isError()) {
-            redirect.addAttribute("error", response.getError());
+            redirect.addAttribute("error", response.getErrorMessage());
             return "redirect:/classroom";
         }
         return "redirect:/classroom/" + response.getResponse().getId() + "/homework";
     }
 
     @PostMapping("/join")
-    public String join(RedirectAttributes redirect, String inviteCode) {
-        ServiceResponse<Classroom> response = classroomService.join(session.getCurrentAccount(), inviteCode);
+    public String join(
+        RedirectAttributes redirect,
+        String inviteCode,
+        @RequestAttribute Account account
+    ) {
+        ServiceResponse<Classroom> response = classroomService.join(account, inviteCode);
         if (response.isError()) {
-            redirect.addAttribute("error", response.getError());
+            redirect.addAttribute("error", response.getErrorMessage());
             return "redirect:/classroom";
         }
         return "redirect:/classroom/" + response.getResponse().getId() + "/homework";
