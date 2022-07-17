@@ -21,10 +21,14 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.studentmanager.config.PagingConfig;
 import com.studentmanager.dto.CreateHomeworkDTO;
+import com.studentmanager.dto.HomeworkDTO;
 import com.studentmanager.dto.ServiceResponse;
+import com.studentmanager.model.Account;
 import com.studentmanager.model.Classroom;
+import com.studentmanager.model.Comment;
 import com.studentmanager.model.Homework;
 import com.studentmanager.service.ClassMemberService;
+import com.studentmanager.service.CommentService;
 import com.studentmanager.service.HomeworkService;
 import com.studentmanager.service.SessionService;
 import com.studentmanager.service.SubmissionService;
@@ -42,6 +46,8 @@ public class HomeworkController {
     private HomeworkService homeworkService;
     @Autowired
     private SubmissionService submissionService;
+    @Autowired
+    private CommentService commentService;
 
     @GetMapping
     public String list(Model view, @RequestParam(defaultValue = "1") int page, @RequestParam(required = false) String error) {
@@ -52,7 +58,13 @@ public class HomeworkController {
             homeworkService
                 .getHomeworks(classroom, page-1, PagingConfig.SIZE)
                 .stream()
-                .map(homework -> new Pair<>(homework, submissionService.getSubmission(session.getCurrentAccount(), homework)))
+                .map(homework -> {
+                    HomeworkDTO dto = new HomeworkDTO();
+                    dto.setHomework(homework);
+                    dto.setSubmission(submissionService.getSubmission(session.getCurrentAccount(), homework));
+                    dto.setComments(commentService.listCommentByHomework(homework));
+                    return dto;
+                })
                 .collect(Collectors.toList())
         );
         view.addAttribute("page", page);
@@ -89,6 +101,16 @@ public class HomeworkController {
             )
             .body(file);
     }
+
+    @PostMapping("/{hid}/comment")
+    public String comment(RedirectAttributes redirect, @PathVariable Long cid, String comment, @RequestParam(defaultValue = "1") int page) {
+       Account account = session.getCurrentAccount();
+       Homework homework = session.getCurrentHomework();
+        ServiceResponse<Comment> response = commentService.comment(account, homework, comment);
+       redirect.addAttribute("page", page);
+        return "redirect:/classroom/" + cid + "/homework";
+    }
+
 
     @GetMapping("/{hid}/edit")
     public String editGet(Model view, @RequestParam(defaultValue = "1") int page) {

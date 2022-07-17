@@ -1,12 +1,14 @@
+<div class="paging">
 <ul class="pagination" style="margin-bottom: 100px;">
-  <li class="prev" th:onclick="toPage([[${page-1}]])">Prev</li>
+  <li class="prev" th:onclick="toPage([[${page-1}]])"><<</li>
 
   <li th:each="i: ${#numbers.sequence(1, pageCount)}">
     <span class="pageNumber" th:onclick="toPage([[${i}]])" th:text="${i}"></span>
   </li>
 
-  <li class="next" th:onclick="toPage([[${page+1}]])">Next</li>
+  <li class="next" th:onclick="toPage([[${page+1}]])">>></li>
 </ul>
+</div>
 <script th:inline="javascript">
   function toPage(page) {
     window.location.href = `?page=${page}&query=${escape([[${query}]])}`;
