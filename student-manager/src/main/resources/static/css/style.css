@@ -589,7 +589,7 @@ body nav div span:active {
 .msger-send-btn {
     margin-left: 10px;
     background: rgb(0, 196, 65);
-    color: #fff;
+    color: white;
     font-weight: bold;
     cursor: pointer;
     transition: background 0.23s;
@@ -615,9 +615,9 @@ body nav div span:active {
     padding: 10px
 }
 
-/* #sendButton{
-    padding:
-} */
+#sendButton{
+    background-color: transparent;
+}
 
 /* pagination */
 .paging{
