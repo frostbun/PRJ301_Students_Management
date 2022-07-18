@@ -90,7 +90,7 @@ public class SubmissionController {
     ) {
         ServiceResponse<Submission> response = submissionService.mark(submission, mark);
         if (response.isError()) {
-            redirect.addFlashAttribute("error", response.getErrorMessage());
+            redirect.addAttribute("error", response.getErrorMessage());
         }
         redirect.addAttribute("page", page);
         redirect.addAttribute("query", query);
