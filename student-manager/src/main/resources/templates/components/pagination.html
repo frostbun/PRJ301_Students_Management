@@ -1,12 +1,12 @@
 <div class="paging">
   <ul class="pagination" style="margin-bottom: 100px;">
-    <li class="prev" th:onclick="toPage([[${page-1}]])">&lt;&lt;</li>
+    <li th:if="${page} > 1" class="prev" th:onclick="toPage([[${page-1}]])">&lt;&lt;</li>
 
     <li th:each="i: ${#numbers.sequence(1, pageCount)}">
       <span class="pageNumber" th:onclick="toPage([[${i}]])" th:text="${i}"></span>
     </li>
 
-    <li class="next" th:onclick="toPage([[${page+1}]])">&gt;&gt;</li>
+    <li th:if="${page} < ${pageCount}" class="next" th:onclick="toPage([[${page+1}]])">&gt;&gt;</li>
   </ul>
 </div>
 <script th:inline="javascript">
