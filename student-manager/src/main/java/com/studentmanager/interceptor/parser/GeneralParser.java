@@ -17,7 +17,7 @@ public class GeneralParser implements HandlerInterceptor {
         if (page == null) page = "1";
         String query = request.getParameter("query");
         if (query == null) query = "";
-        request.setAttribute("page", page);
+        request.setAttribute("page", Integer.parseInt(page));
         request.setAttribute("query", query);
         request.setAttribute("error", request.getParameter("error"));
         return true;
