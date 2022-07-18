@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,6 +25,7 @@ import com.studentmanager.dto.HomeworkDTO;
 import com.studentmanager.dto.ServiceResponse;
 import com.studentmanager.model.Account;
 import com.studentmanager.model.Classroom;
+import com.studentmanager.model.Comment;
 import com.studentmanager.model.Homework;
 import com.studentmanager.service.ClassMemberService;
 import com.studentmanager.service.CommentService;
@@ -111,7 +113,25 @@ public class HomeworkController {
         @RequestAttribute Homework homework,
         @RequestAttribute int page
     ) {
-        commentService.comment(account, homework, comment);
+        ServiceResponse<Comment> response =  commentService.comment(account, homework, comment);
+        if (response.isError()) {
+            redirect.addAttribute("error", response.getErrorMessage());
+        }
+        redirect.addAttribute("page", page);
+        return "redirect:/classroom/" + classroom.getId() + "/homework";
+    }
+
+    @PostMapping("/{hid}/comment/{cmtid}/edit/{cmtid}/edit")
+    public String comment(
+        RedirectAttributes redirect,
+        String comment,
+        @PathVariable Long cmtid, 
+        @RequestAttribute Account account,
+        @RequestAttribute Classroom classroom,
+        @RequestAttribute Homework homework,
+        @RequestAttribute int page
+    ) {
+        commentService.editComment(cmtid, comment);
         redirect.addAttribute("page", page);
         return "redirect:/classroom/" + classroom.getId() + "/homework";
     }

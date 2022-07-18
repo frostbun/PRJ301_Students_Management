@@ -17,8 +17,8 @@ public class CommentService {
     private CommentRepository commentRepo;
 
     public ServiceResponse<Comment> comment(Account author, Homework homework, String comment) {
-        if (comment == null) {
-            return ServiceResponse.error("Invalid comment");
+        if (comment == null || comment.length() > 50) {
+            return ServiceResponse.error("Comment too long");
         }
         Comment c = new Comment();
         c.setAuthor(author);
