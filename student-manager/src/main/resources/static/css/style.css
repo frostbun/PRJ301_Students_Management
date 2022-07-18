@@ -599,10 +599,6 @@ body nav div span:active {
     background: rgb(0, 180, 50);
 }
 
-.comment-list{
-    width: 35%;
-}
-
 #comment{
     width: 85%;
     height: 50px;
